@@ -25,11 +25,44 @@ class Home extends StatelessWidget {
          backgroundColor: Color(0xFFF7F7FC),
          body: SafeArea(
 				top: true,
-            // TODO: Sliver List
             child: Padding(
                padding: EdgeInsets.all(30.0),
-               // TODO: Title
-               child: SearchBar()
+               child: CustomScrollView(
+                  slivers: <Widget>[
+                     SliverAppBar( expandedHeight: 300.0, backgroundColor: Color(0xFFF7F7FC) ),
+                     SliverAppBar(
+                        backgroundColor: Color(0xFFF7F7FC),
+                        expandedHeight: 70.0,
+                        flexibleSpace: FlexibleSpaceBar(  
+                           collapseMode: CollapseMode.pin, 
+                           // TODO: Title
+                           background: Text('Heyyyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+                        ),
+                     ),
+                     
+                     SliverAppBar(
+                        elevation: 0,
+                        pinned: true,
+                        titleSpacing: 0,
+                        expandedHeight: 50,
+                        backgroundColor: Color(0xFFF7F7FC),
+                        title: SearchBar(),
+                     ),
+                     SliverFixedExtentList(
+                        itemExtent: 150.0,
+                        delegate: SliverChildListDelegate(
+                           [
+                              Container(color: Color(0xFFF7F7FC)),
+                              Container(color: Color(0xFFF7F7FC)),
+                              Container(color: Color(0xFFF7F7FC)),
+                              Container(color: Color(0xFFF7F7FC)),
+                              Container(color: Color(0xFFF7F7FC)),
+                              Container(color: Color(0xFFF7F7FC)),
+                           ],
+                        ),
+                     ),
+                  ],
+               )
                // TODO: Create button
             ),
 			)
@@ -55,7 +88,7 @@ class SearchBar extends StatelessWidget {
             hintText: 'Search for anything',
             hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600),
             filled: true,
-            fillColor: Color(0xCCEDEDF7)
+            fillColor: Color(0xCCEDEDF7),
          ),
       );
    }
