@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
 
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
+      // TODO: Fix navigation bar color
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
 			systemNavigationBarColor: Color(0xFFF7F7FC),
@@ -23,11 +24,21 @@ class Home extends StatelessWidget {
 		));
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
+         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+         // TODO: Improve FAB style
+         floatingActionButton: FloatingActionButton.extended(
+            onPressed: (){},
+            label: Text('Heyheyeheyy'),
+            icon: Icon(Icons.add),
+         ),
          body: SafeArea(
 				top: true,
             child: Padding(
+               // TODO: Improve padding
                padding: EdgeInsets.all(30.0),
                child: CustomScrollView(
+                  // TODO: Top Button & Top geasture
+                  // TODO: Haptic on changing view
                   slivers: <Widget>[
                      SliverAppBar( expandedHeight: 300.0, backgroundColor: Color(0xFFF7F7FC) ),
                      SliverAppBar(
@@ -39,7 +50,6 @@ class Home extends StatelessWidget {
                            background: Text('Heyyyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
                         ),
                      ),
-                     
                      SliverAppBar(
                         elevation: 0,
                         pinned: true,
@@ -49,13 +59,9 @@ class Home extends StatelessWidget {
                         title: SearchBar(),
                      ),
                      SliverFixedExtentList(
-                        itemExtent: 150.0,
+                        itemExtent: 400.0,
                         delegate: SliverChildListDelegate(
                            [
-                              Container(color: Color(0xFFF7F7FC)),
-                              Container(color: Color(0xFFF7F7FC)),
-                              Container(color: Color(0xFFF7F7FC)),
-                              Container(color: Color(0xFFF7F7FC)),
                               Container(color: Color(0xFFF7F7FC)),
                               Container(color: Color(0xFFF7F7FC)),
                            ],
@@ -78,6 +84,7 @@ class SearchBar extends StatelessWidget {
             fontSize: 17.0,
             color: Colors.black                  
          ),
+         // TODO: Change SearxhBar height
          decoration: new InputDecoration(
             prefixIcon: new Icon( Icons.search, size: 22.0, color: Color(0xFF1F1F33)),
             contentPadding: EdgeInsets.all(15),
