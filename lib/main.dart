@@ -14,6 +14,41 @@ class MyApp extends StatelessWidget {
 	}
 }
 
+class FloatingButton extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) {
+      return Container( 
+         decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.white
+         ),
+         child: ClipRRect(
+            borderRadius: BorderRadius.circular(26),
+            child: Material(
+               child: InkWell(
+                  splashColor: Color(0x106666FF),
+                  highlightColor: Color(0x206666FF),
+                  onTap: () {},
+                  child: Padding(
+                     padding: EdgeInsets.all(15),
+                     child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                           Icon(Icons.add, color: Color(0xFF6666FF),), 
+                           Container(width: 7, height: 24),
+                           Text('Heyy ', style: TextStyle(
+                              color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
+                           ),)
+                        ]
+                     ),
+                  )
+               ),
+            ),
+         )
+      );
+   }
+}
+
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
       // TODO: Fix navigation bar color
@@ -26,11 +61,7 @@ class Home extends StatelessWidget {
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          // TODO: Improve FAB style
-         floatingActionButton: FloatingActionButton.extended(
-            onPressed: (){},
-            label: Text('Heyheyeheyy'),
-            icon: Icon(Icons.add),
-         ),
+         floatingActionButton: Center(child: FloatingButton(), heightFactor: 1,),
          body: SafeArea(
 				top: true,
             child: Padding(
