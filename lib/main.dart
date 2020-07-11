@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:developer' as dev;
 
 void main() => runApp(MyApp());
 
@@ -14,41 +15,6 @@ class MyApp extends StatelessWidget {
 	}
 }
 
-class FloatingButton extends StatelessWidget {
-   @override
-   Widget build(BuildContext context) {
-      return Container( 
-         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: Colors.white
-         ),
-         child: ClipRRect(
-            borderRadius: BorderRadius.circular(26),
-            child: Material(
-               child: InkWell(
-                  splashColor: Color(0x106666FF),
-                  highlightColor: Color(0x206666FF),
-                  onTap: () {},
-                  child: Padding(
-                     padding: EdgeInsets.all(15),
-                     child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                           Icon(Icons.add, color: Color(0xFF6666FF),), 
-                           Container(width: 7, height: 24),
-                           Text('Heyy ', style: TextStyle(
-                              color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-                           ),)
-                        ]
-                     ),
-                  )
-               ),
-            ),
-         )
-      );
-   }
-}
-
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
       // TODO: Fix navigation bar color
@@ -60,7 +26,6 @@ class Home extends StatelessWidget {
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-         // TODO: Improve FAB style
          floatingActionButton: Center(child: FloatingButton(), heightFactor: 1,),
          body: SafeArea(
 				top: true,
@@ -100,7 +65,6 @@ class Home extends StatelessWidget {
                      ),
                   ],
                )
-               // TODO: Create button
             ),
 			)
       );
@@ -115,7 +79,7 @@ class SearchBar extends StatelessWidget {
             fontSize: 17.0,
             color: Colors.black                  
          ),
-         // TODO: Change SearxhBar height
+         // TODO: Change SearchBar height
          decoration: new InputDecoration(
             prefixIcon: new Icon( Icons.search, size: 22.0, color: Color(0xFF1F1F33)),
             contentPadding: EdgeInsets.all(15),
@@ -127,6 +91,84 @@ class SearchBar extends StatelessWidget {
             hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600),
             filled: true,
             fillColor: Color(0xCCEDEDF7),
+         ),
+      );
+   }
+}
+
+class FloatingButton extends StatefulWidget { 
+   @override 
+   _FloatingButtonState createState() => _FloatingButtonState(); }
+
+class _FloatingButtonState extends State<FloatingButton> {
+      double _shadowBlur = 40;
+      Color _shadowColor = Color(0x194D4DFF);
+      Offset _positionOffset = Offset(0, 0);
+      Color _bottomColor = Color(0xFFF2F2FF);
+
+
+   void _hover(){
+      setState(() {
+         _shadowBlur = 20;
+         _shadowColor = Color(0x154D4DFF);
+         _positionOffset = Offset(0, 5);
+         _bottomColor = Color(0xFFEBEBFF);
+      });
+   }
+
+   void _rest(){
+      dev.log('om');
+      setState(() {
+         _shadowBlur = 40;
+         _shadowColor = Color(0x194D4DFF);
+         _positionOffset = Offset(0, 0);
+         _bottomColor = Color(0xFFF2F2FF);
+      });
+   }
+
+   @override
+   Widget build(BuildContext context) {
+      return Container( 
+         decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(27),
+            color: Colors.white,
+            boxShadow: [
+               BoxShadow (
+                  color: _shadowColor,
+                  offset: Offset(0,10),
+                  blurRadius: _shadowBlur,
+               ), 
+               BoxShadow (
+                  color: _bottomColor,
+                  offset: Offset(0,3),
+                  blurRadius: 0,
+               ),
+            ],          
+         ),
+         child: ClipRRect(
+            borderRadius: BorderRadius.circular(26),
+            child: Material(
+               child: InkWell(
+                  splashColor: Color(0x106666FF),
+                  highlightColor: Color(0x106666FF),
+                  onTapDown: (hey) { dev.log(hey.toString()); _hover();},
+                  onTapCancel: () {_rest();},
+                  onTap: () {_rest();},
+                  child: Padding(
+                     padding: EdgeInsets.all(15),
+                     child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                           Icon(Icons.add, color: Color(0xFF6666FF),), 
+                           Container(width: 7, height: 24),
+                           Text('Heyy ', style: TextStyle(
+                              color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
+                           ),)
+                        ]
+                     ),
+                  )
+               ),
+            ),
          ),
       );
    }
