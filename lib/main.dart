@@ -10,14 +10,12 @@ class MyApp extends StatelessWidget {
 		return MaterialApp(
 			title: 'Yaayyay',
 			home: Home(),
-         // TODO: Login & Set up page
 		);
 	}
 }
 
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
-      // TODO: Fix navigation bar color
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
 			systemNavigationBarColor: Color(0xFFF7F7FC),
@@ -30,11 +28,8 @@ class Home extends StatelessWidget {
          body: SafeArea(
 				top: true,
             child: Padding(
-               // TODO: Improve padding
                padding: EdgeInsets.all(30.0),
                child: CustomScrollView(
-                  // TODO: Top Button & Top geasture
-                  // TODO: Haptic on changing view
                   slivers: <Widget>[
                      SliverAppBar( expandedHeight: 300.0, backgroundColor: Color(0xFFF7F7FC) ),
                      SliverAppBar(
@@ -42,7 +37,6 @@ class Home extends StatelessWidget {
                         expandedHeight: 70.0,
                         flexibleSpace: FlexibleSpaceBar(  
                            collapseMode: CollapseMode.pin, 
-                           // TODO: Title
                            background: Text('Heyyyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
                         ),
                      ),
@@ -50,7 +44,7 @@ class Home extends StatelessWidget {
                         elevation: 0,
                         pinned: true,
                         titleSpacing: 0,
-                        expandedHeight: 50,
+                        expandedHeight: 52,
                         backgroundColor: Color(0xFFF7F7FC),
                         title: SearchBar(),
                      ),
@@ -77,18 +71,20 @@ class SearchBar extends StatelessWidget {
       return TextField(
          style: TextStyle(
             fontSize: 17.0,
-            color: Colors.black                  
+            color: Color(0xFF1F1F33)                 
          ),
-         // TODO: Change SearchBar height
          decoration: new InputDecoration(
-            prefixIcon: new Icon( Icons.search, size: 22.0, color: Color(0xFF1F1F33)),
-            contentPadding: EdgeInsets.all(15),
+            prefixIcon: Container(
+               padding: EdgeInsets.all(15),
+               child: new Icon( Icons.search, size: 22.0, color: Color(0xFF1F1F33)),
+            ),
+            contentPadding: EdgeInsets.all(17),
             border: new OutlineInputBorder(
                borderSide: BorderSide.none,
-               borderRadius: BorderRadius.circular(10),
+               borderRadius: BorderRadius.circular(12),
             ),
             hintText: 'Search for anything',
-            hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600),
+            hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
             filled: true,
             fillColor: Color(0xCCEDEDF7),
          ),
@@ -109,7 +105,7 @@ class _FloatingButtonState extends State<FloatingButton> {
 
    void _hover(){
       setState(() {
-         _shadowBlur = 20;
+         _shadowBlur = 30;
          _shadowColor = Color(0x154D4DFF);
          _positionOffset = Offset(0, 5);
          _bottomColor = Color(0xFFEBEBFF);
@@ -122,7 +118,7 @@ class _FloatingButtonState extends State<FloatingButton> {
          _shadowBlur = 40;
          _shadowColor = Color(0x194D4DFF);
          _positionOffset = Offset(0, 0);
-         _bottomColor = Color(0xFFF2F2FF);
+         _bottomColor = Color(0xFFF3F3FF);
       });
    }
 
@@ -150,7 +146,7 @@ class _FloatingButtonState extends State<FloatingButton> {
             child: Material(
                child: InkWell(
                   splashColor: Color(0x106666FF),
-                  highlightColor: Color(0x106666FF),
+                  highlightColor: Color(0x086666FF),
                   onTapDown: (hey) { dev.log(hey.toString()); _hover();},
                   onTapCancel: () {_rest();},
                   onTap: () {_rest();},
