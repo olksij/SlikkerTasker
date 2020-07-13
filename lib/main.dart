@@ -101,6 +101,7 @@ class _FloatingButtonState extends State<FloatingButton> {
       Color _shadowColor = Color(0x194D4DFF);
       Offset _positionOffset = Offset(0, 0);
       Color _bottomColor = Color(0xFFF2F2FF);
+      Offset _shadowOffset = Offset(0, 10);
 
 
    void _hover(){
@@ -109,29 +110,31 @@ class _FloatingButtonState extends State<FloatingButton> {
          _shadowColor = Color(0x154D4DFF);
          _positionOffset = Offset(0, 5);
          _bottomColor = Color(0xFFEBEBFF);
+         _shadowOffset = Offset(0, 8);
       });
    }
 
    void _rest(){
-      dev.log('om');
       setState(() {
          _shadowBlur = 40;
          _shadowColor = Color(0x194D4DFF);
          _positionOffset = Offset(0, 0);
          _bottomColor = Color(0xFFF3F3FF);
+         _shadowOffset = Offset(0, 10);
       });
    }
 
    @override
    Widget build(BuildContext context) {
       return Container( 
+         margin: EdgeInsets.only(bottom: 14),
          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(27),
             color: Colors.white,
             boxShadow: [
                BoxShadow (
                   color: _shadowColor,
-                  offset: Offset(0,10),
+                  offset: _shadowOffset,
                   blurRadius: _shadowBlur,
                ), 
                BoxShadow (
@@ -147,9 +150,9 @@ class _FloatingButtonState extends State<FloatingButton> {
                child: InkWell(
                   splashColor: Color(0x106666FF),
                   highlightColor: Color(0x086666FF),
-                  onTapDown: (hey) { dev.log(hey.toString()); _hover();},
-                  onTapCancel: () {_rest();},
-                  onTap: () {_rest();},
+                  onTapDown: (hey) { _hover();},
+                  onTapCancel: () { _rest(); },
+                  onTap: () { _rest(); },
                   child: Padding(
                      padding: EdgeInsets.all(15),
                      child: Row(
