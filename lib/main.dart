@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
 
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
+      WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
 			systemNavigationBarColor: Color(0xFFF7F7FC),
