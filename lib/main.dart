@@ -29,6 +29,7 @@ class Home extends StatelessWidget {
             child: Padding(
                padding: EdgeInsets.all(30.0),
                child: CustomScrollView(
+                  physics: BouncingScrollPhysics(),
                   slivers: <Widget>[
                      SliverAppBar( expandedHeight: 300.0, backgroundColor: Color(0xFFF7F7FC) ),
                      SliverAppBar(
