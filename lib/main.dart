@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:developer' as dev;
 
 void main() => runApp(MyApp());
 
@@ -53,7 +52,10 @@ class Home extends StatelessWidget {
                         delegate: SliverChildListDelegate(
                            [
                               Container(color: Color(0xFFF7F7FC)),
-                              Container(color: Color(0xFFF7F7FC)),
+                              Container(color: Color(0xFF00F7FC)),
+                              Container(color: Color(0xFFF700FC)),
+                              Container(color: Color(0xFFF7F700)),
+                              Container(color: Color(0xFFF700FC)),
                            ],
                         ),
                      ),
@@ -99,7 +101,7 @@ class FloatingButton extends StatefulWidget {
 class _FloatingButtonState extends State<FloatingButton> {
       double _shadowBlur = 40;
       Color _shadowColor = Color(0x194D4DFF);
-      Offset _positionOffset = Offset(0, 0);
+      double _positionOffsetBottom = 11;
       Color _bottomColor = Color(0xFFF2F2FF);
       Offset _shadowOffset = Offset(0, 10);
 
@@ -108,7 +110,7 @@ class _FloatingButtonState extends State<FloatingButton> {
       setState(() {
          _shadowBlur = 30;
          _shadowColor = Color(0x154D4DFF);
-         _positionOffset = Offset(0, 5);
+         _positionOffsetBottom = 11;
          _bottomColor = Color(0xFFEBEBFF);
          _shadowOffset = Offset(0, 8);
       });
@@ -118,7 +120,7 @@ class _FloatingButtonState extends State<FloatingButton> {
       setState(() {
          _shadowBlur = 40;
          _shadowColor = Color(0x194D4DFF);
-         _positionOffset = Offset(0, 0);
+         _positionOffsetBottom = 14;
          _bottomColor = Color(0xFFF3F3FF);
          _shadowOffset = Offset(0, 10);
       });
@@ -127,7 +129,7 @@ class _FloatingButtonState extends State<FloatingButton> {
    @override
    Widget build(BuildContext context) {
       return Container( 
-         margin: EdgeInsets.only(bottom: 14),
+         margin: EdgeInsets.only(bottom: _positionOffsetBottom),
          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(27),
             color: Colors.white,
@@ -150,7 +152,7 @@ class _FloatingButtonState extends State<FloatingButton> {
                child: InkWell(
                   splashColor: Color(0x106666FF),
                   highlightColor: Color(0x086666FF),
-                  onTapDown: (hey) { _hover();},
+                  onTapDown: (h) { _hover();},
                   onTapCancel: () { _rest(); },
                   onTap: () { _rest(); },
                   child: Padding(
