@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'material.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,7 +25,7 @@ class Home extends StatelessWidget {
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-         floatingActionButton: Center(child: FloatingButton(), heightFactor: 1,),
+         floatingActionButton: FloatingButton(title: 'Heyy', icon: Icons.add,),
          body: SafeArea(
 				top: true,
             child: Padding(
@@ -96,83 +97,3 @@ class SearchBar extends StatelessWidget {
    }
 }
 
-class FloatingButton extends StatefulWidget { 
-   @override 
-   _FloatingButtonState createState() => _FloatingButtonState(); }
-
-class _FloatingButtonState extends State<FloatingButton> {
-      double _shadowBlur = 40;
-      Color _shadowColor = Color(0x194D4DFF);
-      double _positionOffsetBottom = 11;
-      Color _bottomColor = Color(0xFFF2F2FF);
-      Offset _shadowOffset = Offset(0, 10);
-
-
-   void _hover(){
-      setState(() {
-         _shadowBlur = 30;
-         _shadowColor = Color(0x154D4DFF);
-         _positionOffsetBottom = 11;
-         _bottomColor = Color(0xFFEBEBFF);
-         _shadowOffset = Offset(0, 8);
-      });
-   }
-
-   void _rest(){
-      setState(() {
-         _shadowBlur = 40;
-         _shadowColor = Color(0x194D4DFF);
-         _positionOffsetBottom = 14;
-         _bottomColor = Color(0xFFF3F3FF);
-         _shadowOffset = Offset(0, 10);
-      });
-   }
-
-   @override
-   Widget build(BuildContext context) {
-      return Container( 
-         margin: EdgeInsets.only(bottom: _positionOffsetBottom),
-         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(27),
-            color: Colors.white,
-            boxShadow: [
-               BoxShadow (
-                  color: _shadowColor,
-                  offset: _shadowOffset,
-                  blurRadius: _shadowBlur,
-               ), 
-               BoxShadow (
-                  color: _bottomColor,
-                  offset: Offset(0,3),
-                  blurRadius: 0,
-               ),
-            ],          
-         ),
-         child: ClipRRect(
-            borderRadius: BorderRadius.circular(26),
-            child: Material(
-               child: InkWell(
-                  splashColor: Color(0x106666FF),
-                  highlightColor: Color(0x086666FF),
-                  onTapDown: (h) { _hover();},
-                  onTapCancel: () { _rest(); },
-                  onTap: () { _rest(); },
-                  child: Padding(
-                     padding: EdgeInsets.all(15),
-                     child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                           Icon(Icons.add, color: Color(0xFF6666FF),), 
-                           Container(width: 7, height: 24),
-                           Text('Heyy ', style: TextStyle(
-                              color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-                           ),)
-                        ]
-                     ),
-                  )
-               ),
-            ),
-         ),
-      );
-   }
-}
