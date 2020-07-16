@@ -39,7 +39,7 @@ class _FloatingButtonState extends State<FloatingButton> {
          _shadowBlur = 30;
          _shadowColor = Color(0x154D4DFF);
          _positionOffsetBottom = 11;
-         _bottomColor = Color(0xFFEBEBFF);
+         _bottomColor = Color(0xFFF0F0FF);
          _shadowOffset = Offset(0, 8);
       });
    }
@@ -56,7 +56,9 @@ class _FloatingButtonState extends State<FloatingButton> {
 
    @override
    Widget build(BuildContext context) {
-      return Container( 
+      return AnimatedContainer( 
+         duration: Duration(milliseconds: 200),
+         curve: Curves.easeOut,
          margin: EdgeInsets.only(bottom: _positionOffsetBottom),
          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(27),
@@ -79,7 +81,7 @@ class _FloatingButtonState extends State<FloatingButton> {
             child: Material(
                borderRadius: BorderRadius.circular(26),
                child: InkWell(
-                  splashColor: Color(0x106666FF),
+                  splashColor: Color(0x076666FF),
                   highlightColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   onTapDown: (h) { _hover();},
