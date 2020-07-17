@@ -25,7 +25,10 @@ class Home extends StatelessWidget {
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-         floatingActionButton: FloatingButton(title: 'Heyy', icon: Icons.add,),
+         floatingActionButton: Container(
+            child: FloatingButton(title: 'Create', icon: Icons.add),
+            margin: EdgeInsets.only(bottom: 14),
+         ),
          body: SafeArea(
 				top: true,
             child: Padding(
