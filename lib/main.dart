@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
 		return MaterialApp(
+         theme: ThemeData(fontFamily: 'Manrope'),
 			title: 'Yaayyay',
 			home: Home(),
 		);
@@ -78,7 +79,7 @@ class SearchBar extends StatelessWidget {
    Widget build(BuildContext context) {
       return TextField(
          style: TextStyle(
-            fontSize: 17.0,
+            fontSize: 16.5,
             color: Color(0xFF1F1F33)                 
          ),
          decoration: new InputDecoration(
