@@ -23,6 +23,7 @@ class Home extends StatelessWidget {
 			systemNavigationBarColor: Color(0xFFF7F7FC),
 			statusBarColor: Color(0x25BABADB),
 		));
+      var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'}];
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -54,17 +55,31 @@ class Home extends StatelessWidget {
                         backgroundColor: Color(0xFFF7F7FC),
                         title: SearchBar(),
                      ),
-                     SliverFixedExtentList(
-                        itemExtent: 400.0,
-                        delegate: SliverChildListDelegate(
-                           [
-                              Container(color: Color(0xFFF7F7FC)),
-                              Container(color: Color(0xFF00F7FC)),
-                              Container(color: Color(0xFFF700FC)),
-                              Container(color: Color(0xFFF7F700)),
-                              Container(color: Color(0xFFF700FC)),
-                           ],
-                        ),
+                     SliverToBoxAdapter(    
+                        child: Container(
+                           child: ListView.builder(
+                              padding: EdgeInsets.only(top: 30, bottom: 30),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: todo.length,
+                              itemBuilder: (BuildContext context, int i) {
+                                 return Container(
+                                    margin: EdgeInsets.only(right: 15),
+                                    height: 100,
+                                    child: Layer(
+                                       accent: Color(0xFF6666FF),
+                                       type: LayerType.card,
+                                       position: 1,
+                                       child: Container(
+                                          padding: EdgeInsets.all(12), 
+                                          child: Text('${todo[i]['title']} $i  ')
+                                       ),
+                                    )
+                                 );
+                              }
+                           ),
+                           height: 200,
+                           clipBehavior: Clip.none,
+                        )
                      ),
                   ],
                )

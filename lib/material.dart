@@ -33,7 +33,7 @@ class _LayerState extends State<Layer> {
          curve: Curves.easeOut,
          margin: EdgeInsets.only(bottom: pressed ? 0 : 3),
          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(27),
+            borderRadius: BorderRadius.circular( type.index==0 ? 12 : 26 ),
             color: Colors.white,
             boxShadow: [
                BoxShadow (
