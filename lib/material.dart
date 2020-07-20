@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'ripple.dart';
+
 
 enum LayerType{ card, fab }
 
@@ -53,8 +55,9 @@ class _LayerState extends State<Layer> {
             child: Material(
                borderRadius: BorderRadius.circular( type.index==0 ? 12 : 26 ),
                child: InkWell(
-                  splashColor: color.withAlpha(0.1).toColor(),
-                  highlightColor: Colors.transparent,
+                  splashFactory: CustomInkRipple.splashFactory,
+                  splashColor: color.withAlpha(0.12).toColor(),
+                  highlightColor: color.withAlpha(0.02).toColor(),
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { setState(() { pressed = true; }); },
                   onTapCancel: () { setState(() { pressed = false; }); },

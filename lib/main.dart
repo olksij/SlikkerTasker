@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'material.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -21,7 +20,7 @@ class Home extends StatelessWidget {
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
 			systemNavigationBarColor: Color(0xFFF7F7FC),
-			statusBarColor: Color(0x25BABADB),
+			statusBarColor: Color(0x00BABADB),
 		));
       var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'}];
 		return Scaffold(
@@ -63,8 +62,9 @@ class Home extends StatelessWidget {
                               itemCount: todo.length,
                               itemBuilder: (BuildContext context, int i) {
                                  return Container(
-                                    margin: EdgeInsets.only(right: 15),
-                                    height: 100,
+                                    margin: EdgeInsets.only(right: 20),
+                                    height: 140,
+                                    width: 110,
                                     child: Layer(
                                        accent: Color(0xFF6666FF),
                                        type: LayerType.card,
