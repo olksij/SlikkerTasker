@@ -33,7 +33,7 @@ class _LayerState extends State<Layer> {
       return AnimatedContainer( 
          duration: Duration(milliseconds: 200),
          curve: Curves.easeOut,
-         margin: EdgeInsets.only(bottom: pressed ? 0 : 3),
+         margin: EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular( type.index==0 ? 12 : 26 ),
             color: Colors.white,
@@ -56,8 +56,8 @@ class _LayerState extends State<Layer> {
                borderRadius: BorderRadius.circular( type.index==0 ? 12 : 26 ),
                child: InkWell(
                   splashFactory: CustomInkRipple.splashFactory,
-                  splashColor: color.withAlpha(0.12).toColor(),
-                  highlightColor: color.withAlpha(0.02).toColor(),
+                  splashColor: color.withAlpha(0.25).toColor(),
+                  highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { setState(() { pressed = true; }); },
                   onTapCancel: () { setState(() { pressed = false; }); },

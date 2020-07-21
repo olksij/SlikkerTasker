@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-const Duration _kUnconfirmedRippleDuration = Duration(seconds: 1);
-const Duration _kFadeInDuration = Duration(milliseconds: 150);
-const Duration _kRadiusDuration = Duration(milliseconds: 450);
+const Duration _kUnconfirmedRippleDuration = Duration(seconds: 2);
+const Duration _kFadeInDuration = Duration(milliseconds: 100);
+const Duration _kRadiusDuration = Duration(milliseconds: 550);
 const Duration _kFadeOutDuration = Duration(milliseconds: 475);
 const Duration _kCancelDuration = Duration(milliseconds: 75);
 
@@ -143,7 +143,7 @@ class CustomInkRipple extends InteractiveInkFeature {
 		_radius = _radiusController.drive(
 			Tween<double>(
 				begin: 0,
-				end: _targetRadius * 1.5,
+				end: _targetRadius * 2,
 			).chain(_easeCurveTween),
 		);
 
@@ -182,7 +182,7 @@ class CustomInkRipple extends InteractiveInkFeature {
 	/// or material [Theme].
 	static const InteractiveInkFeatureFactory splashFactory = _CustomInkRippleFactory();
 
-	static final Animatable<double> _easeCurveTween = CurveTween(curve: Curves.ease);
+	static final Animatable<double> _easeCurveTween = CurveTween(curve: Curves.easeOut);
 	static final Animatable<double> _fadeOutIntervalTween = CurveTween(curve: const Interval(_kFadeOutIntervalStart, 1.0));
 
 	@override
@@ -222,11 +222,11 @@ class CustomInkRipple extends InteractiveInkFeature {
 
 	@override
 	void paintFeature(Canvas canvas, Matrix4 transform) {
-		final int alpha = _fadeInController.isAnimating ? _fadeIn.value : _fadeOut.value;
+		final int alpha = ((255-(_radius.value/(_targetRadius * 2.5) * 255))*(color.alpha/255)).round();
 		final Paint paint = Paint()
 			..color = color.withAlpha(alpha)
-			..maskFilter = MaskFilter.blur(BlurStyle.normal, (25 + _targetRadius*0.5)/2)
-			..strokeWidth = (80 + _targetRadius*0.3)/2
+			..maskFilter = MaskFilter.blur(BlurStyle.normal, (_radius.value/3 + 30)/2 + 10)
+			..strokeWidth = (_radius.value/3 + 50)/2 + 10
 			..style = PaintingStyle.stroke;
 
 		paintInkCircle(
