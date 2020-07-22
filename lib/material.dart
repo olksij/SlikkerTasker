@@ -40,7 +40,7 @@ class _LayerState extends State<Layer> {
             boxShadow: [
                BoxShadow (
                   color: color.withSaturation(color.saturation+0.1).withAlpha(pressed ? 0.1 : 0.15).toColor(),
-                  offset: Offset(pressed ? 8 : 10,0),
+                  offset: Offset(0, pressed ? 8 : 10),
                   blurRadius: pressed ? 30 : 40,
                ),
                BoxShadow (
