@@ -225,7 +225,7 @@ class CustomInkRipple extends InteractiveInkFeature {
 		final int alpha = ((255-(_radius.value/(_targetRadius * 2.5) * 255))*(color.alpha/255)).round();
 		final Paint paint = Paint()
 			..color = color.withAlpha(alpha)
-			..maskFilter = MaskFilter.blur(BlurStyle.normal, (_radius.value/3 + 30)/2 + 10)
+			..maskFilter = MaskFilter.blur(BlurStyle.normal, (_radius.value/3 + 20)/2 + 10)
 			..strokeWidth = (_radius.value/3 + 50)/2 + 10
 			..style = PaintingStyle.stroke;
 

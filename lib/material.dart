@@ -39,14 +39,13 @@ class _LayerState extends State<Layer> {
             color: Colors.white,
             boxShadow: [
                BoxShadow (
-                  color: color.withSaturation(color.saturation+0.1).withAlpha(pressed ? 0.1 : 0.15).toColor(),
-                  offset: Offset(0, pressed ? 8 : 10),
+                  color: color.withSaturation(color.value-0.1).withAlpha(position*0.05 + (pressed ? 0.0 : 0.05)).toColor(),
+                  offset: Offset(0, pressed ? 5 : 7),
                   blurRadius: pressed ? 30 : 40,
                ),
                BoxShadow (
-                  color: color.withSaturation(color.saturation-(pressed ? 0.53 : 0.55)).toColor(),
+                  color: color.withSaturation(color.saturation-(pressed ? 0.54 : 0.55)).toColor(),
                   offset: Offset(0,3),
-                  blurRadius: 0,
                ),
             ],          
          ),
@@ -56,12 +55,12 @@ class _LayerState extends State<Layer> {
                borderRadius: BorderRadius.circular( type.index==0 ? 12 : 26 ),
                child: InkWell(
                   splashFactory: CustomInkRipple.splashFactory,
-                  splashColor: color.withAlpha(0.25).toColor(),
+                  splashColor: color.withAlpha(0.15).toColor(),
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { setState(() { pressed = true; }); },
                   onTapCancel: () { setState(() { pressed = false; }); },
-                  onTap: () { setState(() { pressed = false; }); },
+                  onTap: () {  Future.delayed(Duration(milliseconds: 200), (){setState(() {pressed=false;});}); setState(() { pressed = true; }); },
                   child: Padding(
                      padding: EdgeInsets.all( type.index == 0 ? 12 : 15 ),
                      child: child
@@ -93,7 +92,7 @@ class _FloatingButtonState extends State<FloatingButton> {
       return Layer(
          accent: Color(0xFF6666FF),
          type: LayerType.fab,
-         position: 1,
+         position: 2,
          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
