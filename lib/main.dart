@@ -14,6 +14,69 @@ class Planner extends StatelessWidget {
 	}
 }
 
+class HomeView extends StatefulWidget { @override _HomeViewState createState() => _HomeViewState(); }
+
+class _HomeViewState extends State<HomeView> {
+	@override
+	Widget build(BuildContext context) {
+		var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},];
+		return NotificationListener<ScrollNotification>(
+         onNotification: (scrollInfo) {},
+         child: CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            slivers: <Widget>[
+               SliverAppBar( expandedHeight: MediaQuery.of(context).size.height/2.75, backgroundColor: Color(0xFFF7F7FC) ),
+               SliverAppBar(
+                  backgroundColor: Color(0xFFF7F7FC),
+                  expandedHeight: 70.0,
+                  flexibleSpace: FlexibleSpaceBar(  
+                     collapseMode: CollapseMode.pin, 
+                     background: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+                  ),
+               ),
+               SliverAppBar(
+                  elevation: 0,
+                  pinned: true,
+                  titleSpacing: 0,
+                  expandedHeight: 52,
+                  backgroundColor: Colors.transparent,
+                  title: SearchBar(),
+               ),
+               SliverToBoxAdapter(    
+                  child: Container(
+                     height: 220,
+                     clipBehavior: Clip.none,
+                     child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        padding: EdgeInsets.only(top: 30, bottom: 50),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: todo.length,
+                        itemBuilder: (BuildContext context, int i) {
+                           return Container(
+                              margin: EdgeInsets.only(right: i==todo.length-1 ? 30 : 20, left: i==0 ? 30 : 0),
+                              height: 140,
+                              width: 110,
+                              child: Layer(
+                                 accent: Color(0xFF6666FF),
+                                 type: LayerType.card,
+                                 position: 1,
+                                 child: Container(
+                                    padding: EdgeInsets.all(12), 
+                                    child: Text('${todo[i]['title']} $i  ')
+                                 ),
+                              )
+                           );
+                        }
+                     ),
+                  )
+               ), 
+               SliverToBoxAdapter(child: Container(height: 200),)
+            ],
+         )
+      );
+	}
+}
+
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
@@ -22,7 +85,6 @@ class Home extends StatelessWidget {
 			systemNavigationBarColor: Color(0xFFF7F7FC),
 			statusBarColor: Color(0x00BABADB),
 		));
-      var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'}];
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -32,56 +94,7 @@ class Home extends StatelessWidget {
          ),
          body: SafeArea(
 				top: true,
-            child: CustomScrollView(
-               physics: BouncingScrollPhysics(),
-               slivers: <Widget>[
-                  SliverAppBar( expandedHeight: 300.0, backgroundColor: Color(0xFFF7F7FC) ),
-                  SliverAppBar(
-                     backgroundColor: Color(0xFFF7F7FC),
-                     expandedHeight: 70.0,
-                     flexibleSpace: FlexibleSpaceBar(  
-                        collapseMode: CollapseMode.pin, 
-                        background: Text('Heyyyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-                     ),
-                  ),
-                  SliverAppBar(
-                     elevation: 0,
-                     pinned: true,
-                     titleSpacing: 0,
-                     expandedHeight: 52,
-                     backgroundColor: Colors.transparent,
-                     title: SearchBar(),
-                  ),
-                  SliverToBoxAdapter(    
-                     child: Container(
-                        height: 220,
-                        clipBehavior: Clip.none,
-                        child: ListView.builder(
-                           physics: BouncingScrollPhysics(),
-                           padding: EdgeInsets.only(top: 30, bottom: 50),
-                           scrollDirection: Axis.horizontal,
-                           itemCount: todo.length,
-                           itemBuilder: (BuildContext context, int i) {
-                              return Container(
-                                 margin: EdgeInsets.only(right: i==todo.length-1 ? 30 : 20, left: i==0 ? 30 : 0),
-                                 height: 140,
-                                 width: 110,
-                                 child: Layer(
-                                    accent: Color(0xFF6666FF),
-                                    type: LayerType.card,
-                                    position: 1,
-                                    child: Container(
-                                       padding: EdgeInsets.all(12), 
-                                       child: Text('${todo[i]['title']} $i  ')
-                                    ),
-                                 )
-                              );
-                           }
-                        ),
-                     )
-                  ),
-               ],
-            )
+            child: HomeView()
 			)
       );
 	}
