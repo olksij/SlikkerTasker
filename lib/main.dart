@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:developer' as dev;
+import 'dart:math' as math;
 import 'material.dart';
+
 void main() => runApp(Planner());
 
 class Planner extends StatelessWidget {
@@ -25,22 +28,24 @@ class _HomeViewState extends State<HomeView> {
          child: CustomScrollView(
             physics: BouncingScrollPhysics(),
             slivers: <Widget>[
-               SliverAppBar( expandedHeight: MediaQuery.of(context).size.height/2.75, backgroundColor: Color(0xFFF7F7FC) ),
-               SliverAppBar(
-                  backgroundColor: Color(0xFFF7F7FC),
-                  expandedHeight: 70.0,
-                  flexibleSpace: FlexibleSpaceBar(  
-                     collapseMode: CollapseMode.pin, 
-                     background: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-                  ),
+               SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/2.75,
+                  delegate: SliverChildListDelegate([ Container()]),
                ),
                SliverAppBar(
-                  elevation: 0,
+                     backgroundColor: Color(0xFFF7F7FC),
+                     expandedHeight: 70.0,
+                     flexibleSpace: FlexibleSpaceBar(  
+                        collapseMode: CollapseMode.pin, 
+                        background: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+                     ),
+               ),
+               SliverPersistentHeader(
                   pinned: true,
-                  titleSpacing: 0,
-                  expandedHeight: 52,
-                  backgroundColor: Colors.transparent,
-                  title: SearchBar(),
+                  delegate: _SliverPersistentHeaderDelegate(
+                     minHeight: 52.0,
+                     maxHeight: 52.0,
+                     child: SearchBar(),
+                  ),
                ),
                SliverToBoxAdapter(    
                   child: Container(
@@ -79,6 +84,7 @@ class _HomeViewState extends State<HomeView> {
 
 class Home extends StatelessWidget {
 	Widget build(BuildContext context) {
+      dev.log((MediaQuery.of(context).size.height/2.75).toString());
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
@@ -130,3 +136,23 @@ class SearchBar extends StatelessWidget {
    }
 }
 
+class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+   _SliverPersistentHeaderDelegate({ 
+      @required this.minHeight, @required this.maxHeight, @required this.child });
+
+   final double minHeight; final double maxHeight; final Widget child;
+   @override double get minExtent => minHeight;
+   @override double get maxExtent => math.max(maxHeight, minHeight);
+
+   @override
+   Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+      return SizedBox.expand(child: child);
+   }
+
+   @override
+   bool shouldRebuild(_SliverPersistentHeaderDelegate oldDelegate) {
+      return maxHeight != oldDelegate.maxHeight ||
+         minHeight != oldDelegate.minHeight || child != oldDelegate.child;
+   }
+}
