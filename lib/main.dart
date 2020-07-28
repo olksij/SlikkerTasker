@@ -25,6 +25,7 @@ class _HomeViewState extends State<HomeView> {
    var pullPercent = 0;
 	@override
 	Widget build(BuildContext context) {
+      dev.log(MediaQuery.of(context).size.height.toString());
 		var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},];
 		return NotificationListener<ScrollNotification>(
          onNotification: (scrollInfo) {
@@ -35,12 +36,34 @@ class _HomeViewState extends State<HomeView> {
          child: CustomScrollView(
             physics: BouncingScrollPhysics(),
             slivers: <Widget>[
-               SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/2.75,
-                  delegate: SliverChildListDelegate([ 
-                     Center(
-                        child: Text(pullPercent.toString()+'%'),
-                     ) 
-                  ]),
+               SliverFixedExtentList( itemExtent: 50,
+                  delegate: SliverChildListDelegate([Container()]),
+               ),
+               SliverToBoxAdapter(
+                  child: Center(
+                     child: Container(
+                        padding: EdgeInsets.fromLTRB(14, 13, 17, 14),
+                        decoration: BoxDecoration(
+                           color: Color(0xCCEDEDF7),
+                           borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Row(
+                           mainAxisSize: MainAxisSize.min,
+                           children: <Widget>[
+                              Icon(Icons.settings, color: Color(0xFF1F1F33),), 
+                              Container(width: 7, height: 24),
+                              Text('Settings', style: TextStyle(
+                                 color: Color(0xFF1F1F33), fontWeight: FontWeight.w600, fontSize: 16
+                              ))
+                           ]
+                        ),
+                     ),
+                  )
+               ),
+               SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/3.7,
+                  delegate: SliverChildListDelegate([Center(
+                     child: Text(pullPercent.toString()+'%'),
+                  )]),
                ),
                SliverAppBar(
                   backgroundColor: Color(0xFFF7F7FC),
@@ -105,7 +128,7 @@ class Home extends StatelessWidget {
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          floatingActionButton: Container(
-            child: FloatingButton(title: 'Create', icon: Icons.add),
+            child: FloatingButton(title: 'Createhhh', icon: Icons.add),
             margin: EdgeInsets.only(bottom: 14),
          ),
          body: SafeArea(
