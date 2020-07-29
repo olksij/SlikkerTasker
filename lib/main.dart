@@ -25,7 +25,6 @@ class _HomeViewState extends State<HomeView> {
    var pullPercent = 0;
 	@override
 	Widget build(BuildContext context) {
-      dev.log(MediaQuery.of(context).size.height.toString());
 		var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},];
 		return NotificationListener<ScrollNotification>(
          onNotification: (scrollInfo) {
@@ -50,8 +49,25 @@ class _HomeViewState extends State<HomeView> {
                         child: Row(
                            mainAxisSize: MainAxisSize.min,
                            children: <Widget>[
-                              Icon(Icons.settings, color: Color(0xFF1F1F33),), 
-                              Container(width: 7, height: 24),
+                              pullPercent == 0 ? 
+                                 Icon(
+                                    Icons.settings, 
+                                    color: Color(0xFF1F1F33), 
+                                    size: 22,
+                                 ) : 
+                                 Padding(
+                                    padding: EdgeInsets.all(3),
+                                    child: SizedBox(
+                                       child: CircularProgressIndicator(
+                                          value: pullPercent/100,
+                                          strokeWidth: 3,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
+                                       ),
+                                       height: 16,
+                                       width: 16,
+                                    ),
+                                 ),
+                              Container(width: 8, height: 24),
                               Text('Settings', style: TextStyle(
                                  color: Color(0xFF1F1F33), fontWeight: FontWeight.w600, fontSize: 16
                               ))
@@ -61,9 +77,7 @@ class _HomeViewState extends State<HomeView> {
                   )
                ),
                SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/3.7,
-                  delegate: SliverChildListDelegate([Center(
-                     child: Text(pullPercent.toString()+'%'),
-                  )]),
+                  delegate: SliverChildListDelegate([Container()]),
                ),
                SliverAppBar(
                   backgroundColor: Color(0xFFF7F7FC),
@@ -97,7 +111,7 @@ class _HomeViewState extends State<HomeView> {
                               width: 110,
                               child: Layer(
                                  accent: Color(0xFF6666FF),
-                                 type: LayerType.card,
+                                 corningStyle: CorningStyle.partial,
                                  position: 1,
                                  child: Container(
                                     padding: EdgeInsets.all(12), 
@@ -121,14 +135,16 @@ class Home extends StatelessWidget {
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
-			systemNavigationBarColor: Color(0xFFF7F7FC),
 			statusBarColor: Color(0x00BABADB),
+         systemNavigationBarColor: Color(0xFFF7F7FC),
+         systemNavigationBarIconBrightness: Brightness.dark,
+         systemNavigationBarDividerColor: Color(0xFFFF0000)
 		));
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          floatingActionButton: Container(
-            child: FloatingButton(title: 'Createhhh', icon: Icons.add),
+            child: FloatingButton(title: 'Create', icon: Icons.add),
             margin: EdgeInsets.only(bottom: 14),
          ),
          body: SafeArea(

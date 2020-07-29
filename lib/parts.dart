@@ -19,7 +19,7 @@ class _FloatingButtonState extends State<FloatingButton> {
    Widget build(BuildContext context) {
       return Layer(
          accent: Color(0xFF6666FF),
-         type: LayerType.fab,
+         corningStyle: CorningStyle.full,
          position: 2,
          child: Row(
             mainAxisSize: MainAxisSize.min,
