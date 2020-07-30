@@ -30,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
          onNotification: (scrollInfo) {
             var scroll = scrollInfo.metrics.pixels.round();
             var tempPercent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
-            if(tempPercent != pullPercent) setState(() { pullPercent = tempPercent; });
+            if(tempPercent != pullPercent) setState(() { pullPercent = tempPercent; if (pullPercent == 100) { HapticFeedback.lightImpact(); } });
          },
          child: CustomScrollView(
             physics: BouncingScrollPhysics(),

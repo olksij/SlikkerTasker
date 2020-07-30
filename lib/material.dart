@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'ripple.dart';
 
 
@@ -60,9 +61,9 @@ class _LayerState extends State<Layer> {
                   splashColor: color.withAlpha(0.15).toColor(),
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
-                  onTapDown: (a) { setState(() { pressed = true; }); },
+                  onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
                   onTapCancel: () { setState(() { pressed = false; }); },
-                  onTap: () {  Future.delayed(Duration(milliseconds: 200), (){setState(() {pressed=false;});}); setState(() { pressed = true; }); },
+                  onTap: () { Future.delayed(Duration(milliseconds: 200), (){setState(() {pressed=false;});}); setState(() { pressed = true; }); },
                   child: Padding(
                      padding: EdgeInsets.all( padding == null ? (corningStyle.index == 0 ? 12 : 15) : padding ),
                      child: child
