@@ -3,7 +3,7 @@ description: Planner, tracker, diary, and a habit maker.
 
 publish_to: 'none'
 
-version: 0.0.27+27-alpha
+version: 0.0.28-alpha
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: '>=0.5.8 <2.0.0'
 
 dev_dependencies:
   flutter_test:
