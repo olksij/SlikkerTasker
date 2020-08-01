@@ -8,18 +8,19 @@ enum CorningStyle { partial, full }
 enum ObjectType { field, floating }
 
 class Layer extends StatefulWidget {
-   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding;
+   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding; final Function onTap;
 
-   const Layer({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding });
+   const Layer({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding, this.onTap });
 
    @override
-   _LayerState createState() => _LayerState(corningStyle: corningStyle, accent: accent, position: position, child: child, padding: padding);
+   _LayerState createState() => _LayerState(corningStyle: corningStyle, accent: accent, position: 
+   position, child: child, padding: padding, onTap: onTap);
 }
 
 class _LayerState extends State<Layer> {
-   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding;
+   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding; final Function onTap;
 
-   _LayerState({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding });
+   _LayerState({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding, this.onTap });
 
    HSVColor color;
 
@@ -62,8 +63,14 @@ class _LayerState extends State<Layer> {
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
-                  onTapCancel: () { setState(() { pressed = false; }); },
-                  onTap: () { Future.delayed(Duration(milliseconds: 200), (){setState(() {pressed=false;});}); setState(() { pressed = true; }); },
+                  onTapCancel: () { setState(() => pressed = false ); },
+                  onTap: () { 
+                     if ( onTap != null ) onTap();
+                     Future.delayed( 
+                        Duration(milliseconds: 200), 
+                        () => setState(() => pressed = false )
+                     ); 
+                     setState(() => pressed = true ); },
                   child: Padding(
                      padding: EdgeInsets.all( padding == null ? (corningStyle.index == 0 ? 12 : 15) : padding ),
                      child: child

@@ -16,7 +16,6 @@ class Planner extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
-      //isFirstRun().then((firstRun) => firstRun ? Navigator.pushNamed(context, '/init') : Navigator.pushNamed(context, '/home'));
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
@@ -39,7 +38,7 @@ class Planner extends StatelessWidget {
                      '/home': (context) => Home(),
                   },
                );
-            } else return Container(color: Colors.red,);
+            } else return Container(color: Color(0xFFF7F7FC),);
          }
       );
 	}
@@ -58,6 +57,7 @@ class FirstRun extends StatelessWidget {
             corningStyle: CorningStyle.full,
             position: 1,
             child: Text('Continue'),
+            onTap: () { Navigator.pushNamed(context, '/home'); },
          ),
       );
    }
