@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1063142144569",
+    "firebase_url": "https://ab-planner.firebaseio.com",
+    "project_id": "ab-planner",
+    "storage_bucket": "ab-planner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063142144569:android:071376b8fbc720b3452be8",
+        "android_client_info": {
+          "package_name": "sh.now.alexbesida.planner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063142144569-94tsd6e3ql4m28ftbg1nsc0oiio175dm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUKsQW6eZdS6Dc8Be51nc3rW12mCQiG6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063142144569-94tsd6e3ql4m28ftbg1nsc0oiio175dm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

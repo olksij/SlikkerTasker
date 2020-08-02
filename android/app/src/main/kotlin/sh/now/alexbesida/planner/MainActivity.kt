@@ -1,4 +1,4 @@
-package com.example.planner
+package sh.now.alexbesida.planner
 
 import io.flutter.embedding.android.FlutterActivity
 
