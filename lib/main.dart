@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'material.dart';
 import 'home.dart';
 
+import 'dart:developer' as dev;
+
 void main() => runApp(Planner());
 
 class Planner extends StatelessWidget {
@@ -44,7 +46,17 @@ class Planner extends StatelessWidget {
 	}
 }
 
-class FirstRun extends StatelessWidget {
+class FirstRun extends StatefulWidget {
+   @override
+   _FirstRunState createState() => _FirstRunState();
+}
+
+class _FirstRunState extends State<FirstRun> {
+   
+   var loggingIn = false;
+
+   void localSetState(s) { this.setState(() => s()); }
+
    @override
    Widget build(BuildContext context) {
       return Scaffold(
@@ -56,8 +68,17 @@ class FirstRun extends StatelessWidget {
             accent: Color(0xFF6666FF),
             corningStyle: CorningStyle.full,
             position: 1,
-            child: Text('Continue'),
-            onTap: () { Navigator.pushNamed(context, '/home'); },
+            child: loggingIn ? SizedBox(
+               child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
+               ),
+               height: 16,
+               width: 16,
+            )
+            : Text('Continue with Google $loggingIn'),
+            onTap: this.localSetState,
+            onTapProp: () => loggingIn = true,
          ),
       );
    }

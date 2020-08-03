@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'ripple.dart';
@@ -8,26 +10,26 @@ enum CorningStyle { partial, full }
 enum ObjectType { field, floating }
 
 class Layer extends StatefulWidget {
-   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding; final Function onTap;
 
-   const Layer({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding, this.onTap });
+   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding; final Function onTap; final onTapProp;
+
+   const Layer({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding, this.onTap, this.onTapProp });
 
    @override
-   _LayerState createState() => _LayerState(corningStyle: corningStyle, accent: accent, position: 
-   position, child: child, padding: padding, onTap: onTap);
+   _LayerState createState() => _LayerState();
+
 }
 
 class _LayerState extends State<Layer> {
-   final CorningStyle corningStyle; final Color accent; final int position; final Widget child; final EdgeInsetsGeometry padding; final Function onTap;
-
-   _LayerState({ @required this.corningStyle, @required this.accent, @required this.position, @required this.child, this.padding, this.onTap });
 
    HSVColor color;
+   bool rounded;
 
    @override
    void initState() {
       super.initState();
-      color = HSVColor.fromColor(accent);
+      color = HSVColor.fromColor(widget.accent);
+      rounded = widget.corningStyle.index == 0;
    }
    
    var pressed = false;
@@ -39,11 +41,11 @@ class _LayerState extends State<Layer> {
          curve: Curves.easeOut,
          margin: EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular( corningStyle.index==0 ? 12 : 26 ),
+            borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
             color: Colors.white,
             boxShadow: [
                BoxShadow (
-                  color: color.withSaturation(color.value-0.1).withAlpha(position*0.05 + (pressed ? 0.0 : 0.05)).toColor(),
+                  color: color.withSaturation(color.value-0.1).withAlpha(widget.position*0.05 + (pressed ? 0.0 : 0.05)).toColor(),
                   offset: Offset(0, pressed ? 5 : 7),
                   blurRadius: pressed ? 30 : 40,
                ),
@@ -54,9 +56,9 @@ class _LayerState extends State<Layer> {
             ],          
          ),
          child: ClipRRect(
-            borderRadius: BorderRadius.circular( corningStyle.index==0 ? 12 : 26 ),
+            borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
             child: Material(
-               borderRadius: BorderRadius.circular( corningStyle.index==0 ? 12 : 26 ),
+               borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
                child: InkWell(
                   splashFactory: CustomInkRipple.splashFactory,
                   splashColor: color.withAlpha(0.15).toColor(),
@@ -65,15 +67,16 @@ class _LayerState extends State<Layer> {
                   onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
                   onTapCancel: () { setState(() => pressed = false ); },
                   onTap: () { 
-                     if ( onTap != null ) onTap();
+
+                     if ( widget.onTap != null ) widget.onTap(widget.onTapProp);
                      Future.delayed( 
                         Duration(milliseconds: 200), 
                         () => setState(() => pressed = false )
                      ); 
                      setState(() => pressed = true ); },
                   child: Padding(
-                     padding: EdgeInsets.all( padding == null ? (corningStyle.index == 0 ? 12 : 15) : padding ),
-                     child: child
+                     padding: EdgeInsets.all( widget.padding == null ? (rounded ? 12 : 15) : widget.padding ),
+                     child: widget.child
                   )
                ),
             ),
