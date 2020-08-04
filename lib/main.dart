@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'material.dart';
 import 'home.dart';
 
@@ -36,7 +34,7 @@ class Planner extends StatelessWidget {
                return MaterialApp(
                   theme: ThemeData(fontFamily: 'Manrope'),
                   title: 'Yaayyay',
-                  initialRoute: '/init', //snapshot.data ? '/init' : '/home',
+                  initialRoute: snapshot.data ? '/init' : '/home',
                   routes: {
                      '/init': (context) => FirstRun(),
                      '/home': (context) => Home(),
@@ -56,53 +54,29 @@ class FirstRun extends StatefulWidget {
 class _FirstRunState extends State<FirstRun> {
    
    var loggingIn = false;
-   Future<FirebaseUser> _handleSignIn() async {
-      final GoogleSignIn _googleSignIn = GoogleSignIn();
-      final FirebaseAuth _auth = FirebaseAuth.instance;
-      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-         accessToken: googleAuth.accessToken,
-         idToken: googleAuth.idToken,
-      );
-
-      final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-      print("signed in " + user.displayName);
-      return user;
-   }
-
-   void localSetState(s) { 
-      this.setState(() => s());
-   }
+   void localSetState(s) { this.setState(() => s()); }
 
    @override
    Widget build(BuildContext context) {
       return Scaffold(
-         body: Center( child: Text("It's first run!") ),
+         body: Center(
+            child: Text("It's first run!")
+         ),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          floatingActionButton: Layer(
             accent: Color(0xFF6666FF),
             corningStyle: CorningStyle.full,
             position: 1,
-            child: loggingIn ? FutureBuilder(
-               future: _handleSignIn(),
-               builder: (context, user) {
-                  if (user.hasData) {
-                     Future.delayed(Duration(seconds: 1), () => Navigator.pushNamed(context, '/home'));
-                     return Text(user.data.displayName.toString()); 
-                  }
-                  else return loggingIn ? SizedBox(
-                     child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
-                     ),
-                     height: 16,
-                     width: 16,
-                  ) : Text('Continue with Google $loggingIn');
-               },
+            child: loggingIn ? SizedBox(
+               child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
+               ),
+               height: 16,
+               width: 16,
             )
-            : Text('Continue with Google'),
+            : Text('Continue with Google $loggingIn'),
             onTap: this.localSetState,
             onTapProp: () => loggingIn = true,
          ),
