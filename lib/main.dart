@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'material.dart';
 import 'home.dart';
 
@@ -54,29 +57,50 @@ class FirstRun extends StatefulWidget {
 class _FirstRunState extends State<FirstRun> {
    
    var loggingIn = false;
+   Future<FirebaseUser> _handleSignIn() async {
+      GoogleSignInAccount googleAccount = await GoogleSignIn().isSignedIn() ? await GoogleSignIn().signInSilently() : await GoogleSignIn().signIn();
+      GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
 
-   void localSetState(s) { this.setState(() => s()); }
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+         accessToken: googleAuth.accessToken,
+         idToken: googleAuth.idToken,
+      );
+
+      final FirebaseUser user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+      return user;
+   }
+
+   void localSetState(s) { 
+      this.setState(() => s());
+   }
 
    @override
    Widget build(BuildContext context) {
       return Scaffold(
-         body: Center(
-            child: Text("It's first run!")
-         ),
+         body: Center( child: Text("It's first run!") ),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          floatingActionButton: Layer(
             accent: Color(0xFF6666FF),
             corningStyle: CorningStyle.full,
             position: 1,
-            child: loggingIn ? SizedBox(
-               child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
-               ),
-               height: 16,
-               width: 16,
+            child: loggingIn ? FutureBuilder(
+               future: _handleSignIn(),
+               builder: (context, user) {
+                  if (user.hasData) {
+                     Future.delayed(Duration(seconds: 1), () => Navigator.pushNamed(context, '/home'));
+                     return Text(user.data.displayName.toString()); 
+                  }
+                  else return loggingIn ? SizedBox(
+                     child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
+                     ),
+                     height: 16,
+                     width: 16,
+                  ) : Text('Continue with Google $loggingIn');
+               },
             )
-            : Text('Continue with Google $loggingIn'),
+            : Text('Continue with Google'),
             onTap: this.localSetState,
             onTapProp: () => loggingIn = true,
          ),
