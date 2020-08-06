@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
+import 'app.dart';
 import 'material.dart';
 import 'home.dart';
 
-import 'dart:developer' as dev;
+//import 'dart:developer' as dev;
 
 void main() => runApp(Planner());
 
 class Planner extends StatelessWidget {
-   Future<bool> isFirstRun() async {
-      final prefs = await SharedPreferences.getInstance();
-      bool firstRun = prefs.getBool('firstRun') ?? true;
-      if (firstRun) SharedPreferences.getInstance().then((prefs) => prefs.setBool('firstRun', false));
-      return firstRun;
-   }
-
 	@override
 	Widget build(BuildContext context) {
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
@@ -57,22 +48,8 @@ class FirstRun extends StatefulWidget {
 class _FirstRunState extends State<FirstRun> {
    
    var loggingIn = false;
-   Future<FirebaseUser> _handleSignIn() async {
-      GoogleSignInAccount googleAccount = await GoogleSignIn().isSignedIn() ? await GoogleSignIn().signInSilently() : await GoogleSignIn().signIn();
-      GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-         accessToken: googleAuth.accessToken,
-         idToken: googleAuth.idToken,
-      );
-
-      final FirebaseUser user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
-      return user;
-   }
-
-   void localSetState(s) { 
-      this.setState(() => s());
-   }
+   void localSetState(s) => this.setState(() => s());
 
    @override
    Widget build(BuildContext context) {
@@ -84,7 +61,7 @@ class _FirstRunState extends State<FirstRun> {
             corningStyle: CorningStyle.full,
             position: 1,
             child: loggingIn ? FutureBuilder(
-               future: _handleSignIn(),
+               future: signIn(),
                builder: (context, user) {
                   if (user.hasData) {
                      Future.delayed(Duration(seconds: 1), () => Navigator.pushNamed(context, '/home'));
