@@ -18,9 +18,10 @@ class _FloatingButtonState extends State<FloatingButton> {
    @override
    Widget build(BuildContext context) {
       return Layer(
-         accent: Color(0xFF6666FF),
+         accent: 240,
          corningStyle: CorningStyle.full,
-         position: 2,
+         objectType: ObjectType.floating,
+         padding: EdgeInsets.all(15),
          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'material.dart';
 import 'parts.dart';
-//import 'dart:developer' as dev;
 
 class HomeView extends StatefulWidget { @override _HomeViewState createState() => _HomeViewState(); }
 
@@ -16,7 +15,7 @@ class _HomeViewState extends State<HomeView> {
          onNotification: (scrollInfo) {
             var scroll = scrollInfo.metrics.pixels.round();
             var tempPercent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
-            if(tempPercent != pullPercent) setState(() { pullPercent = tempPercent; if (pullPercent == 100) { HapticFeedback.lightImpact(); } });
+            if (tempPercent != pullPercent) setState(() { pullPercent = tempPercent; if (pullPercent == 100) { HapticFeedback.lightImpact(); } });
          },
          child: CustomScrollView(
             physics: BouncingScrollPhysics(),
@@ -26,12 +25,11 @@ class _HomeViewState extends State<HomeView> {
                ),
                SliverToBoxAdapter(
                   child: Center(
-                     child: Container(
+                     child: Layer(
+                        accent: 240,
+                        corningStyle: CorningStyle.full,
+                        objectType: ObjectType.field,
                         padding: EdgeInsets.fromLTRB(14, 13, 17, 14),
-                        decoration: BoxDecoration(
-                           color: Color(0xCCEDEDF7),
-                           borderRadius: BorderRadius.circular(24),
-                        ),
                         child: Row(
                            mainAxisSize: MainAxisSize.min,
                            children: <Widget>[
@@ -59,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
                               ))
                            ]
                         ),
-                     ),
+                     )
                   )
                ),
                SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/3.7,
@@ -96,13 +94,11 @@ class _HomeViewState extends State<HomeView> {
                               height: 140,
                               width: 110,
                               child: Layer(
-                                 accent: Color(0xFF6666FF),
+                                 accent: 240,
+                                 padding: EdgeInsets.all(20),
                                  corningStyle: CorningStyle.partial,
-                                 position: 1,
-                                 child: Container(
-                                    padding: EdgeInsets.all(12), 
-                                    child: Text('${todo[i]['title']} $i  ')
-                                 ),
+                                 objectType: ObjectType.floating,
+                                 child: Text('${todo[i]['title']} $i  ')
                               )
                            );
                         }

@@ -172,9 +172,11 @@ class CustomInkRipple extends InteractiveInkFeature {
 	Animation<double> _radius;
 	AnimationController _radiusController;
 
+ // ignore: unused_field
 	Animation<int> _fadeIn;
 	AnimationController _fadeInController;
 
+ // ignore: unused_field
 	Animation<int> _fadeOut;
 	AnimationController _fadeOutController;
 
