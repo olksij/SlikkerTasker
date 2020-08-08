@@ -17,6 +17,7 @@ class _FirstRunState extends State<FirstRun> {
          body: Center( child: Text("It's first run!") ),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          floatingActionButton: Layer(
+            padding: EdgeInsets.all(15),
             accent: 240,
             corningStyle: CorningStyle.full,
             objectType: ObjectType.floating,
@@ -27,14 +28,14 @@ class _FirstRunState extends State<FirstRun> {
                      Future.delayed(Duration(seconds: 1), () => Navigator.pushNamed(context, '/home'));
                      return Text(user.data.displayName.toString()); 
                   }
-                  else return loggingIn ? SizedBox(
+                  else return SizedBox(
                      child: CircularProgressIndicator(
                         strokeWidth: 3,
                         valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
                      ),
                      height: 16,
                      width: 16,
-                  ) : Text('Continue with Google $loggingIn');
+                  );
                },
             )
             : Text('Continue with Google'),
