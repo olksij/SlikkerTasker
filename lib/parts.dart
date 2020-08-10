@@ -2,40 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'material.dart';
 
-class FloatingButton extends StatefulWidget { 
-   final String title; final IconData icon;
-
-   const FloatingButton({this.title, this.icon});
-
-   @override 
-   _FloatingButtonState createState() => _FloatingButtonState(title: title, icon: icon); }
-
-class _FloatingButtonState extends State<FloatingButton> {
-   final String title; final IconData icon;
-
-   _FloatingButtonState({ @required this.title, @required this.icon, });
-
-   @override
-   Widget build(BuildContext context) {
-      return Layer(
-         accent: 240,
-         corningStyle: CorningStyle.full,
-         objectType: ObjectType.floating,
-         padding: EdgeInsets.all(15),
-         child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-               Icon(icon, color: Color(0xFF6666FF),), 
-               Container(width: 7, height: 24),
-               Text(title+' ', style: TextStyle(
-                  color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-               ),)
-            ]
-         ),
-      );
-   }
-}
-
 class SearchBar extends StatelessWidget {
    @override
    Widget build(BuildContext context) {

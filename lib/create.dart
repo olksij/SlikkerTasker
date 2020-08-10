@@ -4,13 +4,12 @@ import 'package:flutter/services.dart';
 import 'material.dart';
 import 'parts.dart';
 
-class HomeView extends StatefulWidget { @override _HomeViewState createState() => _HomeViewState(); }
+class CreateView extends StatefulWidget { @override _CreateViewState createState() => _CreateViewState(); }
 
-class _HomeViewState extends State<HomeView> {
+class _CreateViewState extends State<CreateView> {
    var pullPercent = 0;
 	@override
 	Widget build(BuildContext context) {
-		var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},];
 		return NotificationListener<ScrollNotification>(
          onNotification: (scrollInfo) {
             var scroll = scrollInfo.metrics.pixels.round();
@@ -36,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
                            children: <Widget>[
                               pullPercent == 0 ? 
                                  Icon(
-                                    Icons.settings, 
+                                    Icons.arrow_back, 
                                     color: Color(0xFF1F1F33), 
                                     size: 22,
                                  ) : 
@@ -53,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                  ),
                               Container(width: 8, height: 24),
-                              Text('Settings', style: TextStyle(
+                              Text('Back', style: TextStyle(
                                  color: Color(0xFF1F1F33), fontWeight: FontWeight.w600, fontSize: 16
                               ))
                            ]
@@ -77,44 +76,28 @@ class _HomeViewState extends State<HomeView> {
                   delegate: SliverPersistentHeaderDlgt(
                      minHeight: 54.0,
                      maxHeight: 54.0,
-                     child: SearchBar(),
+                     child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        child: Layer(
+                           corningStyle: CorningStyle.partial, 
+                           accent: 240, 
+                           objectType: ObjectType.field, 
+                           child: Center(
+                              child: Text('Somethinggg'),
+                           ),
+                           padding: EdgeInsets.all(12),
+                        ),
+                     )
                   ),
                ),
-               SliverToBoxAdapter(    
-                  child: Container(
-                     height: 220,
-                     clipBehavior: Clip.none,
-                     child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.only(top: 30, bottom: 50),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: todo.length,
-                        itemBuilder: (BuildContext context, int i) {
-                           return Container(
-                              margin: EdgeInsets.only(right: i==todo.length-1 ? 30 : 20, left: i==0 ? 30 : 0),
-                              height: 140,
-                              width: 110,
-                              child: Layer(
-                                 accent: 240,
-                                 padding: EdgeInsets.all(20),
-                                 corningStyle: CorningStyle.partial,
-                                 objectType: ObjectType.floating,
-                                 child: Text('${todo[i]['title']} $i  ')
-                              )
-                           );
-                        }
-                     ),
-                  )
-               ), 
-               SliverToBoxAdapter(child: Container(height: 200),)
+               SliverToBoxAdapter(child: Container(height: 500),)
             ],
          )
       );
 	}
 }
 
-class Home extends StatelessWidget {
-   toCreate(context) => Navigator.pushNamed(context, '/create');
+class Create extends StatelessWidget {
 	Widget build(BuildContext context) {
 		return Scaffold(
          backgroundColor: Color(0xFFF7F7FC),
@@ -125,13 +108,12 @@ class Home extends StatelessWidget {
                corningStyle: CorningStyle.full,
                objectType: ObjectType.floating,
                padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-               onTap: () => toCreate(context),
                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                     Icon(Icons.add, color: Color(0xFF6666FF),), 
+                     Icon(Icons.save, color: Color(0xFF6666FF),), 
                      Container(width: 7, height: 24),
-                     Text('Create', style: TextStyle(
+                     Text('Go..!', style: TextStyle(
                         color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
                      ),)
                   ]
@@ -141,7 +123,7 @@ class Home extends StatelessWidget {
          ),
          body: SafeArea(
 				top: true,
-            child: HomeView()
+            child: CreateView()
 			)
       );
 	}

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'app.dart';
 import 'home.dart';
 import 'intro.dart';
+import 'create.dart';
 
 void main() => runApp(Planner());
 
@@ -30,6 +31,7 @@ class Planner extends StatelessWidget {
                   routes: {
                      '/init': (context) => FirstRun(),
                      '/home': (context) => Home(),
+                     '/create': (context) => Create(),
                   },
                );
             } else return Container(color: Color(0xFFF7F7FC),);
