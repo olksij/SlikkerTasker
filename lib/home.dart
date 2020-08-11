@@ -16,6 +16,7 @@ class _HomeViewState extends State<HomeView> {
             var scroll = scrollInfo.metrics.pixels.round();
             var tempPercent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
             if (tempPercent != pullPercent) setState(() { pullPercent = tempPercent; if (pullPercent == 100) { HapticFeedback.lightImpact(); } });
+            return false;
          },
          child: CustomScrollView(
             scrollDirection: Axis.vertical,

@@ -21,14 +21,12 @@ class _LayerState extends State<Layer> {
 
    HSVColor color;
    bool rounded;
-   bool field;
 
    @override
    void initState() {
       super.initState();
       rounded = widget.corningStyle.index == 0;
-      field = widget.objectType.index == 0;
-      color = HSVColor.fromAHSV(field ? 0.8 : 1, widget.accent, field ? 0.05 : 0.6, field ? 0.97 : 1);
+      color = HSVColor.fromAHSV((widget.objectType.index == 0) ? 0.8 : 1, widget.accent, (widget.objectType.index == 0) ? 0.05 : 0.6, (widget.objectType.index == 0) ? 0.97 : 1);
    }
    
    var pressed = false;
@@ -38,11 +36,11 @@ class _LayerState extends State<Layer> {
       return AnimatedContainer( 
          duration: Duration(milliseconds: 200),
          curve: Curves.easeOut,
-         margin: field ? null : EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
+         margin: (widget.objectType.index == 0) ? EdgeInsets.only(bottom: 1.5, top: 1.5) : EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
             color: Colors.transparent,
-            boxShadow: field ? [] : [
+            boxShadow: (widget.objectType.index == 0) ? [] : [
                BoxShadow (
                   color: color.withSaturation(0.6).withAlpha(pressed ? 0.07 : 0.12).toColor(),
                   offset: Offset(0, pressed ? 5 : 7),
@@ -57,11 +55,11 @@ class _LayerState extends State<Layer> {
          child: ClipRRect(
             borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
             child: Material(
-               color: field ? color.toColor() : Colors.white,
+               color: (widget.objectType.index == 0) ? color.toColor() : Colors.white,
                borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
                child: InkWell(
                   splashFactory: CustomInkRipple.splashFactory,
-                  splashColor: color.withAlpha(field ? 0.5 : 0.125).withValue(field ? 0.95 : 1).withSaturation(field ? 0.075 : 0.6).toColor(),
+                  splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.5 : 0.125).withValue((widget.objectType.index == 0) ? 0.95 : 1).withSaturation((widget.objectType.index == 0) ? 0.075 : 0.6).toColor(),
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },

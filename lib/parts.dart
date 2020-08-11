@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'material.dart';
 
 class SearchBar extends StatelessWidget {
    @override

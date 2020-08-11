@@ -15,6 +15,7 @@ class _CreateViewState extends State<CreateView> {
             var scroll = scrollInfo.metrics.pixels.round();
             var tempPercent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
             if (tempPercent != pullPercent) setState(() { pullPercent = tempPercent; if (pullPercent == 100) { HapticFeedback.lightImpact(); } });
+            return false;
          },
          child: CustomScrollView(
             scrollDirection: Axis.vertical,
@@ -90,11 +91,34 @@ class _CreateViewState extends State<CreateView> {
                      )
                   ),
                ),
-               SliverToBoxAdapter(child: Container(height: 500),)
+               SliverToBoxAdapter(child: CreateProps(title: 'Hey')),
+               SliverToBoxAdapter(child: Container(height: 500)),
             ],
          )
       );
 	}
+}
+
+class CreateProps extends StatefulWidget {
+   final String title;
+   const CreateProps({Key key, this.title});
+   @override _CreatePropsState createState() => _CreatePropsState();
+}
+
+class _CreatePropsState extends State<CreateProps> {
+   bool togged = false;
+   togge() => setState(() { togged = !togged; });
+   @override
+   Widget build(BuildContext context) {
+      return Layer(
+         accent: 240,
+         child: Text(togged.toString()),
+         corningStyle: CorningStyle.partial,
+         objectType: togged ? ObjectType.floating : ObjectType.field,
+         padding: EdgeInsets.all(15),
+         onTap: this.togge,
+      );
+   }
 }
 
 class Create extends StatelessWidget {
