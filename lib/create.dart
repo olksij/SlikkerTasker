@@ -8,6 +8,12 @@ class CreateView extends StatefulWidget { @override _CreateViewState createState
 
 class _CreateViewState extends State<CreateView> {
    var pullPercent = 0;
+   var toggesList = [
+      CreateProps(title: 'hey',),
+      CreateProps(title: 'hey2',),
+      CreateProps(title: 'hey3',),
+      CreateProps(title: 'bye',)
+   ];
 	@override
 	Widget build(BuildContext context) {
 		return NotificationListener<ScrollNotification>(
@@ -91,7 +97,27 @@ class _CreateViewState extends State<CreateView> {
                      )
                   ),
                ),
-               SliverToBoxAdapter(child: CreateProps(title: 'Hey')),
+               SliverToBoxAdapter(
+                  child: Padding( 
+                     padding: EdgeInsets.fromLTRB(30, 30, 30, 0),
+                     child: ColumnBuilder(
+                        itemCount: (toggesList.length/2).round(),
+                        itemBuilder: (BuildContext context, int i) {
+                           var j = i*2;
+                           return Padding(
+                              padding: EdgeInsets.only(bottom:20),
+                              child: Row(
+                                 children: [
+                                    Expanded(child: toggesList[j],),
+                                    Container(width: 20,),
+                                    Expanded(child: toggesList[j+1],)
+                                 ],
+                              )
+                           );
+                        },
+                     )
+                  )
+               ),
                SliverToBoxAdapter(child: Container(height: 500)),
             ],
          )
@@ -112,7 +138,7 @@ class _CreatePropsState extends State<CreateProps> {
    Widget build(BuildContext context) {
       return Layer(
          accent: 240,
-         child: Text(togged.toString()),
+         child: Text(widget.title),
          corningStyle: CorningStyle.partial,
          objectType: togged ? ObjectType.floating : ObjectType.field,
          padding: EdgeInsets.all(15),
