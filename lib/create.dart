@@ -133,7 +133,7 @@ class CreateProps extends StatefulWidget {
 
 class _CreatePropsState extends State<CreateProps> {
    bool togged = false;
-   togge() => setState(() { togged = !togged; });
+   togge(a) => setState(() { togged = !togged; });
    @override
    Widget build(BuildContext context) {
       return Layer(
@@ -142,7 +142,33 @@ class _CreatePropsState extends State<CreateProps> {
          corningStyle: CorningStyle.partial,
          objectType: togged ? ObjectType.floating : ObjectType.field,
          padding: EdgeInsets.all(15),
-         onTap: this.togge,
+         onTap: (a) => showModalBottomSheet(
+            context: context, 
+            isDismissible: true,
+            shape: RoundedRectangleBorder(),
+            builder: (context) { 
+               return Padding(
+                  padding: EdgeInsets.all(30),
+                  child: TextField(
+                  style: TextStyle(
+                     fontSize: 16.5,
+                     color: Color(0xFF1F1F33)                 
+                  ),
+                  decoration: InputDecoration(
+                     contentPadding: EdgeInsets.all(15),
+                     border: new OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                     ),
+                     hintText: 'Type something',
+                     hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                     filled: true,
+                     fillColor: Color(0xCCEDEDF7),
+                  ),
+               )
+               );
+            }
+         ),
       );
    }
 }
