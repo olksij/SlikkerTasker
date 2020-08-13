@@ -126,7 +126,8 @@ class Home extends StatelessWidget {
                corningStyle: CorningStyle.full,
                objectType: ObjectType.floating,
                padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-               onTap: () => toCreate(context),
+               onTap: this.toCreate,
+               onTapProp: context,
                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
