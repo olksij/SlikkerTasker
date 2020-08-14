@@ -145,27 +145,38 @@ class _CreatePropsState extends State<CreateProps> {
          onTap: (a) => showModalBottomSheet(
             context: context, 
             isDismissible: true,
-            shape: RoundedRectangleBorder(),
+            barrierColor: Color(0x551F1F33),
+            backgroundColor: Colors.transparent,
             builder: (context) { 
-               return Padding(
-                  padding: EdgeInsets.all(30),
+               return Container(
+                  decoration: BoxDecoration(
+                     color: Color(0xFFF7F7FC),
+                     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                     boxShadow: [
+                        BoxShadow(
+                           color: Color(0x301e1e33),
+                           blurRadius: 35
+                        )
+                     ]
+                  ),
+                  padding: EdgeInsets.fromLTRB(25, 27, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
                   child: TextField(
-                  style: TextStyle(
-                     fontSize: 16.5,
-                     color: Color(0xFF1F1F33)                 
-                  ),
-                  decoration: InputDecoration(
-                     contentPadding: EdgeInsets.all(15),
-                     border: new OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12),
+                     style: TextStyle(
+                        fontSize: 16.5,
+                        color: Color(0xFF1F1F33)
                      ),
-                     hintText: 'Type something',
-                     hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-                     filled: true,
-                     fillColor: Color(0xCCEDEDF7),
-                  ),
-               )
+                     decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(15),
+                        border: new OutlineInputBorder(
+                           borderSide: BorderSide.none,
+                           borderRadius: BorderRadius.circular(12),
+                        ),
+                        hintText: 'Type something',
+                        hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                        filled: true,
+                        fillColor: Color(0xCCEDEDF7),
+                     ),
+                  )
                );
             }
          ),
