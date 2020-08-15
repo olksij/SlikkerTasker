@@ -21,7 +21,7 @@ class Planner extends StatelessWidget {
 		));
 
 		return FutureBuilder<bool>(
-         future: isFirstRun(),
+         future: isSignedIn(),
          builder: (context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasData) {
                return MaterialApp(
@@ -34,7 +34,7 @@ class Planner extends StatelessWidget {
                      '/create': (context) => Create(),
                   },
                );
-            } else return Container(color: Color(0xFFF7F7FC),);
+            } else return Container(color: Color(0xFFFF0000),); //F7F7FC
          }
       );
 	}
