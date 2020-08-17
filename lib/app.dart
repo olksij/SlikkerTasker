@@ -15,25 +15,32 @@ Map<String, dynamic> getDefaults(PackageInfo packageInfo) => {
    'settingsVersion': setsVersion,
 };
 
+Future<FirebaseUser> _signInWithCredential(googleAuth) async {
+   return (await FirebaseAuth.instance.signInWithCredential(
+      GoogleAuthProvider.getCredential(
+         accessToken: googleAuth.accessToken,
+         idToken: googleAuth.idToken,
+      )
+   )).user; 
+}
+
 Future<bool> isSignedIn() async {
    if (signedIn != null) return signedIn;
-   signedIn = await GoogleSignIn().isSignedIn();
+
+   GoogleSignInAccount signInAccount = await GoogleSignIn().signInSilently(suppressErrors: true);
+   if (signInAccount != null) {
+      GoogleSignInAuthentication googleAuth = await signInAccount.authentication;
+      user = await _signInWithCredential(googleAuth);
+      signedIn = true;
+   }
+   else signedIn = false;
    return signedIn;
 }
 
 Future<FirebaseUser> signIn() async {
    if (user != null) return user;
-   signedIn = false;
-   GoogleSignInAccount googleAccount = signedIn
-      ? await GoogleSignIn().signInSilently() : await GoogleSignIn().signIn();
-   GoogleSignInAuthentication googleAuth = await googleAccount.authentication;
-
-   final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-   );
-
-   user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+   GoogleSignInAuthentication googleAuth = await (await GoogleSignIn().signIn()).authentication;
+   user =  await _signInWithCredential(googleAuth);
    firestoreConnect();
    return user;
 }

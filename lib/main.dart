@@ -27,7 +27,7 @@ class Planner extends StatelessWidget {
                return MaterialApp(
                   theme: ThemeData(fontFamily: 'Manrope'),
                   title: 'Yaayyay',
-                  initialRoute: snapshot.data ? '/init' : '/home',
+                  initialRoute: snapshot.data ? '/home' : '/init',
                   routes: {
                      '/init': (context) => FirstRun(),
                      '/home': (context) => Home(),
