@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'material.dart';
 import 'parts.dart';
+import 'app.dart';
 
 class HomeView extends StatefulWidget { @override _HomeViewState createState() => _HomeViewState(); }
 
@@ -10,7 +11,6 @@ class _HomeViewState extends State<HomeView> {
    var pullPercent = 0;
 	@override
 	Widget build(BuildContext context) {
-		var todo = [{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},{'title': 'Testt'},];
 		return NotificationListener<ScrollNotification>(
          onNotification: (scrollInfo) {
             var scroll = scrollInfo.metrics.pixels.round();
@@ -81,32 +81,45 @@ class _HomeViewState extends State<HomeView> {
                      child: SearchBar(),
                   ),
                ),
-               SliverToBoxAdapter(    
-                  child: Container(
-                     height: 220,
-                     clipBehavior: Clip.none,
-                     child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.only(top: 30, bottom: 50),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: todo.length,
-                        itemBuilder: (BuildContext context, int i) {
-                           return Container(
-                              margin: EdgeInsets.only(right: i==todo.length-1 ? 30 : 20, left: i==0 ? 30 : 0),
-                              height: 140,
-                              width: 110,
-                              child: Layer(
-                                 accent: 240,
-                                 padding: EdgeInsets.all(20),
-                                 corningStyle: CorningStyle.partial,
-                                 objectType: ObjectType.floating,
-                                 child: Text('${todo[i]['title']} $i  ')
+               SliverToBoxAdapter( 
+                  child: StreamBuilder(
+                     stream: getFirestoreData(),
+                     builder: (context, snapshot){
+                        if (snapshot.hasError) return Text('Something went wrong');
+
+                        if (snapshot.connectionState == ConnectionState.waiting) return Text("Loading");
+                        
+                        List<Widget> cards = [];
+                        snapshot.data.documents.forEach((d) =>
+                           cards.add(
+                              Container(
+                                 height: 140,
+                                 width: 110,
+                                 margin: EdgeInsets.only(right: 20),
+                                 child: Layer(
+                                    accent: 240,
+                                    padding: EdgeInsets.all(20),
+                                    corningStyle: CorningStyle.partial,
+                                    objectType: ObjectType.floating,
+                                    child: Text(d.data['appVersion'])
+                                 )
                               )
-                           );
-                        }
-                     ),
-                  )
-               ), 
+                           )
+                        );
+                        return Container(
+                           height: 220,
+                           margin: EdgeInsets.only(left: 30, right: 10),
+                           clipBehavior: Clip.none,
+                           child: ListView(
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(top: 30, bottom: 50),
+                              scrollDirection: Axis.horizontal,
+                              children: cards,
+                           ),
+                        );
+                     }
+                  ),
+               ),
                SliverToBoxAdapter(child: Container(height: 200),)
             ],
          )

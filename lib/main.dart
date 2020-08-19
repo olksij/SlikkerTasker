@@ -23,18 +23,17 @@ class Planner extends StatelessWidget {
 		return FutureBuilder<bool>(
          future: isSignedIn(),
          builder: (context, AsyncSnapshot<bool> snapshot) {
-            if (snapshot.hasData) {
-               return MaterialApp(
-                  theme: ThemeData(fontFamily: 'Manrope'),
-                  title: 'Yaayyay',
-                  initialRoute: snapshot.data ? '/home' : '/init',
-                  routes: {
-                     '/init': (context) => FirstRun(),
-                     '/home': (context) => Home(),
-                     '/create': (context) => Create(),
-                  },
-               );
-            } else return Container(color: Color(0xFFFF0000),); //F7F7FC
+            if (!snapshot.hasData) return Container(color: Color(0xFFF2F2F5)); //F7F7FC
+            return MaterialApp(
+               theme: ThemeData(fontFamily: 'Manrope'),
+               title: 'Yaayyay',
+               initialRoute: snapshot.data ? '/home' : '/init',
+               routes: {
+                  '/init': (context) => FirstRun(),
+                  '/home': (context) => Home(),
+                  '/create': (context) => Create(),
+               },
+            );
          }
       );
 	}

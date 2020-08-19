@@ -5,10 +5,8 @@ import 'package:package_info/package_info.dart';
 
 const double setsVersion = 0.1;
 
-bool signedIn;
-FirebaseUser user;
-List reminders;
-Map<String, dynamic> settings;
+bool signedIn; FirebaseUser user; Firestore firestoreDB = Firestore.instance;
+List reminders; Map<String, dynamic> settings;
 
 Map<String, dynamic> getDefaults(PackageInfo packageInfo) => {
    'appVersion': packageInfo.version,
@@ -25,8 +23,6 @@ Future<FirebaseUser> _signInWithCredential(googleAuth) async {
 }
 
 Future<bool> isSignedIn() async {
-   if (signedIn != null) return signedIn;
-
    GoogleSignInAccount signInAccount = await GoogleSignIn().signInSilently(suppressErrors: true);
    if (signInAccount != null) {
       GoogleSignInAuthentication googleAuth = await signInAccount.authentication;
@@ -34,19 +30,27 @@ Future<bool> isSignedIn() async {
       signedIn = true;
    }
    else signedIn = false;
+   //
+   /*var testSettings = await firestoreDB.collection(user.uid).
+   if (!testSettings.exists) for(int i = 1; i < 4; i++ ){
+      await firestoreDB.collection(user.uid).document().setData(getDefaults(await PackageInfo.fromPlatform()));
+   }*/
+   //
    return signedIn;
 }
 
 Future<FirebaseUser> signIn() async {
-   if (user != null) return user;
    GoogleSignInAuthentication googleAuth = await (await GoogleSignIn().signIn()).authentication;
    user =  await _signInWithCredential(googleAuth);
-   firestoreConnect();
    return user;
 }
 
+Stream<QuerySnapshot> getFirestoreData() {
+
+   return firestoreDB.collection(user.uid).snapshots();
+}
+
 firestoreConnect() async {
-   var firestoreDB = Firestore.instance;
    var testSettings = await firestoreDB.collection(user.uid).document('.settings').get();
    if (testSettings.exists) settings = testSettings.data;
    else { 
