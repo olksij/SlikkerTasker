@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'material.dart';
 import 'parts.dart';
@@ -81,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
                      child: SearchBar(),
                   ),
                ),
-               SliverToBoxAdapter( 
+               /*SliverToBoxAdapter( 
                   child: StreamBuilder(
                      stream: getFirestoreData(),
                      builder: (context, snapshot){
@@ -119,8 +120,45 @@ class _HomeViewState extends State<HomeView> {
                         );
                      }
                   ),
+               ),*/
+               SliverPadding(
+                  padding: EdgeInsets.all(30),
+                  sliver: StreamBuilder(
+                     stream: getFirestoreData(),
+                     builder: (context, snapshot){
+                        if (snapshot.hasError) 
+                           return SliverToBoxAdapter(child: Text('Something went wrong'));
+                        if (snapshot.connectionState == ConnectionState.waiting) 
+                           return SliverToBoxAdapter(child: Text('loading'));
+
+                        List<Widget> cards = [];
+                        snapshot.data.documents.forEach((d) =>
+                           cards.add(
+                              Container(
+                                 height: 140,
+                                 child: Layer(
+                                    accent: 240,
+                                    padding: EdgeInsets.all(20),
+                                    corningStyle: CorningStyle.partial,
+                                    objectType: ObjectType.floating,
+                                    child: Text(d.data['appVersion'])
+                                 ),
+                              )
+                           )
+                        );
+                        return SliverStaggeredGrid.countBuilder(
+                           crossAxisCount: 2,
+                           itemCount: cards.length,
+                           itemBuilder: (BuildContext context, int index) => cards[index],
+                           staggeredTileBuilder: (int index) =>
+                              StaggeredTile.count(1,1),
+                           mainAxisSpacing: 20.0,
+                           crossAxisSpacing: 20.0,
+                        );
+                     }
+                  ),
                ),
-               SliverToBoxAdapter(child: Container(height: 200),)
+               //SliverToBoxAdapter(child: Container(height: 200),)
             ],
          )
       );
