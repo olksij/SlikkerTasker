@@ -23,19 +23,14 @@ Future<FirebaseUser> _signInWithCredential(googleAuth) async {
 }
 
 Future<bool> isSignedIn() async {
-   GoogleSignInAccount signInAccount = await GoogleSignIn().signInSilently(suppressErrors: true);
+   GoogleSignInAccount signInAccount = GoogleSignIn().currentUser ?? 
+      await GoogleSignIn().signInSilently(suppressErrors: true);
    if (signInAccount != null) {
       GoogleSignInAuthentication googleAuth = await signInAccount.authentication;
       user = await _signInWithCredential(googleAuth);
       signedIn = true;
    }
    else signedIn = false;
-   //
-   /*var testSettings = await firestoreDB.collection(user.uid).
-   if (!testSettings.exists) for(int i = 1; i < 4; i++ ){
-      await firestoreDB.collection(user.uid).document().setData(getDefaults(await PackageInfo.fromPlatform()));
-   }*/
-   //
    return signedIn;
 }
 
