@@ -6,13 +6,11 @@ import 'material.dart';
 import 'parts.dart';
 import 'app.dart';
 
-class HomeView extends StatefulWidget { @override _HomeViewState createState() => _HomeViewState(); }
-
-class _HomeViewState extends State<HomeView> {
-   TopButton topButton = TopButton();
-   bool pull100 = false;
+class HomeView extends StatelessWidget {
+   final TopButton topButton = TopButton();
 	@override
 	Widget build(BuildContext context) {
+      bool pull100 = false;
 		return NotificationListener<ScrollNotification>(
          onNotification: (scrollInfo) {
             var scroll = scrollInfo.metrics.pixels.round();
@@ -104,34 +102,27 @@ class Home extends StatelessWidget {
    toCreate(context) => Navigator.pushNamed(context, '/create');
 	Widget build(BuildContext context) {
 		return Material(
-         /*backgroundColor: Color(0xFFF7F7FC),
-         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-         floatingActionButton: Container(
-            child: Layer(
-               accent: 240,
-               corningStyle: CorningStyle.full,
-               objectType: ObjectType.floating,
-               padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-               onTap: this.toCreate,
-               onTapProp: context,
-               child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                     Icon(Icons.add, color: Color(0xFF6666FF),), 
-                     Container(width: 7, height: 24),
-                     Text('Create', style: TextStyle(
-                        color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-                     ),)
-                  ]
-               ),
-            ),
-            margin: EdgeInsets.only(bottom: 14),
-         ),*/
          child: SafeArea(
-				//top: true,
+				top: true,
             child: Stack(
                children: [
                   HomeView(),
+                  Align(
+                     alignment: Alignment.bottomCenter,
+                     child: Container(
+                        decoration: BoxDecoration(
+                           gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment(0,0.25),
+                              colors: [
+                                 Color(0x00F7F7FC),
+                                 Color(0xFFF7F7FC),
+                              ]
+                           )
+                        ),
+                        height: 84,
+                     ),
+                  ),
                   Align(
                      alignment: Alignment.bottomCenter,
                      child: Container(
