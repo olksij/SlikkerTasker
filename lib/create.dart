@@ -71,7 +71,7 @@ class _CreateViewState extends State<CreateView> {
 						delegate: SliverChildListDelegate([Container()]),
 					),
 					SliverAppBar(
-						backgroundColor: Color(0xFFF7F7FC),
+						backgroundColor: Color(0xFFF6F6FC),
 						expandedHeight: 70.0,
 						flexibleSpace: FlexibleSpaceBar(  
 							collapseMode: CollapseMode.pin, 
@@ -150,7 +150,7 @@ class _CreatePropsState extends State<CreateProps> {
 				builder: (context) { 
 					return Container(
 						decoration: BoxDecoration(
-							color: Color(0xFFF7F7FC),
+							color: Color(0xFFF6F6FC),
 							borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
 							boxShadow: [
 								BoxShadow(
@@ -187,7 +187,7 @@ class _CreatePropsState extends State<CreateProps> {
 class Create extends StatelessWidget {
 	Widget build(BuildContext context) {
 		return Scaffold(
-			backgroundColor: Color(0xFFF7F7FC),
+			backgroundColor: Color(0xFFF6F6FC),
 			floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 			floatingActionButton: Container(
 				child: Layer(

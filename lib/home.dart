@@ -28,18 +28,21 @@ class HomeView extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             slivers: <Widget>[
                SliverFixedExtentList( itemExtent: 50,
-                  delegate: SliverChildListDelegate([Container()]),
+                  delegate: SliverChildListDelegate([Container(color: Color(0xFFF6F6FC))]),
                ),
                SliverToBoxAdapter(
-                  child: Center(
-                     child: topButton
+                  child: Container(
+                     color: Color(0xFFF6F6FC),
+                     child: Center(
+                        child: topButton
+                     )
                   )
                ),
                SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/3.7,
-                  delegate: SliverChildListDelegate([Container()]),
+                  delegate: SliverChildListDelegate([Container(color: Color(0xFFF6F6FC),)]),
                ),
                SliverAppBar(
-                  backgroundColor: Color(0xFFF7F7FC),
+                  backgroundColor: Color(0xFFF6F6FC),
                   expandedHeight: 70.0,
                   flexibleSpace: FlexibleSpaceBar(  
                      collapseMode: CollapseMode.pin, 
@@ -102,6 +105,7 @@ class Home extends StatelessWidget {
    toCreate(context) => Navigator.pushNamed(context, '/create');
 	Widget build(BuildContext context) {
 		return Material(
+         color: Color(0xFFF6F6FC),
          child: SafeArea(
 				top: true,
             child: Stack(
@@ -115,8 +119,8 @@ class Home extends StatelessWidget {
                               begin: Alignment.topCenter,
                               end: Alignment(0,0.25),
                               colors: [
-                                 Color(0x00F7F7FC),
-                                 Color(0xFFF7F7FC),
+                                 Color(0x00F6F6FC),
+                                 Color(0xFFF6F6FC),
                               ]
                            )
                         ),

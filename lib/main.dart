@@ -15,7 +15,7 @@ class Planner extends StatelessWidget {
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
 			statusBarColor: Color(0x00BABADB),
-         systemNavigationBarColor: Color(0xFFF7F7FC),
+         systemNavigationBarColor: Color(0xFFF6F6FC),
          systemNavigationBarIconBrightness: Brightness.dark,
          systemNavigationBarDividerColor: Color(0xFFFF0000)
 		));
@@ -23,7 +23,7 @@ class Planner extends StatelessWidget {
 		return FutureBuilder<bool>(
          future: isSignedIn(),
          builder: (context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) return Container(color: Color(0xFFF2F2F5)); //F7F7FC
+            if (!snapshot.hasData) return Container(color: Color(0xFFF2F2F5));
             return MaterialApp(
                theme: ThemeData(fontFamily: 'Manrope'),
                title: 'Yaayyay',
