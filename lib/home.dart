@@ -166,7 +166,7 @@ class TopButton extends StatefulWidget {
 
 class _TopButtonState extends State<TopButton> {
    var pullPercent = 0;
-   void refresh(percent) => setState(() => pullPercent = percent);
+   void refresh(percent) { if (pullPercent != percent) setState(() => pullPercent = percent); }
    @override Widget build(BuildContext context) {
       return Layer(
          accent: 240,
