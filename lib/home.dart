@@ -103,8 +103,8 @@ class _HomeViewState extends State<HomeView> {
 class Home extends StatelessWidget {
    toCreate(context) => Navigator.pushNamed(context, '/create');
 	Widget build(BuildContext context) {
-		return Scaffold(
-         backgroundColor: Color(0xFFF7F7FC),
+		return Material(
+         /*backgroundColor: Color(0xFFF7F7FC),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
          floatingActionButton: Container(
             child: Layer(
@@ -126,10 +126,38 @@ class Home extends StatelessWidget {
                ),
             ),
             margin: EdgeInsets.only(bottom: 14),
-         ),
-         body: SafeArea(
-				top: true,
-            child: HomeView()
+         ),*/
+         child: SafeArea(
+				//top: true,
+            child: Stack(
+               children: [
+                  HomeView(),
+                  Align(
+                     alignment: Alignment.bottomCenter,
+                     child: Container(
+                        child: Layer(
+                           accent: 240,
+                           corningStyle: CorningStyle.full,
+                           objectType: ObjectType.floating,
+                           padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
+                           onTap: this.toCreate,
+                           onTapProp: context,
+                           child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                 Icon(Icons.add, color: Color(0xFF6666FF),), 
+                                 Container(width: 7, height: 24),
+                                 Text('Create', style: TextStyle(
+                                    color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
+                                 ),)
+                              ]
+                           ),
+                        ),
+                        margin: EdgeInsets.only(bottom: 25),
+                     )
+                  ),
+               ],
+            )
 			)
       );
 	}
@@ -155,7 +183,7 @@ class _TopButtonState extends State<TopButton> {
             children: <Widget>[
                pullPercent == 0 ? 
                   Icon(
-                     Icons.settings, 
+                     Icons.account_circle, 
                      color: Color(0xFF1F1F33), 
                      size: 22,
                   ) : 
@@ -172,7 +200,7 @@ class _TopButtonState extends State<TopButton> {
                      ),
                   ),
                Container(width: 8, height: 24),
-               Text('Settings', style: TextStyle(
+               Text('Account', style: TextStyle(
                   color: Color(0xFF1F1F33), fontWeight: FontWeight.w600, fontSize: 16
                ))
             ]
