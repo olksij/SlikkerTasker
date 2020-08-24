@@ -3,13 +3,16 @@ import 'package:flutter/services.dart';
 
 import 'material.dart';
 import 'parts.dart';
+import 'app.dart';
+
+String name;
 
 class CreateView extends StatefulWidget { @override _CreateViewState createState() => _CreateViewState(); }
 
 class _CreateViewState extends State<CreateView> {
 	var pullPercent = 0;
 	var toggesList = [
-		CreateProps(title: 'hey',),
+		CreateProps(title: 'name', value: name),
 		CreateProps(title: 'hey2',),
 		CreateProps(title: 'hey3',),
 		CreateProps(title: 'bye',)
@@ -127,87 +130,117 @@ class _CreateViewState extends State<CreateView> {
 }
 
 class CreateProps extends StatefulWidget {
-	final String title;
-	const CreateProps({Key key, this.title});
+	final String title; final String value;
+	const CreateProps({Key key, this.title, this.value});
 	@override _CreatePropsState createState() => _CreatePropsState();
 }
 
 class _CreatePropsState extends State<CreateProps> {
-	bool togged = false;
-	togge(a) => setState(() { togged = !togged; });
+   setValue(d) => name = d;
+   TextEditingController valueController = TextEditingController();
+
+   String value;
+   hey(){print(valueController.value.text);}
+
+   initState() {
+      super.initState();
+      valueController.addListener(hey);
+   }
+
+   enterValue(a) => showModalBottomSheet(
+      context: context, 
+      isDismissible: true,
+      barrierColor: Color(0x551F1F33),
+      backgroundColor: Colors.transparent,
+      builder: (context) { 
+         return Container(
+            decoration: BoxDecoration(
+               color: Color(0xFFF6F6FC),
+               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+               boxShadow: [
+                  BoxShadow(
+                     color: Color(0x301e1e33),
+                     blurRadius: 35
+                  )
+               ]
+            ),
+            padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
+            child: SizedBox(
+               height: 55,
+               child: Row(
+                  children: [
+                     Expanded(
+                        child: Container(
+                           margin: EdgeInsets.only(bottom: 3),
+                           child: TextField(
+                              controller: valueController,
+                              style: TextStyle(
+                                 fontSize: 16.5,
+                                 color: Color(0xFF1F1F33)
+                              ),
+                              decoration: InputDecoration(
+                                 contentPadding: EdgeInsets.all(15),
+                                 border: new OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(12),
+                                 ),
+                                 hintText: 'Type something',
+                                 hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                                 filled: true,
+                                 fillColor: Color(0xCCEDEDF7),
+                              ),
+                           ),
+                        )
+                     ),
+                     Container(width: 20,),
+                     Layer(
+                        corningStyle: CorningStyle.partial, 
+                        accent: 240, 
+                        onTap: this.setValue,
+                        onTapProp: valueController.value.text,
+                        objectType: ObjectType.floating, 
+                        child: SizedBox(
+                           height: 52,
+                           width: 52,
+                           child: Center(
+                              child: Text('👍', style: TextStyle(fontSize: 18),)
+                           )
+                        )
+                     )
+                  ]
+               )
+            )
+         );
+      }
+   );
+
 	@override
 	Widget build(BuildContext context) {
 		return Layer(
 			accent: 240,
-			child: Text(widget.title),
+			child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+               Text(widget.title),
+               Text(widget.value ?? 'Null'),
+            ],
+         ),
 			corningStyle: CorningStyle.partial,
-			objectType: togged ? ObjectType.floating : ObjectType.field,
+			objectType: widget.value != null ? ObjectType.floating : ObjectType.field,
 			padding: EdgeInsets.all(15),
-			onTap: (a) => showModalBottomSheet(
-				context: context, 
-				isDismissible: true,
-				barrierColor: Color(0x551F1F33),
-				backgroundColor: Colors.transparent,
-				builder: (context) { 
-					return Container(
-						decoration: BoxDecoration(
-							color: Color(0xFFF6F6FC),
-							borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-							boxShadow: [
-								BoxShadow(
-									color: Color(0x301e1e33),
-									blurRadius: 35
-								)
-							]
-						),
-						padding: EdgeInsets.fromLTRB(25, 27, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
-						child: SizedBox(
-                     height: 55,
-                     child: Row(
-                        children: [
-                           Expanded(
-                              child: TextField(
-                                 style: TextStyle(
-                                    fontSize: 16.5,
-                                    color: Color(0xFF1F1F33)
-                                 ),
-                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(15),
-                                    border: new OutlineInputBorder(
-                                       borderSide: BorderSide.none,
-                                       borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    hintText: 'Type something',
-                                    hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-                                    filled: true,
-                                    fillColor: Color(0xCCEDEDF7),
-                                 ),
-                              ),
-                           ),
-                           Container(width: 20,),
-                           Layer(
-                              corningStyle: CorningStyle.partial, 
-                              accent: 240, 
-                              objectType: ObjectType.floating, 
-                              child: SizedBox(
-                                 height: 52,
-                                 width: 52,
-                                 child: Center(
-                                    child: Text('👍', style: TextStyle(fontSize: 18),)
-                                 )
-                              )
-                           )
-                        ]
-                     )
-                  )
-					);
-				}
-			),
+			onTap: this.enterValue,
+         onTapProp: 'a'
 		);
 	}
 }
 
 class Create extends StatelessWidget {
+   void createEl(context) { 
+      newDoc({'name': name}); 
+      Navigator.pushNamed(context, '/home');
+   }
+
+   @override
 	Widget build(BuildContext context) {
 		return Scaffold(
 			backgroundColor: Color(0xFFF6F6FC),
@@ -218,6 +251,8 @@ class Create extends StatelessWidget {
 					corningStyle: CorningStyle.full,
 					objectType: ObjectType.floating,
 					padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
+               onTap: this.createEl,
+               onTapProp: context,
 					child: Row(
 						mainAxisSize: MainAxisSize.min,
 						children: <Widget>[

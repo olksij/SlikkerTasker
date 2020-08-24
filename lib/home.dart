@@ -77,7 +77,7 @@ class HomeView extends StatelessWidget {
                                     padding: EdgeInsets.all(20),
                                     corningStyle: CorningStyle.partial,
                                     objectType: ObjectType.floating,
-                                    child: Text(d.data['appVersion'])
+                                    child: Text(d.data['name'])
                                  ),
                               )
                            )

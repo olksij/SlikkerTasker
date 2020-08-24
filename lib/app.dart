@@ -53,3 +53,7 @@ firestoreConnect() async {
       await firestoreDB.collection(user.uid).document('.settings').setData(settings);
    }
 }
+
+newDoc(Map<String, dynamic> data) {
+   firestoreDB.collection(user.uid).document().setData(data);
+}
