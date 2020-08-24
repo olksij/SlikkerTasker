@@ -27,8 +27,11 @@ class _CreateViewState extends State<CreateView> {
 				scrollDirection: Axis.vertical,
 				physics: BouncingScrollPhysics(),
 				slivers: <Widget>[
-					SliverFixedExtentList( itemExtent: 50,
-						delegate: SliverChildListDelegate([Container()]),
+					SliverFixedExtentList( 
+                  itemExtent: 50,
+						delegate: SliverChildListDelegate(
+                     [ Container() ]
+                  ),
 					),
 					SliverToBoxAdapter(
 						child: Center(
@@ -40,13 +43,11 @@ class _CreateViewState extends State<CreateView> {
 								child: Row(
 									mainAxisSize: MainAxisSize.min,
 									children: <Widget>[
-										pullPercent == 0 ? 
-											Icon(
+										pullPercent == 0 ? Icon(
 												Icons.arrow_back, 
 												color: Color(0xFF1F1F33), 
 												size: 22,
-											) : 
-											Padding(
+											) : Padding(
 												padding: EdgeInsets.all(3),
 												child: SizedBox(
 													child: CircularProgressIndicator(
@@ -160,23 +161,45 @@ class _CreatePropsState extends State<CreateProps> {
 							]
 						),
 						padding: EdgeInsets.fromLTRB(25, 27, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
-						child: TextField(
-							style: TextStyle(
-								fontSize: 16.5,
-								color: Color(0xFF1F1F33)
-							),
-							decoration: InputDecoration(
-								contentPadding: EdgeInsets.all(15),
-								border: new OutlineInputBorder(
-									borderSide: BorderSide.none,
-									borderRadius: BorderRadius.circular(12),
-								),
-								hintText: 'Type something',
-								hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-								filled: true,
-								fillColor: Color(0xCCEDEDF7),
-							),
-						)
+						child: SizedBox(
+                     height: 55,
+                     child: Row(
+                        children: [
+                           Expanded(
+                              child: TextField(
+                                 style: TextStyle(
+                                    fontSize: 16.5,
+                                    color: Color(0xFF1F1F33)
+                                 ),
+                                 decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(15),
+                                    border: new OutlineInputBorder(
+                                       borderSide: BorderSide.none,
+                                       borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    hintText: 'Type something',
+                                    hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                                    filled: true,
+                                    fillColor: Color(0xCCEDEDF7),
+                                 ),
+                              ),
+                           ),
+                           Container(width: 20,),
+                           Layer(
+                              corningStyle: CorningStyle.partial, 
+                              accent: 240, 
+                              objectType: ObjectType.floating, 
+                              child: SizedBox(
+                                 height: 52,
+                                 width: 52,
+                                 child: Center(
+                                    child: Text('👍', style: TextStyle(fontSize: 18),)
+                                 )
+                              )
+                           )
+                        ]
+                     )
+                  )
 					);
 				}
 			),
