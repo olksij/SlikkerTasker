@@ -25,7 +25,7 @@ class HomeView extends StatelessWidget {
          },
          child: CustomScrollView(
             scrollDirection: Axis.vertical,
-            physics: BouncingScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
             slivers: <Widget>[
                SliverFixedExtentList( itemExtent: 50,
                   delegate: SliverChildListDelegate([Container(color: Color(0xFFF6F6FC))]),
