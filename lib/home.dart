@@ -70,16 +70,13 @@ class HomeView extends StatelessWidget {
                         List<Widget> cards = [];
                         snapshot.data.documents.forEach((d) =>
                            cards.add(
-                              Container(
-                                 height: 140,
-                                 child: Layer(
-                                    accent: 240,
-                                    padding: EdgeInsets.all(20),
-                                    corningStyle: CorningStyle.partial,
-                                    objectType: ObjectType.floating,
-                                    child: Text(d.data['name'])
-                                 ),
-                              )
+                              Layer(
+                                 accent: 240,
+                                 padding: EdgeInsets.all(20),
+                                 corningStyle: CorningStyle.partial,
+                                 objectType: ObjectType.floating,
+                                 child: Text(d.data['name'])
+                              ),
                            )
                         );
                         return SliverStaggeredGrid.countBuilder(
@@ -87,7 +84,7 @@ class HomeView extends StatelessWidget {
                            itemCount: cards.length,
                            itemBuilder: (BuildContext context, int index) => cards[index],
                            staggeredTileBuilder: (int index) =>
-                              StaggeredTile.count(1,1),
+                              StaggeredTile.fit(1),
                            mainAxisSpacing: 20.0,
                            crossAxisSpacing: 20.0,
                         );
