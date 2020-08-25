@@ -91,7 +91,7 @@ class HomeView extends StatelessWidget {
                      }
                   ),
                ),
-               //SliverToBoxAdapter(child: Container(height: 200),)
+               SliverToBoxAdapter(child: Container(height: 60),)
             ],
          )
       );

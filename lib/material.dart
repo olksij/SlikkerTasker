@@ -34,7 +34,7 @@ class _LayerState extends State<Layer> {
    @override
    Widget build(BuildContext context) {
       return AnimatedContainer( 
-         duration: Duration(milliseconds: 200),
+         duration: Duration(milliseconds: 175),
          curve: Curves.easeOut,
          margin: (widget.objectType.index == 0) ? EdgeInsets.only(bottom: 1.5, top: 1.5) : EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
          decoration: BoxDecoration(
@@ -67,7 +67,7 @@ class _LayerState extends State<Layer> {
                   onTap: () { 
                      if ( widget.onTap != null ) widget.onTap(widget.onTapProp);
                      Future.delayed( 
-                        Duration(milliseconds: 200), 
+                        Duration(milliseconds: 175), 
                         () => setState(() => pressed = false )
                      ); 
                      setState(() => pressed = true ); },
