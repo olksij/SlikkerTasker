@@ -336,6 +336,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slikker_ripple:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "189ed191a2e1bd5ea5b47af86d77a2885ac5c2ed"
+      url: "git://github.com/AlexBesida/slikker_ripple.git"
+    source: git
+    version: "0.1.0"
   source_span:
     dependency: transitive
     description:

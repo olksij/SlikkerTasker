@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'ripple.dart';
-
+import 'package:slikker_ripple/slikker_ripple.dart';
 
 enum CorningStyle { partial, full }
 enum ObjectType { field, floating }
@@ -58,7 +57,7 @@ class _LayerState extends State<Layer> {
                color: (widget.objectType.index == 0) ? color.toColor() : Colors.white,
                borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
                child: InkWell(
-                  splashFactory: CustomInkRipple.splashFactory,
+                  splashFactory: SlikkerRipple.splashFactory,
                   splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.5 : 0.125).withValue((widget.objectType.index == 0) ? 0.95 : 1).withSaturation((widget.objectType.index == 0) ? 0.075 : 0.6).toColor(),
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
