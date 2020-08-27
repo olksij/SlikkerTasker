@@ -3,7 +3,7 @@ description: Planner, tracker, diary, and a habit maker.
 
 publish_to: 'none'
 
-version: 0.0.61-alpha
+version: 0.0.62-alpha
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -22,6 +22,9 @@ dependencies:
   slikker_ripple: 
     git:
       url: git://github.com/AlexBesida/slikker_ripple.git
+  hive: ^1.4.4
+  hive_flutter: ^0.3.1
+  path_provider: ^1.6.14
 
 dev_dependencies:
   flutter_test:
