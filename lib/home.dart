@@ -68,8 +68,8 @@ class HomeView extends StatelessWidget {
                            return SliverToBoxAdapter(child: Text('loading'));
 
                         List<Widget> cards = [];
-                        snapshot.data.documents.forEach((d) =>
-                           cards.add(
+                        snapshot.data.documents.forEach((d) {
+                           if (d.documentID != '.settings' && d.data['name'] != null) cards.add(
                               Layer(
                                  accent: 240,
                                  padding: EdgeInsets.all(20),
@@ -77,8 +77,8 @@ class HomeView extends StatelessWidget {
                                  objectType: ObjectType.floating,
                                  child: Text(d.data['name'])
                               ),
-                           )
-                        );
+                           );
+                        });
                         return SliverStaggeredGrid.countBuilder(
                            crossAxisCount: 2,
                            itemCount: cards.length,
@@ -158,6 +158,7 @@ class Home extends StatelessWidget {
 class TopButton extends StatefulWidget { 
    final _TopButtonState state = _TopButtonState();
    void refresh(percent) => state.refresh(percent);
+   //void ready() => state.ready();
    @override _TopButtonState createState() => state; 
 }
 

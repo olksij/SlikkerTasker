@@ -55,13 +55,14 @@ firestoreConnect() async {
    }
    Hive.init((await getApplicationDocumentsDirectory()).path);
    var sttBox = await Hive.openBox('.settings');
-   firestoreDB.document('.settings').snapshots().listen((event) {
+   /*firestoreDB.document('.settings').snapshots().listen((event) {
       if (event.data != null) { sttBox.clear();
          event.data.forEach((key, value) {
             sttBox.put(key, value);
          });
       }
-   });
+   });*/
+   print('');
    /*sttBox.watch().listen((event) async {
       await firestoreDB.document('.settings').setData(sttBox.toMap());
    });*/
