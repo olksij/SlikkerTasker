@@ -158,13 +158,14 @@ class Home extends StatelessWidget {
 class TopButton extends StatefulWidget { 
    final _TopButtonState state = _TopButtonState();
    void refresh(percent) => state.refresh(percent);
-   //void ready() => state.ready();
    @override _TopButtonState createState() => state; 
 }
 
 class _TopButtonState extends State<TopButton> {
-   var pullPercent = 0;
-   void refresh(percent) { if (pullPercent != percent) setState(() => pullPercent = percent); }
+   int pullPercent = 0;
+   void refresh(percent) { 
+      if (pullPercent != percent) try { setState(() => pullPercent = percent); } catch (a) {} 
+   }
    @override Widget build(BuildContext context) {
       return Layer(
          accent: 240,
