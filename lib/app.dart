@@ -5,14 +5,15 @@ import 'package:package_info/package_info.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-const double setsVersion = 0.1;
+const double setsVersion = 0.2;
 
 bool signedIn; FirebaseUser user; CollectionReference firestoreDB;
-List reminders; Map<String, dynamic> settings;
+List reminders; Map<String, dynamic> settings123;
 
 Map<String, dynamic> getDefaults(PackageInfo packageInfo) => {
    'appVersion': packageInfo.version,
    'settingsVersion': setsVersion,
+   'time': DateTime.now().millisecondsSinceEpoch,
 };
 
 Future<FirebaseUser> _signInWithCredential(googleAuth) async {
@@ -23,6 +24,7 @@ Future<FirebaseUser> _signInWithCredential(googleAuth) async {
       )
    )).user; 
    firestoreDB = Firestore.instance.collection(user.uid);
+   firestoreConnect();
    return user;
 }
 
@@ -49,23 +51,29 @@ Stream<QuerySnapshot> getFirestoreData() {
 }
 
 firestoreConnect() async {
-   if (!(await firestoreDB.document('.settings').get()).exists) { 
-      settings = getDefaults(await PackageInfo.fromPlatform()); 
-      await firestoreDB.document('.settings').setData(settings);
-   }
    Hive.init((await getApplicationDocumentsDirectory()).path);
-   var sttBox = await Hive.openBox('.settings');
-   /*firestoreDB.document('.settings').snapshots().listen((event) {
-      if (event.data != null) { sttBox.clear();
-         event.data.forEach((key, value) {
-            sttBox.put(key, value);
-         });
-      }
-   });*/
-   print('');
-   /*sttBox.watch().listen((event) async {
-      await firestoreDB.document('.settings').setData(sttBox.toMap());
-   });*/
+   Box settings = await Hive.openBox('.settings');
+   Box data = await Hive.openBox<Map<String, dynamic>>('data');
+   //if (!(await firestoreDB.document('.settings').get()).exists && settings.isEmpty) { 
+      settings.putAll(getDefaults((await PackageInfo.fromPlatform()))); 
+      await firestoreDB.document('.settings').setData(Map<String,dynamic>.from(settings.toMap()));
+   //}
+   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) {
+      event.documents.forEach((doc) {
+         if (doc.documentID == '.settings') {
+            if (settings.isEmpty || doc.data['time'] > settings.toMap()['time']) settings.putAll(doc.data);
+            else firestoreDB.document('.settings')
+            .setData(Map<String,dynamic>.from(settings.toMap()));
+         }
+         else {
+            if (data.get(doc.documentID) != null) {
+               if (doc.data['time'] > data.get(doc.documentID)['time']) data.put(doc.documentID, doc.data);
+               else firestoreDB.document(doc.documentID).setData(data.get(doc.documentID));
+            }
+            else data.put(doc.documentID, doc.data);
+         }
+      });
+   });
 }
 
 newDoc(Map<String, dynamic> data) {

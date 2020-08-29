@@ -236,7 +236,7 @@ class _CreatePropsState extends State<CreateProps> {
 
 class Create extends StatelessWidget {
    void createEl(context) { 
-      newDoc({'name': name}); 
+      newDoc({'name': name, 'time': DateTime.now().millisecondsSinceEpoch }); 
       Navigator.pushNamed(context, '/home');
    }
 
