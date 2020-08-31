@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:package_info/package_info.dart';
@@ -18,6 +19,7 @@ Map<String, dynamic> getDefaults(PackageInfo packageInfo) => {
 };
 
 Future<User> _signInWithCredential(googleAuth) async {
+   await Firebase.initializeApp();
    User user = (await FirebaseAuth.instance.signInWithCredential(
       GoogleAuthProvider.credential(
          accessToken: googleAuth.accessToken,

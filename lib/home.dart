@@ -68,14 +68,14 @@ class HomeView extends StatelessWidget {
                            return SliverToBoxAdapter(child: Text('loading'));
 
                         List<Widget> cards = [];
-                        snapshot.data.documents.forEach((d) {
-                           if (d.documentID != '.settings' && d.data['name'] != null) cards.add(
+                        snapshot.data.docs.forEach((doc) {
+                           if (doc.id != '.settings' && doc.data()['name'] != null) cards.add(
                               Layer(
                                  accent: 240,
                                  padding: EdgeInsets.all(20),
                                  corningStyle: CorningStyle.partial,
                                  objectType: ObjectType.floating,
-                                 child: Text(d.data['name'])
+                                 child: Text(doc.data()['name'])
                               ),
                            );
                         });
