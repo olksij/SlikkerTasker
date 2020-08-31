@@ -32,8 +32,8 @@ Future<User> _signInWithCredential(googleAuth) async {
 }
 
 Future<bool> isSignedIn() async {
-   GoogleSignInAccount signInAccount = GoogleSignIn().currentUser ?? 
-      await GoogleSignIn().signInSilently(suppressErrors: true);
+   GoogleSignInAccount signInAccount = await GoogleSignIn().isSignedIn() ? 
+   GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true) : null;
    if (signInAccount != null) {
       GoogleSignInAuthentication googleAuth = await signInAccount.authentication;
       user = await _signInWithCredential(googleAuth);
@@ -57,32 +57,16 @@ firestoreConnect() async {
    Hive.init((await getApplicationDocumentsDirectory()).path);
    settings = await Hive.openBox('.settings');
    data = await Hive.openBox<Map<String, dynamic>>('data');
-   //if (!(await firestoreDB.document('.settings').get()).exists && settings.isEmpty) { 
+   //if (!(await firestoreDB.doc('.settings').get()).exists && settings.isEmpty) { 
       settings.putAll(getDefaults((await PackageInfo.fromPlatform()))); 
       await firestoreDB.doc('.settings').set(Map<String,dynamic>.from(settings.toMap()));
    //}
-   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) {
-      /*event.docs.forEach((doc) {
-         if (doc.id == '.settings') {
-            if (settings.isEmpty || doc.data()['time'] > settings.toMap()['time']) settings.putAll(doc.data());
-            else firestoreDB.doc('.settings')
-            .set(Map<String,dynamic>.from(settings.toMap()));
-         }
-         else {
-            if (data.get(doc.id) != null) {
-               if (doc.data()['time'] > data.get(doc.id)['time']) data.put(doc.id, doc.data());
-               else firestoreDB.doc(doc.id).set(data.get(doc.id));
-            }
-            else data.put(doc.id, doc.data);
-         }
-      });*/
-      refreshDB(false);
-   });
+   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, event.docChanges));
 }
 
-void refreshDB(isLocal) async {
-   if (!isLocal) firestoreDB.where('time', isGreaterThan: settings.get('lastTimeSync')).get()
-   .then((snapshot) => snapshot.docs.forEach((doc) { if (doc.id != '.settings') data.put(doc.id, doc.data()); }));
+void refreshDB(bool isLocal, [List<DocumentChange> snapshot]) async {
+   if (!isLocal) snapshot.where((docChange) => docChange.doc.data()['time'] > settings.get('lastTimeSync'))
+   .forEach((change) { if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); });
    settings.put('lastTimeSync', DateTime.now().millisecondsSinceEpoch);
 }
 
