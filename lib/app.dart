@@ -6,14 +6,12 @@ import 'package:package_info/package_info.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-const double setsVersion = 0.3;
+const double version = 0.4;
 
 bool signedIn; User user; CollectionReference firestoreDB;
 List reminders; Box settings; Box data;
 
-Map<String, dynamic> getDefaults(PackageInfo packageInfo) => {
-   'appVersion': packageInfo.version,
-   'settingsVersion': setsVersion,
+Map<String, dynamic> getDefaults() => {
    'time': DateTime.now().millisecondsSinceEpoch,
    'lastTimeSync': 0,
 };
@@ -57,10 +55,15 @@ firestoreConnect() async {
    Hive.init((await getApplicationDocumentsDirectory()).path);
    settings = await Hive.openBox('.settings');
    data = await Hive.openBox<Map<String, dynamic>>('data');
-   //if (!(await firestoreDB.doc('.settings').get()).exists && settings.isEmpty) { 
-      settings.putAll(getDefaults((await PackageInfo.fromPlatform()))); 
-      await firestoreDB.doc('.settings').set(Map<String,dynamic>.from(settings.toMap()));
-   //}
+
+   if(settings.get('version') != version) {
+      Map<String, dynamic> oldMap = Map<String, dynamic>.from(settings.toMap());
+      settings.clear();
+      print(settings.toMap());
+      getDefaults().forEach((key, value) => settings.put(key, oldMap[key] ?? value));
+      settings.put('version', version);
+   }      
+   await firestoreDB.doc('.settings').set(Map<String,dynamic>.from(settings.toMap()));
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, event.docChanges));
 }
 
@@ -70,6 +73,6 @@ void refreshDB(bool isLocal, [List<DocumentChange> snapshot]) async {
    settings.put('lastTimeSync', DateTime.now().millisecondsSinceEpoch);
 }
 
-newDoc(Map<String, dynamic> data) {
+void newDoc(Map<String, dynamic> data) {
    firestoreDB.doc().set(data);
 }

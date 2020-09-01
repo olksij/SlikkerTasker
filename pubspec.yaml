@@ -3,7 +3,7 @@ description: Planner, tracker, diary, and a habit maker.
 
 publish_to: 'none'
 
-version: 0.0.68-alpha
+version: 0.0.69-alpha
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
