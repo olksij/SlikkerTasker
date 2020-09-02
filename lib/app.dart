@@ -2,11 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:package_info/package_info.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-const double version = 0.4;
+const double version = 0.8;
 
 bool signedIn; User user; CollectionReference firestoreDB;
 List reminders; Box settings; Box data;
@@ -56,14 +55,18 @@ firestoreConnect() async {
    settings = await Hive.openBox('.settings');
    data = await Hive.openBox<Map<String, dynamic>>('data');
 
-   if(settings.get('version') != version) {
-      Map<String, dynamic> oldMap = Map<String, dynamic>.from(settings.toMap());
-      settings.clear();
-      print(settings.toMap());
-      getDefaults().forEach((key, value) => settings.put(key, oldMap[key] ?? value));
-      settings.put('version', version);
-   }      
-   await firestoreDB.doc('.settings').set(Map<String,dynamic>.from(settings.toMap()));
+   if (settings.get('version') != version) {
+      Map cloudSettings = (await firestoreDB.doc('.settings').get()).data();
+      if (cloudSettings['version'] == version && cloudSettings['time'] > settings.get('time')) {
+         settings.clear(); settings.putAll(cloudSettings);
+      }
+      else {
+         Map<String, dynamic> oldMap = Map<String, dynamic>.from(settings.toMap());
+         settings.clear();
+         getDefaults().forEach((key, value) => settings.put(key, oldMap[key] ?? value));
+         settings.put('version', version);
+      }
+   }    
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, event.docChanges));
 }
 
