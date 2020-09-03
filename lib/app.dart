@@ -67,13 +67,15 @@ firestoreConnect() async {
          settings.put('version', version);
       }
    }    
-   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, event.docChanges));
+   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
+   //settings.watch().listen((event) => refreshDB(true, db: '.settings', event: event));
 }
 
-void refreshDB(bool isLocal, [List<DocumentChange> snapshot]) async {
+void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String db, BoxEvent event }) async {
    if (!isLocal) snapshot.where((docChange) => docChange.doc.data()['time'] > settings.get('lastTimeSync'))
-   .forEach((change) { if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); });
-   settings.put('lastTimeSync', DateTime.now().millisecondsSinceEpoch);
+   .forEach((change) { if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 
+   else  settings.putAll(change.doc.data()); });
+   //settings.put('lastTimeSync', DateTime.now().millisecondsSinceEpoch);
 }
 
 void newDoc(Map<String, dynamic> data) {
