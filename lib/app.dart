@@ -5,14 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
-const double version = 0.8;
+const double version = 0.9;
 
 bool signedIn; User user; CollectionReference firestoreDB;
 List reminders; Box settings; Box data;
 
 Map<String, dynamic> getDefaults() => {
    'time': DateTime.now().millisecondsSinceEpoch,
-   'lastTimeSync': 0,
 };
 
 Future<User> _signInWithCredential(googleAuth) async {
@@ -68,16 +67,23 @@ firestoreConnect() async {
       }
    }    
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
-   //settings.watch().listen((event) => refreshDB(true, db: '.settings', event: event));
+   settings.watch().listen((event) => refreshDB(true, doc: '.settings', value: settings.toMap()));
+   data.watch().listen((event) => refreshDB(true, doc: event.key, value: event.value));
 }
 
-void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String db, BoxEvent event }) async {
-   if (!isLocal) snapshot.where((docChange) => docChange.doc.data()['time'] > settings.get('lastTimeSync'))
-   .forEach((change) { if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 
-   else  settings.putAll(change.doc.data()); });
-   //settings.put('lastTimeSync', DateTime.now().millisecondsSinceEpoch);
+void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<String, dynamic> value }) async {
+   if (!isLocal) { snapshot
+      .where((docChange) => docChange.doc.data()['time'] > settings.get('time'))
+      .forEach((change) { 
+         if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 
+         else settings.putAll(change.doc.data()); 
+      }); 
+      settings.put('time', DateTime.now().millisecondsSinceEpoch);
+   }
+   else firestoreDB.doc(doc).set(value);
 }
 
-void newDoc(Map<String, dynamic> data) {
-   firestoreDB.doc().set(data);
+void newDoc(Map<String, dynamic> value) {
+   //firestoreDB.doc().set(data);
+   data.put('D'+DateTime.now().millisecondsSinceEpoch.toString(), value);
 }
