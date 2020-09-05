@@ -11,17 +11,16 @@ class HomeView extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
       bool pull100 = false;
+      bool pullAct = false;
 		return NotificationListener<ScrollNotification>(
          onNotification: (scrollInfo) {
-            var scroll = scrollInfo.metrics.pixels.round();
-            var tempPercent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
-            topButton.refresh(tempPercent);
-            if (tempPercent == 100 && !pull100) {
-               HapticFeedback.lightImpact();
-               pull100 = true;
-            }
-            if (tempPercent != 100 && pull100) pull100 = false;
-            return false;
+            int scroll = scrollInfo.metrics.pixels.round();
+            int percent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
+            if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
+            if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
+            if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
+            && pullAct) { Navigator.pushNamed(context, '/account'); pullAct = false; }
+            topButton.refresh(percent); return false;
          },
          child: CustomScrollView(
             scrollDirection: Axis.vertical,

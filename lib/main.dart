@@ -32,9 +32,21 @@ class Planner extends StatelessWidget {
                   '/init': (context) => FirstRun(),
                   '/home': (context) => Home(),
                   '/create': (context) => Create(),
+                  '/account': (context) => Account(),
                },
             );
          }
       );
 	}
+}
+
+class Account extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) {
+      return Scaffold(
+         body: Center(
+            child: Text('cool'),
+         )
+      );
+   }
 }
