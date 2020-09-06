@@ -6,8 +6,13 @@ import 'material.dart';
 import 'parts.dart';
 import 'app.dart';
 
-class HomeView extends StatelessWidget {
-   final TopButton topButton = TopButton();
+class SlikkerPage extends StatelessWidget {
+   final Widget title; final Widget header; final Widget content; final TopButton topButton; 
+   final Function topButtonAction; 
+
+   SlikkerPage({ @required this.title, @required this.header, @required this.content, 
+   @required this.topButton, @required this.topButtonAction });
+
 	@override
 	Widget build(BuildContext context) {
       bool pull100 = false;
@@ -19,7 +24,7 @@ class HomeView extends StatelessWidget {
             if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
             if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
             if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
-            && pullAct) { Navigator.pushNamed(context, '/account'); pullAct = false; }
+            && pullAct) { pullAct = false; topButtonAction(); }
             topButton.refresh(percent); return false;
          },
          child: CustomScrollView(
@@ -45,7 +50,7 @@ class HomeView extends StatelessWidget {
                   expandedHeight: 70.0,
                   flexibleSpace: FlexibleSpaceBar(  
                      collapseMode: CollapseMode.pin, 
-                     background: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+                     background: title,
                   ),
                ),
                SliverPersistentHeader(
@@ -53,42 +58,12 @@ class HomeView extends StatelessWidget {
                   delegate: SliverPersistentHeaderDlgt(
                      minHeight: 54.0,
                      maxHeight: 54.0,
-                     child: SearchBar(),
+                     child: header,
                   ),
                ),
                SliverPadding(
                   padding: EdgeInsets.all(30),
-                  sliver: StreamBuilder(
-                     stream: getFirestoreData(),
-                     builder: (context, snapshot){
-                        if (snapshot.hasError) 
-                           return SliverToBoxAdapter(child: Text('Something went wrong'));
-                        if (snapshot.connectionState == ConnectionState.waiting) 
-                           return SliverToBoxAdapter(child: Text('loading'));
-
-                        List<Widget> cards = [];
-                        snapshot.data.docs.forEach((doc) {
-                           if (doc.id != '.settings' && doc.data()['name'] != null) cards.add(
-                              Layer(
-                                 accent: 240,
-                                 padding: EdgeInsets.all(20),
-                                 corningStyle: CorningStyle.partial,
-                                 objectType: ObjectType.floating,
-                                 child: Text(doc.data()['name'])
-                              ),
-                           );
-                        });
-                        return SliverStaggeredGrid.countBuilder(
-                           crossAxisCount: 2,
-                           itemCount: cards.length,
-                           itemBuilder: (BuildContext context, int index) => cards[index],
-                           staggeredTileBuilder: (int index) =>
-                              StaggeredTile.fit(1),
-                           mainAxisSpacing: 20.0,
-                           crossAxisSpacing: 20.0,
-                        );
-                     }
-                  ),
+                  sliver: content
                ),
                SliverToBoxAdapter(child: Container(height: 60),)
             ],
@@ -97,16 +72,30 @@ class HomeView extends StatelessWidget {
 	}
 }
 
-class Home extends StatelessWidget {
-   toCreate(context) => Navigator.pushNamed(context, '/create');
-	Widget build(BuildContext context) {
-		return Material(
+class SlikkerScaffold extends StatelessWidget {
+   final Widget title; final Widget header; final Widget content; final TopButton topButton; 
+   final Widget floatingButton; final Function topButtonAction;
+
+   SlikkerScaffold({ @required this.title, @required this.header, @required this.content, 
+   @required this.topButton, @required this.topButtonAction, @required this.floatingButton, });
+
+   @override
+   Widget build(BuildContext context) {
+      bool pull100 = false;
+      bool pullAct = false;
+  		return Material(
          color: Color(0xFFF6F6FC),
          child: SafeArea(
 				top: true,
             child: Stack(
                children: [
-                  HomeView(),
+                  SlikkerPage(
+                     content: content,
+                     header: header,
+                     title: title,
+                     topButton: topButton,
+                     topButtonAction: topButtonAction,
+                  ),
                   Align(
                      alignment: Alignment.bottomCenter,
                      child: Container(
@@ -114,10 +103,7 @@ class Home extends StatelessWidget {
                            gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment(0,0.25),
-                              colors: [
-                                 Color(0x00F6F6FC),
-                                 Color(0xFFF6F6FC),
-                              ]
+                              colors: [ Color(0x00F6F6FC), Color(0xFFF6F6FC) ]
                            )
                         ),
                         height: 84,
@@ -126,30 +112,73 @@ class Home extends StatelessWidget {
                   Align(
                      alignment: Alignment.bottomCenter,
                      child: Container(
-                        child: Layer(
-                           accent: 240,
-                           corningStyle: CorningStyle.full,
-                           objectType: ObjectType.floating,
-                           padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-                           onTap: this.toCreate,
-                           onTapProp: context,
-                           child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                 Icon(Icons.add, color: Color(0xFF6666FF),), 
-                                 Container(width: 7, height: 24),
-                                 Text('Create', style: TextStyle(
-                                    color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-                                 ),)
-                              ]
-                           ),
-                        ),
+                        child: floatingButton,
                         margin: EdgeInsets.only(bottom: 25),
                      )
                   ),
                ],
             )
 			)
+      );
+   }
+}
+
+class Home extends StatelessWidget {
+	Widget build(BuildContext context) {
+      return SlikkerScaffold(
+         header: SearchBar(),
+         title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         topButton: TopButton(),
+         topButtonAction: () => Navigator.pushNamed(context, '/account'),
+         floatingButton: Layer(
+            accent: 240,
+            corningStyle: CorningStyle.full,
+            objectType: ObjectType.floating,
+            padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
+            onTap: () => Navigator.pushNamed(context, '/create'),
+            onTapProp: context,
+            child: Row(
+               mainAxisSize: MainAxisSize.min,
+               children: <Widget>[
+                  Icon(Icons.add, color: Color(0xFF6666FF),), 
+                  Container(width: 7, height: 24),
+                  Text('Create', style: TextStyle(
+                     color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
+                  ),)
+               ]
+            ),
+         ),
+         content: StreamBuilder(
+            stream: getFirestoreData(),
+            builder: (context, snapshot){
+               if (snapshot.hasError) 
+                  return SliverToBoxAdapter(child: Text('Something went wrong'));
+               if (snapshot.connectionState == ConnectionState.waiting) 
+                  return SliverToBoxAdapter(child: Text('loading'));
+
+               List<Widget> cards = [];
+               snapshot.data.docs.forEach((doc) {
+                  if (doc.id != '.settings' && doc.data()['name'] != null) cards.add(
+                     Layer(
+                        accent: 240,
+                        padding: EdgeInsets.all(20),
+                        corningStyle: CorningStyle.partial,
+                        objectType: ObjectType.floating,
+                        child: Text(doc.data()['name'])
+                     ),
+                  );
+               });
+               return SliverStaggeredGrid.countBuilder(
+                  crossAxisCount: 2,
+                  itemCount: cards.length,
+                  itemBuilder: (BuildContext context, int index) => cards[index],
+                  staggeredTileBuilder: (int index) =>
+                     StaggeredTile.fit(1),
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+               );
+            }
+         ),
       );
 	}
 }
