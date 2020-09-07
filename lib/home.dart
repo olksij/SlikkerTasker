@@ -121,8 +121,7 @@ class Home extends StatelessWidget {
             corningStyle: CorningStyle.full,
             objectType: ObjectType.floating,
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: () => Navigator.pushNamed(context, '/create'),
-            onTapProp: context,
+            onTap: (a) { Navigator.pushNamed(context, '/create'); },
             child: Row(
                mainAxisSize: MainAxisSize.min,
                children: <Widget>[
@@ -130,7 +129,7 @@ class Home extends StatelessWidget {
                   Container(width: 7, height: 24),
                   Text('Create', style: TextStyle(
                      color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-                  ),)
+                  ))
                ]
             ),
          ),
