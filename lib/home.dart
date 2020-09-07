@@ -31,22 +31,13 @@ class SlikkerPage extends StatelessWidget {
             scrollDirection: Axis.vertical,
             physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
             slivers: <Widget>[
-               SliverFixedExtentList( itemExtent: 50,
-                  delegate: SliverChildListDelegate([Container(color: Color(0xFFF6F6FC))]),
-               ),
-               SliverToBoxAdapter(
-                  child: Container(
-                     color: Color(0xFFF6F6FC),
-                     child: Center(
-                        child: topButton
-                     )
-                  )
-               ),
-               SliverFixedExtentList( itemExtent: MediaQuery.of(context).size.height/3.7,
-                  delegate: SliverChildListDelegate([Container(color: Color(0xFFF6F6FC),)]),
-               ),
+               SliverToBoxAdapter(child: Container( height: 52 )),
+               SliverToBoxAdapter(child: Center( child: topButton )),
+               SliverToBoxAdapter(child: Container(
+                  height: MediaQuery.of(context).size.height/3.7,
+               )),
                SliverAppBar(
-                  backgroundColor: Color(0xFFF6F6FC),
+                  backgroundColor: Colors.transparent,
                   expandedHeight: 70.0,
                   flexibleSpace: FlexibleSpaceBar(  
                      collapseMode: CollapseMode.pin, 
@@ -61,11 +52,8 @@ class SlikkerPage extends StatelessWidget {
                      child: header,
                   ),
                ),
-               SliverPadding(
-                  padding: EdgeInsets.all(30),
-                  sliver: content
-               ),
-               SliverToBoxAdapter(child: Container(height: 60),)
+               SliverPadding(padding: EdgeInsets.all(30), sliver: content ),
+               SliverToBoxAdapter(child: Container(height: 60))
             ],
          )
       );
@@ -81,8 +69,6 @@ class SlikkerScaffold extends StatelessWidget {
 
    @override
    Widget build(BuildContext context) {
-      bool pull100 = false;
-      bool pullAct = false;
   		return Material(
          color: Color(0xFFF6F6FC),
          child: SafeArea(

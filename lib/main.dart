@@ -25,6 +25,7 @@ class Planner extends StatelessWidget {
          builder: (context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) return Container(color: Color(0xFFF2F2F5));
             return MaterialApp(
+               color: Color(0xFFF6F6FC),
                theme: ThemeData(fontFamily: 'Manrope'),
                title: 'Yaayyay',
                initialRoute: snapshot.data ? '/home' : '/init',
