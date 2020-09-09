@@ -6,60 +6,6 @@ import 'material.dart';
 import 'parts.dart';
 import 'app.dart';
 
-class SlikkerPage extends StatelessWidget {
-   final Widget title; final Widget header; final Widget content; final TopButton topButton; 
-   final Function topButtonAction; 
-
-   SlikkerPage({ @required this.title, @required this.header, @required this.content, 
-   @required this.topButton, @required this.topButtonAction });
-
-	@override
-	Widget build(BuildContext context) {
-      bool pull100 = false;
-      bool pullAct = false;
-		return NotificationListener<ScrollNotification>(
-         onNotification: (scrollInfo) {
-            int scroll = scrollInfo.metrics.pixels.round();
-            int percent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
-            if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
-            if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
-            if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
-            && pullAct) { pullAct = false; topButtonAction(); }
-            topButton.refresh(percent); return false;
-         },
-         child: CustomScrollView(
-            scrollDirection: Axis.vertical,
-            physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-            slivers: <Widget>[
-               SliverToBoxAdapter(child: Container( height: 52 )),
-               SliverToBoxAdapter(child: Center( child: topButton )),
-               SliverToBoxAdapter(child: Container(
-                  height: MediaQuery.of(context).size.height/3.7,
-               )),
-               SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  expandedHeight: 70.0,
-                  flexibleSpace: FlexibleSpaceBar(  
-                     collapseMode: CollapseMode.pin, 
-                     background: title,
-                  ),
-               ),
-               SliverPersistentHeader(
-                  pinned: true,
-                  delegate: SliverPersistentHeaderDlgt(
-                     minHeight: 54.0,
-                     maxHeight: 54.0,
-                     child: header,
-                  ),
-               ),
-               SliverPadding(padding: EdgeInsets.all(30), sliver: content ),
-               SliverToBoxAdapter(child: Container(height: 60))
-            ],
-         )
-      );
-	}
-}
-
 class SlikkerScaffold extends StatelessWidget {
    final Widget title; final Widget header; final Widget content; final TopButton topButton; 
    final Widget floatingButton; final Function topButtonAction;
@@ -69,18 +15,45 @@ class SlikkerScaffold extends StatelessWidget {
 
    @override
    Widget build(BuildContext context) {
+      bool pull100 = false;
+      bool pullAct = false;
   		return Material(
          color: Color(0xFFF6F6FC),
          child: SafeArea(
 				top: true,
             child: Stack(
                children: [
-                  SlikkerPage(
-                     content: content,
-                     header: header,
-                     title: title,
-                     topButton: topButton,
-                     topButtonAction: topButtonAction,
+                  NotificationListener<ScrollNotification>(
+                     onNotification: (scrollInfo) {
+                        int scroll = scrollInfo.metrics.pixels.round();
+                        int percent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
+                        if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
+                        if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
+                        if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
+                        && pullAct) { pullAct = false; topButtonAction(); }
+                        topButton.refresh(percent); return false;
+                     },
+                     child: CustomScrollView(
+                        scrollDirection: Axis.vertical,
+                        physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                        slivers: <Widget>[
+                           SliverToBoxAdapter(child: Container( height: 52 )),
+                           SliverToBoxAdapter(child: Center( child: topButton )),
+                           SliverToBoxAdapter(child: Container( height: MediaQuery.of(context).size.height/3.7 )),
+                           SliverToBoxAdapter(child: title),
+                           SliverAppBar(
+                              elevation: 0,
+                              floating: true,
+                              pinned: true,
+                              titleSpacing: 0,
+                              title: header,
+                              backgroundColor: Colors.transparent,
+                              automaticallyImplyLeading: false,
+                           ),
+                           SliverPadding(padding: EdgeInsets.all(30), sliver: content ),
+                           SliverToBoxAdapter(child: Container(height: 60))
+                        ],
+                     )
                   ),
                   Align(
                      alignment: Alignment.bottomCenter,
