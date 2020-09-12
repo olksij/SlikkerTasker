@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'slikker.dart';
-import 'parts.dart';
 import 'app.dart';
 
-String name;
+String _name;
+
+List<CreateProps> _toggesList = [
+   CreateProps(title: 'name', value: _name),
+   CreateProps(title: 'bye', value: null),
+   CreateProps(title: 'hey', value: null),
+   CreateProps(title: 'wow', value: null),
+];
 
 class CreateView extends StatefulWidget { @override _CreateViewState createState() => _CreateViewState(); }
 
 class _CreateViewState extends State<CreateView> {
    
    void createEl(context) { 
-      newDoc({'name': name, 'time': DateTime.now().millisecondsSinceEpoch }); 
+      newDoc({'name': _name, 'time': DateTime.now().millisecondsSinceEpoch }); 
       Navigator.pushNamed(context, '/home');
    }
 
 	var pullPercent = 0;
-	var toggesList = [
-		{ 'title': 'name', 'value': name },
-		{ 'title': 'name', 'value': null },
-		{ 'title': 'name', 'value': null },
-		{ 'title': 'name', 'value': null },
-	];
+
 	@override
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
@@ -43,11 +44,8 @@ class _CreateViewState extends State<CreateView> {
          ),
          content: SliverStaggeredGrid.countBuilder(
             crossAxisCount: 2,
-            itemCount: toggesList.length,
-            itemBuilder: (BuildContext context, int index) => CreateProps(
-               title: toggesList[index]['title'],
-               value: toggesList[index]['value'],
-            ),
+            itemCount: _toggesList.length,
+            itemBuilder: (BuildContext context, int index) => _toggesList[index],
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             mainAxisSpacing: 20.0,
             crossAxisSpacing: 20.0,
@@ -76,18 +74,19 @@ class _CreateViewState extends State<CreateView> {
 
 class CreateProps extends StatefulWidget {
 	final String title; final String value;
-	const CreateProps({Key key, this.title, this.value});
+	CreateProps({ Key key, this.title, this.value });
 	@override _CreatePropsState createState() => _CreatePropsState();
 }
 
 class _CreatePropsState extends State<CreateProps> {
    TextEditingController valueController = TextEditingController();
-
    String value;
-
-   initState() {
+   @override
+   void initState() {
       super.initState();
+      value = widget.value;
    }
+   void refresh(d) { setState(() => value = d); print(d); }
 
    enterValue(a) => showModalBottomSheet(
       context: context, 
@@ -138,7 +137,7 @@ class _CreatePropsState extends State<CreateProps> {
                      Layer(
                         corningStyle: CorningStyle.partial, 
                         accent: 240, 
-                        onTap: (d) { name = d(); Navigator.pop(context); },
+                        onTap: (d) { _name = d(); this.refresh(d()); Navigator.pop(context); },
                         onTapProp: () => valueController.value.text,
                         objectType: ObjectType.floating, 
                         child: SizedBox(
@@ -164,11 +163,11 @@ class _CreatePropsState extends State<CreateProps> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
                Text(widget.title),
-               widget.value != null ? Text(widget.value) : Container(),
+               value != null ? Text(value) : Container(),
             ],
          ),
 			corningStyle: CorningStyle.partial,
-			objectType: widget.value != null ? ObjectType.floating : ObjectType.field,
+			objectType: value != null ? ObjectType.floating : ObjectType.field,
 			padding: EdgeInsets.all(15),
 			onTap: this.enterValue,
          onTapProp: 'a'
@@ -178,7 +177,7 @@ class _CreatePropsState extends State<CreateProps> {
 
 class Create extends StatelessWidget {
    void createEl(context) { 
-      newDoc({'name': name, 'time': DateTime.now().millisecondsSinceEpoch }); 
+      newDoc({'name': _name, 'time': DateTime.now().millisecondsSinceEpoch }); 
       Navigator.pushNamed(context, '/home');
    }
 
@@ -186,28 +185,6 @@ class Create extends StatelessWidget {
 	Widget build(BuildContext context) {
 		return Scaffold(
 			backgroundColor: Color(0xFFF6F6FC),
-			floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-			floatingActionButton: Container(
-				child: Layer(
-					accent: 240,
-					corningStyle: CorningStyle.full,
-					objectType: ObjectType.floating,
-					padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-               onTap: this.createEl,
-               onTapProp: context,
-					child: Row(
-						mainAxisSize: MainAxisSize.min,
-						children: <Widget>[
-							Icon(Icons.save, color: Color(0xFF6666FF),), 
-							Container(width: 7, height: 24),
-							Text('Go..!', style: TextStyle(
-								color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-							),)
-						]
-					),
-				),
-				margin: EdgeInsets.only(bottom: 14),
-			),
 			body: SafeArea(
 				top: true,
 				child: CreateView()
