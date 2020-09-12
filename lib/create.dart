@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'slikker.dart';
 import 'parts.dart';
@@ -17,10 +18,10 @@ class _CreateViewState extends State<CreateView> {
 
 	var pullPercent = 0;
 	var toggesList = [
-		CreateProps(title: 'name', value: name),
-		CreateProps(title: 'hey2',),
-		CreateProps(title: 'hey3',),
-		CreateProps(title: 'bye',)
+		{ 'title': 'name', 'value': name },
+		{ 'title': 'name', 'value': null },
+		{ 'title': 'name', 'value': null },
+		{ 'title': 'name', 'value': null },
 	];
 	@override
 	Widget build(BuildContext context) {
@@ -40,26 +41,16 @@ class _CreateViewState extends State<CreateView> {
                padding: EdgeInsets.all(12),
             ),
          ),
-         content: SliverToBoxAdapter(
-            child: Padding( 
-               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-               child: ColumnBuilder(
-                  itemCount: (toggesList.length/2).round(),
-                  itemBuilder: (BuildContext context, int i) {
-                     var j = i*2;
-                     return Padding(
-                        padding: EdgeInsets.only(bottom:20),
-                        child: Row(
-                           children: [
-                              Expanded(child: toggesList[j],),
-                              Container(width: 20,),
-                              Expanded(child: toggesList[j+1],)
-                           ],
-                        )
-                     );
-                  },
-               ),
+         content: SliverStaggeredGrid.countBuilder(
+            crossAxisCount: 2,
+            itemCount: toggesList.length,
+            itemBuilder: (BuildContext context, int index) => CreateProps(
+               title: toggesList[index]['title'],
+               value: toggesList[index]['value'],
             ),
+            staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+            mainAxisSpacing: 20.0,
+            crossAxisSpacing: 20.0,
          ),
          floatingButton: Layer(
             accent: 240,
@@ -90,15 +81,12 @@ class CreateProps extends StatefulWidget {
 }
 
 class _CreatePropsState extends State<CreateProps> {
-   setValue(d) => name = d;
    TextEditingController valueController = TextEditingController();
 
    String value;
-   hey(){print(valueController.value.text);}
 
    initState() {
       super.initState();
-      valueController.addListener(hey);
    }
 
    enterValue(a) => showModalBottomSheet(
@@ -150,15 +138,15 @@ class _CreatePropsState extends State<CreateProps> {
                      Layer(
                         corningStyle: CorningStyle.partial, 
                         accent: 240, 
-                        onTap: this.setValue,
-                        onTapProp: valueController.value.text,
+                        onTap: (d) { name = d(); Navigator.pop(context); },
+                        onTapProp: () => valueController.value.text,
                         objectType: ObjectType.floating, 
                         child: SizedBox(
                            height: 52,
                            width: 52,
                            child: Center(
                               child: Text('👍', style: TextStyle(fontSize: 18),)
-                           )
+                           ) 
                         )
                      )
                   ]
@@ -176,7 +164,7 @@ class _CreatePropsState extends State<CreateProps> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
                Text(widget.title),
-               Text(widget.value ?? 'Null'),
+               widget.value != null ? Text(widget.value) : Container(),
             ],
          ),
 			corningStyle: CorningStyle.partial,
