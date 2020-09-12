@@ -6,14 +6,9 @@ enum CorningStyle { partial, full }
 enum ObjectType { field, floating }
 
 class Layer extends StatefulWidget {
-
    final CorningStyle corningStyle; final double accent; final ObjectType objectType; final Widget child; final EdgeInsetsGeometry padding; final Function onTap; final onTapProp;
-
    const Layer({ @required this.corningStyle, @required this.accent, @required this.objectType, @required this.child, this.padding, this.onTap, this.onTapProp });
-
-   @override
-   _LayerState createState() => _LayerState();
-
+   @override _LayerState createState() => _LayerState();
 }
 
 class _LayerState extends State<Layer> {
@@ -58,7 +53,10 @@ class _LayerState extends State<Layer> {
                borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
                child: InkWell(
                   splashFactory: SlikkerRipple.splashFactory,
-                  splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.5 : 0.125).withValue((widget.objectType.index == 0) ? 0.95 : 1).withSaturation((widget.objectType.index == 0) ? 0.075 : 0.6).toColor(),
+                  splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.25 : 0.125)
+                     .withValue((widget.objectType.index == 0) ? 0.85 : 1)
+                     .withSaturation((widget.objectType.index == 0) ? 0.15 : 0.6)
+                     .toColor(),
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
