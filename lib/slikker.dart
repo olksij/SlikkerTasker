@@ -18,6 +18,7 @@ class SlikkerScaffold extends StatelessWidget {
       bool pull100 = false;
       bool pullAct = false;
       bool startedAtZero = false;
+      topButton.action(topButtonAction);
   		return Material(
          color: Color(0xFFF6F6FC),
          child: SafeArea(
@@ -91,7 +92,8 @@ class TopButton extends StatefulWidget {
    final String title; final IconData icon; final double accent;
    final _TopButtonState state = _TopButtonState();
    TopButton({ @required this.title, @required this.icon, @required this.accent });
-   void refresh(percent) => state.refresh(percent);
+   void refresh(int percent) => state.refresh(percent);
+   void action(Function a) => state.action(a);
    @override _TopButtonState createState() => state; 
 }
 
@@ -99,20 +101,23 @@ class _TopButtonState extends State<TopButton> {
    int pullPercent = 0;
    Color color;
    bool inTree = false;
-   void refresh(percent) { 
-      if (pullPercent != percent && inTree) setState(() => pullPercent = percent); 
-   }
-   @override
-   void initState() {
+   Function onTap;
+
+   void refresh(percent) { if (pullPercent != percent && inTree) setState(() => pullPercent = percent); }
+   void action(Function a) { onTap = a; print(a); }
+
+   @override void initState() {
       super.initState();
       inTree = true;
       color = HSVColor.fromAHSV(1, widget.accent, 0.4, 0.2).toColor();
    }
+
    @override Widget build(BuildContext context) {
       return Layer(
          accent: 240,
          corningStyle: CorningStyle.full,
          objectType: ObjectType.field,
+         onTap: this.onTap,
          padding: EdgeInsets.fromLTRB(14, 13, 17, 14),
          child: Row(
             mainAxisSize: MainAxisSize.min,

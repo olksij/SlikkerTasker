@@ -62,7 +62,10 @@ class _LayerState extends State<Layer> {
                   onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
                   onTapCancel: () { setState(() => pressed = false ); },
                   onTap: () { 
-                     if ( widget.onTap != null ) widget.onTap(widget.onTapProp);
+                     if (widget.onTap != null) { 
+                        if (widget.onTapProp != null) widget.onTap(widget.onTapProp);
+                        else widget.onTap();
+                     }
                      Future.delayed( 
                         Duration(milliseconds: 175), 
                         () => setState(() => pressed = false )
