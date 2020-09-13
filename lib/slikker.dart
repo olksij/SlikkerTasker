@@ -17,6 +17,7 @@ class SlikkerScaffold extends StatelessWidget {
    Widget build(BuildContext context) {
       bool pull100 = false;
       bool pullAct = false;
+      bool startedAtZero = false;
   		return Material(
          color: Color(0xFFF6F6FC),
          child: SafeArea(
@@ -25,13 +26,17 @@ class SlikkerScaffold extends StatelessWidget {
                children: [
                   NotificationListener<ScrollNotification>(
                      onNotification: (scrollInfo) {
-                        int scroll = scrollInfo.metrics.pixels.round();
-                        int percent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
-                        if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
-                        if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
-                        if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
-                        && pullAct) { pullAct = false; topButtonAction(); }
-                        topButton.refresh(percent); return false;
+                        if (scrollInfo is ScrollUpdateNotification && startedAtZero) {
+                           int scroll = scrollInfo.metrics.pixels.round();
+                           int percent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
+                           if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
+                           if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
+                           if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
+                           && pullAct) { pullAct = false; topButtonAction(); }
+                           topButton.refresh(percent); 
+                        } 
+                        else if (scrollInfo is ScrollStartNotification) startedAtZero = scrollInfo.metrics.pixels <= 0; 
+                        return false;
                      },
                      child: CustomScrollView(
                         scrollDirection: Axis.vertical,
