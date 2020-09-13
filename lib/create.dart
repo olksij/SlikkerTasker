@@ -27,7 +27,11 @@ class _CreateViewState extends State<CreateView> {
 	@override
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
-         topButton: TopButton(),
+         topButton: TopButton(
+            accent: 240,
+            icon: Icons.arrow_back,
+            title: 'Back',
+         ),
          topButtonAction: () => Navigator.pushNamed(context, '/home'),
          title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(

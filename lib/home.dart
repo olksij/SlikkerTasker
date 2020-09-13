@@ -9,14 +9,18 @@ class Home extends StatelessWidget {
       return SlikkerScaffold(
          header: SearchBar(),
          title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-         topButton: TopButton(),
+         topButton: TopButton(
+            accent: 240,
+            icon: Icons.account_circle_rounded,
+            title: 'Account',
+         ),
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
          floatingButton: Layer(
             accent: 240,
             corningStyle: CorningStyle.full,
             objectType: ObjectType.floating,
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: (a) { Navigator.pushNamed(context, '/create'); },
+            onTap: () { Navigator.pushNamed(context, '/create'); },
             child: Row(
                mainAxisSize: MainAxisSize.min,
                children: <Widget>[

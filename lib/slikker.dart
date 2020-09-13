@@ -83,15 +83,25 @@ class SlikkerScaffold extends StatelessWidget {
 }
 
 class TopButton extends StatefulWidget { 
+   final String title; final IconData icon; final double accent;
    final _TopButtonState state = _TopButtonState();
+   TopButton({ @required this.title, @required this.icon, @required this.accent });
    void refresh(percent) => state.refresh(percent);
    @override _TopButtonState createState() => state; 
 }
 
 class _TopButtonState extends State<TopButton> {
    int pullPercent = 0;
+   Color color;
+   bool inTree = false;
    void refresh(percent) { 
-      if (pullPercent != percent) try { setState(() => pullPercent = percent); } catch (a) {} 
+      if (pullPercent != percent && inTree) setState(() => pullPercent = percent); 
+   }
+   @override
+   void initState() {
+      super.initState();
+      inTree = true;
+      color = HSVColor.fromAHSV(1, widget.accent, 0.4, 0.2).toColor();
    }
    @override Widget build(BuildContext context) {
       return Layer(
@@ -104,25 +114,24 @@ class _TopButtonState extends State<TopButton> {
             children: <Widget>[
                pullPercent == 0 ? 
                   Icon(
-                     Icons.account_circle, 
-                     color: Color(0xFF1F1F33), 
+                     widget.icon, 
+                     color: color, 
                      size: 22,
-                  ) : 
-                  Padding(
+                  ) : Padding(
                      padding: EdgeInsets.all(3),
                      child: SizedBox(
                         child: CircularProgressIndicator(
                            value: pullPercent/100,
                            strokeWidth: 3,
-                           valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
+                           valueColor: AlwaysStoppedAnimation<Color>(color),
                         ),
                         height: 16,
                         width: 16,
                      ),
                   ),
                Container(width: 8, height: 24),
-               Text('Account', style: TextStyle(
-                  color: Color(0xFF1F1F33), fontWeight: FontWeight.w600, fontSize: 16
+               Text(widget.title, style: TextStyle(
+                  color: color, fontWeight: FontWeight.w600, fontSize: 16
                ))
             ]
          ),
