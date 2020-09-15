@@ -2,6 +2,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'slikker.dart';
 import 'parts.dart';
+import 'task_info.dart';
 import 'app.dart';
 
 class Home extends StatelessWidget {
@@ -45,6 +46,12 @@ class Home extends StatelessWidget {
                   if (doc.id != '.settings' && doc.data()['name'] != null) cards.add(
                      Layer(
                         accent: 240,
+                        onTap: () => Navigator.push(
+                           context,
+                           MaterialPageRoute(
+                              builder: (context) => TaskDetails(title: doc.data()['name'],),
+                           ),
+                        ),
                         padding: EdgeInsets.all(20),
                         corningStyle: CorningStyle.partial,
                         objectType: ObjectType.floating,
