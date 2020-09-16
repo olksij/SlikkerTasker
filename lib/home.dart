@@ -2,10 +2,10 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'slikker.dart';
 import 'parts.dart';
-import 'task_info.dart';
+import 'task.dart';
 import 'app.dart';
 
-class Home extends StatelessWidget {
+class HomePage extends StatelessWidget {
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
          header: SearchBar(),
@@ -49,7 +49,9 @@ class Home extends StatelessWidget {
                         onTap: () => Navigator.push(
                            context,
                            MaterialPageRoute(
-                              builder: (context) => TaskDetails(title: doc.data()['name'],),
+                              builder: (context) => TaskPage(
+                                 title: doc.data()['name'],
+                                 time: doc.data()['time']),
                            ),
                         ),
                         padding: EdgeInsets.all(20),

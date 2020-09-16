@@ -31,9 +31,9 @@ class Planner extends StatelessWidget {
                initialRoute: snapshot.data ? '/home' : '/init',
                routes: {
                   '/init': (context) => FirstRun(),
-                  '/home': (context) => Home(),
-                  '/create': (context) => Create(),
-                  '/account': (context) => Account(),
+                  '/home': (context) => HomePage(),
+                  '/create': (context) => CreatePage(),
+                  '/account': (context) => AccountPage(),
                },
             );
          }
@@ -41,7 +41,7 @@ class Planner extends StatelessWidget {
 	}
 }
 
-class Account extends StatelessWidget {
+class AccountPage extends StatelessWidget {
    @override
    Widget build(BuildContext context) {
       return Scaffold(

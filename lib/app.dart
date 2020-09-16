@@ -84,6 +84,5 @@ void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<St
 }
 
 void newDoc(Map<String, dynamic> value) {
-   //firestoreDB.doc().set(data);
    data.put('D'+DateTime.now().millisecondsSinceEpoch.toString(), value);
 }

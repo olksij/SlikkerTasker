@@ -1,22 +1,32 @@
 import 'slikker.dart';
 
-class TaskDetails extends StatelessWidget {
-   final String title;
-   const TaskDetails({ this.title });
+class TaskPage extends StatelessWidget {
+   final String title; final int time;
+   const TaskPage({ this.title, this.time });
 
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
-         title: Text(title, style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
+         title: Text('Task', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: Layer(
                corningStyle: CorningStyle.partial, 
                accent: 240, 
-               objectType: ObjectType.field, 
-               child: Center(
-                  child: Text('Somethinggg'),
+               objectType: ObjectType.floating, 
+               child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                     Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                           Text(title,),
+                           Container(height: 8,),
+                           Text(time.toString())
+                        ],
+                     )
+                  ]
                ),
-               padding: EdgeInsets.all(12),
+               padding: EdgeInsets.all(14),
             ),
          ), 
          content: SliverToBoxAdapter(child: Text('hey..')), 

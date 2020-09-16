@@ -13,12 +13,14 @@ List<CreateProps> _toggesList = [
    CreateProps(title: 'wow', value: null),
 ];
 
-class CreateView extends StatefulWidget { @override _CreateViewState createState() => _CreateViewState(); }
+class CreatePage extends StatefulWidget { @override _CreatePageState createState() => _CreatePageState(); }
 
-class _CreateViewState extends State<CreateView> {
-   
+class _CreatePageState extends State<CreatePage> {
    void createEl(context) { 
-      newDoc({'name': _name, 'time': DateTime.now().millisecondsSinceEpoch }); 
+      newDoc({
+         'name': _name, 
+         'time': DateTime.now().millisecondsSinceEpoch 
+      }); 
       Navigator.pushNamed(context, '/home');
    }
 
@@ -92,7 +94,7 @@ class _CreatePropsState extends State<CreateProps> {
    }
    void refresh(d) { setState(() => value = d); print(d); }
 
-   enterValue(a) => showModalBottomSheet(
+   enterValue() => showModalBottomSheet(
       context: context, 
       isDismissible: true,
       barrierColor: Color(0x551F1F33),
@@ -174,25 +176,6 @@ class _CreatePropsState extends State<CreateProps> {
 			objectType: value != null ? ObjectType.floating : ObjectType.field,
 			padding: EdgeInsets.all(15),
 			onTap: this.enterValue,
-         onTapProp: 'a'
-		);
-	}
-}
-
-class Create extends StatelessWidget {
-   void createEl(context) { 
-      newDoc({'name': _name, 'time': DateTime.now().millisecondsSinceEpoch }); 
-      Navigator.pushNamed(context, '/home');
-   }
-
-   @override
-	Widget build(BuildContext context) {
-		return Scaffold(
-			backgroundColor: Color(0xFFF6F6FC),
-			body: SafeArea(
-				top: true,
-				child: CreateView()
-			)
 		);
 	}
 }
