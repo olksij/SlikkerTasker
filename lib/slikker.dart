@@ -116,10 +116,8 @@ class _TopButtonState extends State<TopButton> {
    int percent = 0;
    Color color;
    bool inTree = false;
-   Function onTap;
 
    void refresh(p) { if (percent != p && inTree) setState(() => percent = p); }
-   void action(Function a) { onTap = a; print(a); }
 
    @override void initState() {
       super.initState();
@@ -132,7 +130,7 @@ class _TopButtonState extends State<TopButton> {
          accent: 240,
          corningStyle: CorningStyle.full,
          objectType: ObjectType.field,
-         onTap: this.onTap,
+         onTap: this.widget.onTap,
          padding: EdgeInsets.fromLTRB(14, 13, 17, 14),
          child: Row(
             mainAxisSize: MainAxisSize.min,

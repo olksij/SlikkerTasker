@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
          header: SearchBar(),
-         title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         title: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          topButtonIcon: Icons.account_circle_rounded,
          topButtonTitle: 'Account',
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
