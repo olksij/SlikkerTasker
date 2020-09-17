@@ -10,11 +10,8 @@ class HomePage extends StatelessWidget {
       return SlikkerScaffold(
          header: SearchBar(),
          title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-         topButton: TopButton(
-            accent: 240,
-            icon: Icons.account_circle_rounded,
-            title: 'Account',
-         ),
+         topButtonIcon: Icons.account_circle_rounded,
+         topButtonTitle: 'Account',
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
          floatingButton: Layer(
             accent: 240,
@@ -37,9 +34,9 @@ class HomePage extends StatelessWidget {
             stream: getFirestoreData(),
             builder: (context, snapshot){
                if (snapshot.hasError) 
-                  return SliverToBoxAdapter(child: Text('Something went wrong'));
+                  return Text('Something went wrong');
                if (snapshot.connectionState == ConnectionState.waiting) 
-                  return SliverToBoxAdapter(child: Text('loading'));
+                  return Text('loading');
 
                List<Widget> cards = [];
                snapshot.data.docs.forEach((doc) {
@@ -61,7 +58,9 @@ class HomePage extends StatelessWidget {
                      ),
                   );
                });
-               return SliverStaggeredGrid.countBuilder(
+               return StaggeredGridView.countBuilder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   itemCount: cards.length,
                   itemBuilder: (BuildContext context, int index) => cards[index],

@@ -29,12 +29,9 @@ class TaskPage extends StatelessWidget {
                padding: EdgeInsets.all(14),
             ),
          ), 
-         content: SliverToBoxAdapter(child: Text('hey..')), 
-         topButton: TopButton(
-            accent: 240,
-            icon: Icons.arrow_back,
-            title: 'Back',
-         ), 
+         content: Text('hey..'), 
+         topButtonIcon: Icons.arrow_back,
+         topButtonTitle: 'Back',
          topButtonAction: () => Navigator.pushNamed(context, '/home'), 
          floatingButton: Layer(
             accent: 240,

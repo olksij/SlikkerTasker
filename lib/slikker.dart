@@ -6,19 +6,26 @@ export 'package:slikker_ripple/slikker_ripple.dart';
 export 'package:flutter/material.dart';
 export 'material.dart';
 
-class SlikkerScaffold extends StatelessWidget {
-   final Widget title; final Widget header; final Widget content; final TopButton topButton; 
-   final Widget floatingButton; final Function topButtonAction;
+class SlikkerScaffold extends StatefulWidget {
+   final Widget title; final Widget header; final Widget content; final String topButtonTitle; 
+   final IconData topButtonIcon; final Widget floatingButton; final Function topButtonAction;
 
-   SlikkerScaffold({ @required this.title, @required this.header, @required this.content, 
-   @required this.topButton, @required this.topButtonAction, @required this.floatingButton, });
+   SlikkerScaffold({ this.title, this.header, this.content, 
+   this.topButtonAction, this.floatingButton,this.topButtonTitle, this.topButtonIcon, });
 
-   @override
-   Widget build(BuildContext context) {
-      bool pull100 = false;
-      bool pullAct = false;
-      bool startedAtZero = false;
-      topButton.action(topButtonAction);
+   @override _SlikkerScaffoldState createState() => _SlikkerScaffoldState();
+}
+
+class _SlikkerScaffoldState extends State<SlikkerScaffold> {
+   bool pull100; bool pullAct; bool startedAtZero; _TopButtonState topButton; int oldPercent;
+
+   @override void initState() {
+      super.initState();
+      pull100 = false; pullAct = false;
+      startedAtZero = false;
+   }
+   
+   @override Widget build(BuildContext context) {
   		return Material(
          color: Color(0xFFF6F6FC),
          child: SafeArea(
@@ -33,31 +40,29 @@ class SlikkerScaffold extends StatelessWidget {
                            if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
                            if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
                            if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
-                           && pullAct) { pullAct = false; topButtonAction(); }
-                           topButton.refresh(percent); 
+                           && pullAct) { pullAct = false; widget.topButtonAction(); }
+                           if (oldPercent != percent && TopButton.of(context) != null) { TopButton.of(context).refresh(percent);  oldPercent = percent; }
                         } 
                         else if (scrollInfo is ScrollStartNotification) startedAtZero = scrollInfo.metrics.pixels <= 0; 
                         return false;
                      },
-                     child: CustomScrollView(
+                     child: ListView(
                         scrollDirection: Axis.vertical,
                         physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-                        slivers: <Widget>[
-                           SliverToBoxAdapter(child: Container( height: 52 )),
-                           SliverToBoxAdapter(child: Center( child: topButton )),
-                           SliverToBoxAdapter(child: Container( height: MediaQuery.of(context).size.height/3.7 )),
-                           SliverToBoxAdapter(child: title),
-                           SliverAppBar(
-                              elevation: 0,
-                              floating: true,
-                              pinned: true,
-                              titleSpacing: 0,
-                              title: header,
-                              backgroundColor: Colors.transparent,
-                              automaticallyImplyLeading: false,
+                        children: <Widget>[
+                           Container( height: 52 ),
+                           Center( child: TopButton(
+                                 title: widget.topButtonTitle, 
+                                 icon: widget.topButtonIcon, 
+                                 accent: 240,
+                                 onTap: widget.topButtonAction,
+                              )
                            ),
-                           SliverPadding(padding: EdgeInsets.all(30), sliver: content ),
-                           SliverToBoxAdapter(child: Container(height: 60))
+                           Container( height: MediaQuery.of(context).size.height/3.7 ),
+                           widget.title,
+                           widget.header,
+                           widget.content,
+                           Container(height: 60)
                         ],
                      )
                   ),
@@ -77,7 +82,7 @@ class SlikkerScaffold extends StatelessWidget {
                   Align(
                      alignment: Alignment.bottomCenter,
                      child: Container(
-                        child: floatingButton,
+                        child: widget.floatingButton,
                         margin: EdgeInsets.only(bottom: 25),
                      )
                   ),
@@ -89,12 +94,13 @@ class SlikkerScaffold extends StatelessWidget {
 }
 
 class TopButton extends StatefulWidget { 
-   final String title; final IconData icon; final double accent;
-   final _TopButtonState state = _TopButtonState();
-   TopButton({ @required this.title, @required this.icon, @required this.accent });
-   void refresh(int percent) => state.refresh(percent);
-   void action(Function a) => state.action(a);
-   @override _TopButtonState createState() => state; 
+   final String title; final IconData icon; final double accent; final Function onTap;
+   TopButton({ @required this.title, @required this.icon, @required this.accent, this.onTap });
+   
+   @override _TopButtonState createState() => _TopButtonState();
+
+   static _TopButtonState of(BuildContext context, {bool root = false}) => 
+      context.findAncestorStateOfType<_TopButtonState>();
 }
 
 class _TopButtonState extends State<TopButton> {

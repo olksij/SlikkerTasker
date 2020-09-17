@@ -29,11 +29,8 @@ class _CreatePageState extends State<CreatePage> {
 	@override
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
-         topButton: TopButton(
-            accent: 240,
-            icon: Icons.arrow_back,
-            title: 'Back',
-         ),
+         topButtonIcon: Icons.arrow_back,
+         topButtonTitle: 'Back',
          topButtonAction: () => Navigator.pushNamed(context, '/home'),
          title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
