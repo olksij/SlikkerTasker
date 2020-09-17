@@ -24,8 +24,6 @@ class _CreatePageState extends State<CreatePage> {
       Navigator.pushNamed(context, '/home');
    }
 
-	var pullPercent = 0;
-
 	@override
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
@@ -45,7 +43,9 @@ class _CreatePageState extends State<CreatePage> {
                padding: EdgeInsets.all(12),
             ),
          ),
-         content: SliverStaggeredGrid.countBuilder(
+         content: StaggeredGridView.countBuilder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             itemCount: _toggesList.length,
             itemBuilder: (BuildContext context, int index) => _toggesList[index],
