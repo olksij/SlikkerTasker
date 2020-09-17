@@ -17,12 +17,18 @@ class SlikkerScaffold extends StatefulWidget {
 }
 
 class _SlikkerScaffoldState extends State<SlikkerScaffold> {
-   bool pull100; bool pullAct; bool startedAtZero; _TopButtonState topButton; int oldPercent;
+   bool pull100; bool pullAct; bool startedAtZero; TopButton topButton;
 
    @override void initState() {
       super.initState();
       pull100 = false; pullAct = false;
       startedAtZero = false;
+      topButton = TopButton(
+         title: widget.topButtonTitle, 
+         icon: widget.topButtonIcon, 
+         accent: 240,
+         onTap: widget.topButtonAction,
+      );
    }
    
    @override Widget build(BuildContext context) {
@@ -41,27 +47,32 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
                            if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
                            if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
                            && pullAct) { pullAct = false; widget.topButtonAction(); }
-                           if (oldPercent != percent && TopButton.of(context) != null) { TopButton.of(context).refresh(percent);  oldPercent = percent; }
+                           _topButtonState.refresh(percent);
                         } 
                         else if (scrollInfo is ScrollStartNotification) startedAtZero = scrollInfo.metrics.pixels <= 0; 
-                        return false;
+                        return true;
                      },
                      child: ListView(
                         scrollDirection: Axis.vertical,
                         physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                         children: <Widget>[
                            Container( height: 52 ),
-                           Center( child: TopButton(
+                           Center( 
+                              child: TopButton(
                                  title: widget.topButtonTitle, 
                                  icon: widget.topButtonIcon, 
                                  accent: 240,
                                  onTap: widget.topButtonAction,
-                              )
+                              ) 
                            ),
                            Container( height: MediaQuery.of(context).size.height/3.7 ),
-                           widget.title,
+                           widget.title, 
+                           Container( height: 20 ),
                            widget.header,
-                           widget.content,
+                           Padding(
+                              child:widget.content,
+                              padding: EdgeInsets.all(30),
+                           ),
                            Container(height: 60)
                         ],
                      )
@@ -93,23 +104,21 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
    }
 }
 
-class TopButton extends StatefulWidget { 
+_TopButtonState _topButtonState;
+class TopButton extends StatefulWidget {    
    final String title; final IconData icon; final double accent; final Function onTap;
    TopButton({ @required this.title, @required this.icon, @required this.accent, this.onTap });
-   
-   @override _TopButtonState createState() => _TopButtonState();
 
-   static _TopButtonState of(BuildContext context, {bool root = false}) => 
-      context.findAncestorStateOfType<_TopButtonState>();
+   @override _TopButtonState createState() {  _topButtonState = _TopButtonState(); return _topButtonState; }
 }
 
 class _TopButtonState extends State<TopButton> {
-   int pullPercent = 0;
+   int percent = 0;
    Color color;
    bool inTree = false;
    Function onTap;
 
-   void refresh(percent) { if (pullPercent != percent && inTree) setState(() => pullPercent = percent); }
+   void refresh(p) { if (percent != p && inTree) setState(() => percent = p); }
    void action(Function a) { onTap = a; print(a); }
 
    @override void initState() {
@@ -128,7 +137,7 @@ class _TopButtonState extends State<TopButton> {
          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-               pullPercent == 0 ? 
+               percent == 0 ? 
                   Icon(
                      widget.icon, 
                      color: color, 
@@ -137,7 +146,7 @@ class _TopButtonState extends State<TopButton> {
                      padding: EdgeInsets.all(3),
                      child: SizedBox(
                         child: CircularProgressIndicator(
-                           value: pullPercent/100,
+                           value: percent/100,
                            strokeWidth: 3,
                            valueColor: AlwaysStoppedAnimation<Color>(color),
                         ),

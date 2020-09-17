@@ -56,7 +56,7 @@ firestoreConnect() async {
 
    if (settings.get('version') != version) {
       Map cloudSettings = (await firestoreDB.doc('.settings').get()).data();
-      if (cloudSettings['version'] == version && cloudSettings['time'] > settings.get('time')) {
+      if (settings.isEmpty || (cloudSettings['version'] == version && cloudSettings['time'] > settings.get('time'))) {
          settings.clear(); settings.putAll(cloudSettings);
       }
       else {
