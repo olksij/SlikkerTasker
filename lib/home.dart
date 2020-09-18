@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'slikker.dart';
 import 'parts.dart';
 import 'task.dart';
-import 'app.dart';
+import 'data.dart';
 
 class HomePage extends StatelessWidget {
 	Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
          topButtonIcon: Icons.account_circle_rounded,
          topButtonTitle: 'Account',
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
-         floatingButton: Layer(
+         floatingButton: SlikkerCard(
             accent: 240,
             corningStyle: CorningStyle.full,
             objectType: ObjectType.floating,
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                List<Widget> cards = [];
                snapshot.data.docs.forEach((doc) {
                   if (doc.id != '.settings' && doc.data()['name'] != null) cards.add(
-                     Layer(
+                     SlikkerCard(
                         accent: 240,
                         onTap: () => Navigator.push(
                            context,

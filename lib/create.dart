@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'slikker.dart';
-import 'app.dart';
+import 'data.dart';
 
 Map<String, dynamic> _toCreate = {};
 
@@ -33,7 +33,7 @@ class _CreatePageState extends State<CreatePage> {
          title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Layer(
+            child: SlikkerCard(
                corningStyle: CorningStyle.partial, 
                accent: 240, 
                objectType: ObjectType.field, 
@@ -53,7 +53,7 @@ class _CreatePageState extends State<CreatePage> {
             mainAxisSpacing: 20.0,
             crossAxisSpacing: 20.0,
          ),
-         floatingButton: Layer(
+         floatingButton: SlikkerCard(
             accent: 240,
             corningStyle: CorningStyle.full,
             objectType: ObjectType.floating,
@@ -130,7 +130,7 @@ class _CreatePropsState extends State<CreateProps> {
                         )
                      ),
                      Container(width: 20,),
-                     Layer(
+                     SlikkerCard(
                         corningStyle: CorningStyle.partial, 
                         accent: 240, 
                         onTap: (d) { _toCreate[widget.value] = d(); this.setState(() {}); Navigator.pop(context); },
@@ -154,7 +154,7 @@ class _CreatePropsState extends State<CreateProps> {
 	@override
 	Widget build(BuildContext context) {
       bool data = _toCreate[widget.value] != null;
-		return Layer(
+		return SlikkerCard(
 			accent: 240,
 			child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

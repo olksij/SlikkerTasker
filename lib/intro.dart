@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'material.dart';
-import 'app.dart';
+import 'slikker.dart';
+import 'data.dart';
 
 class FirstRun extends StatefulWidget { @override _FirstRunState createState() => _FirstRunState(); }
 
@@ -16,7 +16,7 @@ class _FirstRunState extends State<FirstRun> {
       return Scaffold(
          body: Center( child: Text("It's first run!") ),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-         floatingActionButton: Layer(
+         floatingActionButton: SlikkerCard(
             padding: EdgeInsets.all(15),
             accent: 240,
             corningStyle: CorningStyle.full,

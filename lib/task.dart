@@ -9,7 +9,7 @@ class TaskPage extends StatelessWidget {
          title: Text('Task', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Layer(
+            child: SlikkerCard(
                corningStyle: CorningStyle.partial, 
                accent: 240, 
                objectType: ObjectType.floating, 
@@ -33,7 +33,7 @@ class TaskPage extends StatelessWidget {
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',
          topButtonAction: () => Navigator.pushNamed(context, '/home'), 
-         floatingButton: Layer(
+         floatingButton: SlikkerCard(
             accent: 240,
             child: Text('edit'),
             corningStyle: CorningStyle.full,

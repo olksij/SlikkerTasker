@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'material.dart';
+import 'package:slikker_ripple/slikker_ripple.dart';
 
 export 'package:slikker_ripple/slikker_ripple.dart';
 export 'package:flutter/material.dart';
-export 'material.dart';
 
+/// The style of your card. `CorningStyle.partial` makes your card's corning look similar 
+/// to Material Design's card, it's `BorderRadius` becomes _12_. `CorningStyle.full` makes your
+/// card look fully rounded, as Material's chips, floating buttons, etc.
+enum CorningStyle { partial, full }
+
+/// `ObjectType` decides is your card floating or laying in background. 
+enum ObjectType { field, floating }
+
+/// Widget that helps to build a page. 
+/// Full documentation be later
 class SlikkerScaffold extends StatefulWidget {
-   final Widget title; final Widget header; final Widget content; final String topButtonTitle; 
-   final IconData topButtonIcon; final Widget floatingButton; final Function topButtonAction;
+   /// Widget that is displayed on top of `header`. Useally is a text which indicates which page is it. In Material design it wuld be `AppBarTitle`
+   final Widget title; 
+   /// Widget that is displayed on top of `content`. In Material Design it would be the `AppBar`.
+   final Widget header; 
+   /// Widget, usually `ListView`/`GridView` that contains other widgets. Content of the page.
+   final Widget content; 
+   /// `TopButton`'s title. Usually text that hints which action will be taken when user taps the button or pulls the page.
+   final String topButtonTitle; 
+   /// `TopButton`'s icon. Usually used for hinting which action will be taken when user taps the button or pulls the page.
+   final IconData topButtonIcon; 
+   /// The function that will be called when user pulls the page or taps the `TopButton`.
+   final Function topButtonAction;
+   /// Widget that is placed in the bottom of the screen, always visible, and floats above the `content`.
+   final Widget floatingButton; 
 
    SlikkerScaffold({ this.title, this.header, this.content, 
    this.topButtonAction, this.floatingButton,this.topButtonTitle, this.topButtonIcon, });
@@ -104,6 +125,11 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
    }
 }
 
+
+
+
+
+
 _TopButtonState _topButtonState;
 class TopButton extends StatefulWidget {    
    final String title; final IconData icon; final double accent; final Function onTap;
@@ -126,7 +152,7 @@ class _TopButtonState extends State<TopButton> {
    }
 
    @override Widget build(BuildContext context) {
-      return Layer(
+      return SlikkerCard(
          accent: 240,
          corningStyle: CorningStyle.full,
          objectType: ObjectType.field,
@@ -157,6 +183,91 @@ class _TopButtonState extends State<TopButton> {
                   color: color, fontWeight: FontWeight.w600, fontSize: 16
                ))
             ]
+         ),
+      );
+   }
+}
+
+
+
+
+
+class SlikkerCard extends StatefulWidget {
+   final CorningStyle corningStyle; final double accent; final ObjectType objectType; final Widget child; final EdgeInsetsGeometry padding; final Function onTap; final onTapProp;
+   const SlikkerCard({ @required this.corningStyle, @required this.accent, @required this.objectType, @required this.child, this.padding, this.onTap, this.onTapProp });
+   @override _SlikkerCardState createState() => _SlikkerCardState();
+}
+
+class _SlikkerCardState extends State<SlikkerCard> {
+
+   HSVColor color;
+   bool rounded;
+   bool pressed;
+
+   @override
+   void initState() {
+      super.initState();
+      rounded = widget.corningStyle.index == 0;
+      pressed = false;
+      color = HSVColor.fromAHSV(
+         (widget.objectType.index == 0) ? 0.8 : 1, widget.accent, 
+         (widget.objectType.index == 0) ? 0.05 : 0.6, 
+         (widget.objectType.index == 0) ? 0.97 : 1
+      );
+   }
+
+   @override
+   Widget build(BuildContext context) {
+      return AnimatedContainer( 
+         duration: Duration(milliseconds: 175),
+         curve: Curves.easeOut,
+         margin: (widget.objectType.index == 0) ? EdgeInsets.only(bottom: 1.5, top: 1.5) : EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
+         decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
+            color: Colors.transparent,
+            boxShadow: (widget.objectType.index == 0) ? [] : [
+               BoxShadow (
+                  color: color.withSaturation(0.6).withAlpha(pressed ? 0.07 : 0.12).toColor(),
+                  offset: Offset(0, pressed ? 5 : 7),
+                  blurRadius: pressed ? 30 : 40,
+               ),
+               BoxShadow (
+                  color: color.withSaturation(pressed ? 0.06 : 0.05).toColor(),
+                  offset: Offset(0,3),
+               ),
+            ],          
+         ),
+         child: ClipRRect(
+            borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
+            child: Material(
+               color: (widget.objectType.index == 0) ? color.toColor() : Colors.white,
+               borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
+               child: InkWell(
+                  splashFactory: SlikkerRipple.splashFactory,
+                  splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.25 : 0.125)
+                     .withValue((widget.objectType.index == 0) ? 0.85 : 1)
+                     .withSaturation((widget.objectType.index == 0) ? 0.15 : 0.6)
+                     .toColor(),
+                  highlightColor: color.withAlpha(0.01).toColor(),
+                  hoverColor: Colors.transparent,
+                  onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
+                  onTapCancel: () { setState(() => pressed = false ); },
+                  onTap: () { 
+                     if (widget.onTap != null) { 
+                        if (widget.onTapProp != null) widget.onTap(widget.onTapProp);
+                        else widget.onTap();
+                     }
+                     Future.delayed( 
+                        Duration(milliseconds: 175), 
+                        () => setState(() => pressed = false )
+                     ); 
+                     setState(() => pressed = true ); },
+                  child: Padding(
+                     padding: widget.padding ?? EdgeInsets.all(0),
+                     child: widget.child
+                  )
+               ),
+            ),
          ),
       );
    }
