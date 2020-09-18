@@ -160,9 +160,9 @@ class _CreatePropsState extends State<CreateProps> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text(_toCreate[widget.value] ?? widget.title, style: TextStyle(fontSize: 18, color: data ? Color(0xFF6666FF) : Color(0xFF1F1F33)),),
+               Text(_toCreate[widget.value] ?? widget.title, style: TextStyle(fontSize: 17, color: data ? Color(0xFF6666FF) : Color(0xFF1F1F33)),),
                Container(height: 8),
-               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 14, color: data ? Color(0x4C6666FF) : Color(0x4C1F1F33))),
+               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C1F1F33))),
             ],
          ),
 			corningStyle: CorningStyle.partial,

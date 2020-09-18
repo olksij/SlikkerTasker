@@ -18,16 +18,22 @@ enum ObjectType { field, floating }
 class SlikkerScaffold extends StatefulWidget {
    /// Widget that is displayed on top of `header`. Useally is a text which indicates which page is it. In Material design it wuld be `AppBarTitle`
    final Widget title; 
+
    /// Widget that is displayed on top of `content`. In Material Design it would be the `AppBar`.
    final Widget header; 
+
    /// Widget, usually `ListView`/`GridView` that contains other widgets. Content of the page.
    final Widget content; 
+
    /// `TopButton`'s title. Usually text that hints which action will be taken when user taps the button or pulls the page.
    final String topButtonTitle; 
+
    /// `TopButton`'s icon. Usually used for hinting which action will be taken when user taps the button or pulls the page.
    final IconData topButtonIcon; 
+
    /// The function that will be called when user pulls the page or taps the `TopButton`.
    final Function topButtonAction;
+   
    /// Widget that is placed in the bottom of the screen, always visible, and floats above the `content`.
    final Widget floatingButton; 
 
@@ -243,7 +249,7 @@ class _SlikkerCardState extends State<SlikkerCard> {
                color: (widget.objectType.index == 0) ? color.toColor() : Colors.white,
                borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
                child: InkWell(
-                  splashFactory: SlikkerRipple.splashFactory,
+                  splashFactory: SlikkerRipple(),
                   splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.25 : 0.125)
                      .withValue((widget.objectType.index == 0) ? 0.85 : 1)
                      .withSaturation((widget.objectType.index == 0) ? 0.15 : 0.6)
