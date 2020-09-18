@@ -4,25 +4,25 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'slikker.dart';
 import 'app.dart';
 
-String _name;
+Map<String, dynamic> _toCreate = {};
 
 List<CreateProps> _toggesList = [
-   CreateProps(title: 'name', value: _name),
-   CreateProps(title: 'bye', value: null),
-   CreateProps(title: 'hey', value: null),
-   CreateProps(title: 'wow', value: null),
+   CreateProps(title: 'Title', description: 'The title of your task.', value: 'title'),
+   CreateProps(title: 'Description', description: 'The description of your task.', value: 'description'),
+   CreateProps(title: 'Time out', description: 'Time till which task should be done.', value: 'ends'),
+   CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
 ];
 
 class CreatePage extends StatefulWidget { @override _CreatePageState createState() => _CreatePageState(); }
 
 class _CreatePageState extends State<CreatePage> {
    void createEl(context) { 
-      newDoc({
-         'name': _name, 
-         'time': DateTime.now().millisecondsSinceEpoch 
-      }); 
+      _toCreate['time'] = DateTime.now().millisecondsSinceEpoch;
+      newDoc(_toCreate); 
       Navigator.pushNamed(context, '/home');
    }
+
+   @override void initState() { super.initState(); _toCreate = {}; }
 
 	@override
 	Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _CreatePageState extends State<CreatePage> {
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',
          topButtonAction: () => Navigator.pushNamed(context, '/home'),
-         title: Text('Heyheyy', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
+         title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: Layer(
@@ -76,20 +76,13 @@ class _CreatePageState extends State<CreatePage> {
 }
 
 class CreateProps extends StatefulWidget {
-	final String title; final String value;
-	CreateProps({ Key key, this.title, this.value });
+	final String title; final String description; final String value; 
+	CreateProps({ this.title, this.value, this.description });
 	@override _CreatePropsState createState() => _CreatePropsState();
 }
 
 class _CreatePropsState extends State<CreateProps> {
    TextEditingController valueController = TextEditingController();
-   String value;
-   @override
-   void initState() {
-      super.initState();
-      value = widget.value;
-   }
-   void refresh(d) { setState(() => value = d); print(d); }
 
    enterValue() => showModalBottomSheet(
       context: context, 
@@ -140,7 +133,7 @@ class _CreatePropsState extends State<CreateProps> {
                      Layer(
                         corningStyle: CorningStyle.partial, 
                         accent: 240, 
-                        onTap: (d) { _name = d(); this.refresh(d()); Navigator.pop(context); },
+                        onTap: (d) { _toCreate[widget.value] = d(); this.setState(() {}); Navigator.pop(context); },
                         onTapProp: () => valueController.value.text,
                         objectType: ObjectType.floating, 
                         child: SizedBox(
@@ -160,18 +153,21 @@ class _CreatePropsState extends State<CreateProps> {
 
 	@override
 	Widget build(BuildContext context) {
+      bool data = _toCreate[widget.value] != null;
 		return Layer(
 			accent: 240,
 			child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text(widget.title),
-               value != null ? Text(value) : Container(),
+               Text(_toCreate[widget.value] ?? widget.title, style: TextStyle(fontSize: 18, color: data ? Color(0xFF6666FF) : Color(0xFF1F1F33)),),
+               Container(height: 8),
+               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 14, color: data ? Color(0x4C6666FF) : Color(0x4C1F1F33))),
             ],
          ),
 			corningStyle: CorningStyle.partial,
-			objectType: value != null ? ObjectType.floating : ObjectType.field,
-			padding: EdgeInsets.all(15),
+			objectType: data ? ObjectType.floating : ObjectType.field,
+			padding: EdgeInsets.all(17),
 			onTap: this.enterValue,
 		);
 	}
