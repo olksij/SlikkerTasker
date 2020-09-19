@@ -19,7 +19,7 @@ class TaskPage extends StatelessWidget {
                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Text(title,),
+                           Text(title),
                            Container(height: 8,),
                            Text(time.toString())
                         ],

@@ -75,11 +75,13 @@ firestoreConnect() async {
 
 void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<String, dynamic> value }) async {
    if (!isLocal) { snapshot
-      .where((docChange) => docChange.doc.data()['time'] > settings.get('time'))
-      .forEach((change) { 
-         if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 
-         else settings.putAll(change.doc.data()); 
-         settings.put('time', DateTime.now().millisecondsSinceEpoch);
+      .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time'])
+      .forEach((change) {
+         if (change.type.index == 0 || change.type.index == 1) {
+            if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 
+            else settings.putAll(change.doc.data()); 
+         }
+         else data.delete(change.doc.id); 
       }); 
    }
    else firestoreDB.doc(doc).set(value);
