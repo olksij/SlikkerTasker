@@ -75,7 +75,7 @@ firestoreConnect() async {
 
 void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<String, dynamic> value }) async {
    if (!isLocal) { snapshot
-      .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time'])
+      .where((docChange) => docChange.doc.id != '.settings' ? (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time'] : false) 
       .forEach((change) {
          if (change.type.index == 0 || change.type.index == 1) {
             if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 

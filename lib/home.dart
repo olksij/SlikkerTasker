@@ -42,20 +42,10 @@ class HomePage extends StatelessWidget {
                a.forEach((key, value) {
                   print(value);
                   cards.add(
-                     SlikkerCard(
-                        accent: 240,
-                        onTap: () => Navigator.push(
-                           context,
-                           MaterialPageRoute(
-                              builder: (context) => TaskPage(
-                                 title: value['title'],
-                                 time: value['time']),
-                           ),
-                        ),
-                        padding: EdgeInsets.all(20),
-                        corningStyle: CorningStyle.partial,
-                        objectType: ObjectType.floating,
-                        child: Text(value['title'] ?? 'undefined')
+                     TaskCard(Map<String,dynamic>.from(value), 
+                        onTap: () => Navigator.push(context, MaterialPageRoute(
+                           builder: (context) => TaskPage(Map<String, dynamic>.from(value)),
+                        )),
                      ),
                   );
                });

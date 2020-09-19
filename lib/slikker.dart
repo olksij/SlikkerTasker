@@ -199,8 +199,9 @@ class _TopButtonState extends State<TopButton> {
 
 
 class SlikkerCard extends StatefulWidget {
-   final CorningStyle corningStyle; final double accent; final ObjectType objectType; final Widget child; final EdgeInsetsGeometry padding; final Function onTap; final onTapProp;
-   const SlikkerCard({ @required this.corningStyle, @required this.accent, @required this.objectType, @required this.child, this.padding, this.onTap, this.onTapProp });
+   final CorningStyle corningStyle; final double accent; final ObjectType objectType; final double borderRadius; 
+   final Widget child; final EdgeInsetsGeometry padding; final Function onTap; final onTapProp;
+   const SlikkerCard({ @required this.corningStyle, @required this.accent, @required this.objectType, @required this.child, this.padding, this.onTap, this.onTapProp, this.borderRadius });
    @override _SlikkerCardState createState() => _SlikkerCardState();
 }
 
@@ -229,7 +230,7 @@ class _SlikkerCardState extends State<SlikkerCard> {
          curve: Curves.easeOut,
          margin: (widget.objectType.index == 0) ? EdgeInsets.only(bottom: 1.5, top: 1.5) : EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
+            borderRadius: BorderRadius.circular( widget.borderRadius ?? (rounded ? 12 : 26) ),
             color: Colors.transparent,
             boxShadow: (widget.objectType.index == 0) ? [] : [
                BoxShadow (
@@ -244,10 +245,10 @@ class _SlikkerCardState extends State<SlikkerCard> {
             ],          
          ),
          child: ClipRRect(
-            borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
+            borderRadius: BorderRadius.circular( widget.borderRadius ?? (rounded ? 12 : 26) ),
             child: Material(
                color: (widget.objectType.index == 0) ? color.toColor() : Colors.white,
-               borderRadius: BorderRadius.circular( rounded ? 12 : 26 ),
+               borderRadius: BorderRadius.circular( widget.borderRadius ?? (rounded ? 12 : 26)),
                child: InkWell(
                   splashFactory: SlikkerRipple(),
                   splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.25 : 0.125)

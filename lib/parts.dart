@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'slikker.dart';
 
 class SearchBar extends StatelessWidget {
    @override
@@ -30,6 +30,61 @@ class SearchBar extends StatelessWidget {
                fillColor: Color(0xCCEDEDF7),
             ),
          )
+      );
+   }
+}
+
+class TaskCard extends StatelessWidget {
+   final Map<String, dynamic> task; final Function onTap; final double accent;
+   const TaskCard(this.task, { this.onTap, this.accent });
+
+   @override Widget build(BuildContext context) {
+      return SlikkerCard(
+         padding: EdgeInsets.all(13),
+         accent: accent ?? 240,
+         child: Column( 
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Text(task['title'], style: TextStyle(fontSize: 18, color: Color(0xFF6666FF))),
+               ),
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                     Expanded(
+                        child: Padding(padding: EdgeInsets.all(4),
+                           child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                 Text(task['description'] ?? "WWWWWWW", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
+                                 Container(height: 3),
+                                 Text(task['description'] ?? "WWWWWyy", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
+                              ],
+                           )
+                        )
+                     ),
+                     SlikkerCard(
+                        corningStyle: CorningStyle.partial, 
+                        accent: 240, 
+                        borderRadius: 8,
+                        objectType: ObjectType.field, 
+                        child: Container(
+                           height: 46,
+                           width: 46,
+                           //color: Color(0xFF00FF00),
+                           child: Center(
+                              child: Icon(Icons.play_arrow_rounded, color: Color(0xFF6666FF), size: 32,),
+                           ),
+                        )
+                     )
+                  ]
+               )
+            ]
+         ),
+         corningStyle: CorningStyle.partial,
+         objectType: ObjectType.floating,
       );
    }
 }

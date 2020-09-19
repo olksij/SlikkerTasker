@@ -1,33 +1,16 @@
+import 'package:planner/parts.dart';
 import 'slikker.dart';
 
 class TaskPage extends StatelessWidget {
-   final String title; final int time;
-   const TaskPage({ this.title, this.time });
+   final Map<String, dynamic> task;
+   const TaskPage( this.task );
 
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
          title: Text('Task', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: SlikkerCard(
-               corningStyle: CorningStyle.partial, 
-               accent: 240, 
-               objectType: ObjectType.floating, 
-               child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                     Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                           Text(title),
-                           Container(height: 8,),
-                           Text(time.toString())
-                        ],
-                     )
-                  ]
-               ),
-               padding: EdgeInsets.all(14),
-            ),
+            child: TaskCard(task)
          ), 
          content: Text('hey..'), 
          topButtonIcon: Icons.arrow_back,
