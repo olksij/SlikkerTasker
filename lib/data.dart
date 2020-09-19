@@ -16,44 +16,46 @@ Map<String, dynamic> getDefaults() => {
 
 Future<User> _signInWithCredential(googleAuth) async {
    await Firebase.initializeApp();
-   User user = (await FirebaseAuth.instance.signInWithCredential(
+   user = (await FirebaseAuth.instance.signInWithCredential(
       GoogleAuthProvider.credential(
          accessToken: googleAuth.accessToken,
          idToken: googleAuth.idToken,
       )
    )).user; 
+
+   Hive.init((await getApplicationDocumentsDirectory()).path);
    firestoreDB = FirebaseFirestore.instance.collection(user.uid);
+   settings = await Hive.openBox('.settings');
+   data = await Hive.openBox('data');
+
    firestoreConnect();
    return user;
 }
 
 Future<bool> isSignedIn() async {
-   GoogleSignInAccount signInAccount = await GoogleSignIn().isSignedIn() ? 
-   GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true) : null;
-   if (signInAccount != null) {
-      GoogleSignInAuthentication googleAuth = await signInAccount.authentication;
-      user = await _signInWithCredential(googleAuth);
-      signedIn = true;
-   }
-   else signedIn = false;
-   return signedIn;
+   return GoogleSignIn().isSignedIn().then((signedIn) async { 
+      if (signedIn) {
+         await _signInWithCredential(
+            await (GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true))
+            .authentication
+         );
+         return true;
+      }
+      else return false;
+   });
 }
 
 Future<User> signIn() async {
    return await _signInWithCredential(
-      await (await GoogleSignIn().signIn()).authentication
+      await (
+         await GoogleSignIn().signIn()
+      ).authentication
    );
 }
 
-Stream<QuerySnapshot> getFirestoreData() {
-   return firestoreDB.snapshots();
-}
+Stream<BoxEvent> getDBData() { return data.watch(); }
 
 firestoreConnect() async {
-   Hive.init((await getApplicationDocumentsDirectory()).path);
-   settings = await Hive.openBox('.settings');
-   data = await Hive.openBox<Map<String, dynamic>>('data');
-
    if (settings.get('version') != version) {
       Map cloudSettings = (await firestoreDB.doc('.settings').get()).data();
       if (settings.isEmpty || (cloudSettings['version'] == version && cloudSettings['time'] > settings.get('time'))) {

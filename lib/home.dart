@@ -1,4 +1,6 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:hive/hive.dart';
+
 
 import 'slikker.dart';
 import 'parts.dart';
@@ -31,30 +33,31 @@ class HomePage extends StatelessWidget {
             ),
          ),
          content: StreamBuilder(
-            stream: getFirestoreData(),
+            stream: data.watch(),
+            initialData: null,
             builder: (context, snapshot){
-               if (snapshot.hasError) 
-                  return Text('Something went wrong');
-               if (snapshot.connectionState == ConnectionState.waiting) 
-                  return Text('loading');
-
+               if (snapshot.hasError) return Text('Something went wrong');
+               //if (snapshot.connectionState == ConnectionState.waiting) return Text('loading');
+               
                List<Widget> cards = [];
-               snapshot.data.docs.forEach((doc) {
-                  if (doc.id != '.settings' && doc.data()['name'] != null) cards.add(
+               Map a = data.toMap();
+               a.forEach((key, value) {
+                  print(value);
+                  cards.add(
                      SlikkerCard(
                         accent: 240,
                         onTap: () => Navigator.push(
                            context,
                            MaterialPageRoute(
                               builder: (context) => TaskPage(
-                                 title: doc.data()['name'],
-                                 time: doc.data()['time']),
+                                 title: value['title'],
+                                 time: value['time']),
                            ),
                         ),
                         padding: EdgeInsets.all(20),
                         corningStyle: CorningStyle.partial,
                         objectType: ObjectType.floating,
-                        child: Text(doc.data()['name'])
+                        child: Text(value['title'] ?? 'undefined')
                      ),
                   );
                });
