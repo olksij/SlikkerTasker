@@ -40,8 +40,10 @@ class TaskCard extends StatelessWidget {
 
    @override Widget build(BuildContext context) {
       return SlikkerCard(
+         onTap: this.onTap,
          padding: EdgeInsets.all(13),
          accent: accent ?? 240,
+         borderRadius: BorderRadius.circular(12),
          child: Column( 
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,7 +52,7 @@ class TaskCard extends StatelessWidget {
                   child: Text(task['title'], style: TextStyle(fontSize: 18, color: Color(0xFF6666FF))),
                ),
                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                      Expanded(
@@ -58,24 +60,26 @@ class TaskCard extends StatelessWidget {
                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                 Text(task['description'] ?? "WWWWWWW", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
-                                 Container(height: 3),
-                                 Text(task['description'] ?? "WWWWWyy", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
+                                 Text(task['description'] ?? "Hh", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
+                                 Container(height: 0),
+                                 Text(task['description'] ?? "Xx", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
                               ],
                            )
                         )
                      ),
                      SlikkerCard(
-                        corningStyle: CorningStyle.partial, 
+                        borderRadius: BorderRadius.circular(8), 
                         accent: 240, 
-                        borderRadius: 8,
-                        objectType: ObjectType.field, 
+                        isFloating: false,
                         child: Container(
                            height: 46,
                            width: 46,
-                           //color: Color(0xFF00FF00),
                            child: Center(
-                              child: Icon(Icons.play_arrow_rounded, color: Color(0xFF6666FF), size: 32,),
+                              child: Icon(
+                                 Icons.play_arrow_rounded, 
+                                 color: Color(0xFF6666FF), 
+                                 size: 32,
+                              ),
                            ),
                         )
                      )
@@ -83,8 +87,6 @@ class TaskCard extends StatelessWidget {
                )
             ]
          ),
-         corningStyle: CorningStyle.partial,
-         objectType: ObjectType.floating,
       );
    }
 }

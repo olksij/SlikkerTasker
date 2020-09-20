@@ -15,8 +15,7 @@ class HomePage extends StatelessWidget {
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
          floatingButton: SlikkerCard(
             accent: 240,
-            corningStyle: CorningStyle.full,
-            objectType: ObjectType.floating,
+            borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
             onTap: () { Navigator.pushNamed(context, '/create'); },
             child: Row(
@@ -40,7 +39,6 @@ class HomePage extends StatelessWidget {
                List<Widget> cards = [];
                Map a = data.toMap();
                a.forEach((key, value) {
-                  print(value);
                   cards.add(
                      TaskCard(Map<String,dynamic>.from(value), 
                         onTap: () => Navigator.push(context, MaterialPageRoute(

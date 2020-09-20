@@ -19,8 +19,7 @@ class _FirstRunState extends State<FirstRun> {
          floatingActionButton: SlikkerCard(
             padding: EdgeInsets.all(15),
             accent: 240,
-            corningStyle: CorningStyle.full,
-            objectType: ObjectType.floating,
+            borderRadius: BorderRadius.circular(54),
             child: loggingIn ? FutureBuilder(
                future: signIn(),
                builder: (context, user) {

@@ -19,8 +19,7 @@ class TaskPage extends StatelessWidget {
          floatingButton: SlikkerCard(
             accent: 240,
             child: Text('edit'),
-            corningStyle: CorningStyle.full,
-            objectType: ObjectType.floating,
+            borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.all(12),
          )
       );

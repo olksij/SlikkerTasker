@@ -5,14 +5,6 @@ import 'package:slikker_ripple/slikker_ripple.dart';
 export 'package:slikker_ripple/slikker_ripple.dart';
 export 'package:flutter/material.dart';
 
-/// The style of your card. `CorningStyle.partial` makes your card's corning look similar 
-/// to Material Design's card, it's `BorderRadius` becomes _12_. `CorningStyle.full` makes your
-/// card look fully rounded, as Material's chips, floating buttons, etc.
-enum CorningStyle { partial, full }
-
-/// `ObjectType` decides is your card floating or laying in background. 
-enum ObjectType { field, floating }
-
 /// Widget that helps to build a page. 
 /// Full documentation be later
 class SlikkerScaffold extends StatefulWidget {
@@ -160,8 +152,8 @@ class _TopButtonState extends State<TopButton> {
    @override Widget build(BuildContext context) {
       return SlikkerCard(
          accent: 240,
-         corningStyle: CorningStyle.full,
-         objectType: ObjectType.field,
+         borderRadius: BorderRadius.circular(52),
+         isFloating: false,
          onTap: this.widget.onTap,
          padding: EdgeInsets.fromLTRB(14, 13, 17, 14),
          child: Row(
@@ -199,40 +191,76 @@ class _TopButtonState extends State<TopButton> {
 
 
 class SlikkerCard extends StatefulWidget {
-   final CorningStyle corningStyle; final double accent; final ObjectType objectType; final double borderRadius; 
-   final Widget child; final EdgeInsetsGeometry padding; final Function onTap; final onTapProp;
-   const SlikkerCard({ @required this.corningStyle, @required this.accent, @required this.objectType, @required this.child, this.padding, this.onTap, this.onTapProp, this.borderRadius });
+   /// The Hue which will be used for your card.
+   final double accent; 
+   /// If `true` *[DEFAULT]*, your widget gets shadows, pressing-like tap feedback, and z-axis.
+   final bool isFloating; 
+   /// Decides how curved will be sides of your card. Default is `BorderRadius.all(Radius.circular(12))`
+   final BorderRadiusGeometry borderRadius; 
+   final Widget child; 
+   final EdgeInsetsGeometry padding; 
+   /// The `Function` that will be invoked on user's tap.
+   final Function onTap; 
+   /// Parameters that will be used for function if needed.
+   final dynamic onTapProp;
+
    @override _SlikkerCardState createState() => _SlikkerCardState();
+
+   SlikkerCard({ 
+      this.accent = 240, 
+      this.isFloating = true, 
+      this.child = const Text('hey?'), 
+      this.padding = const EdgeInsets.all(0), 
+      this.onTap, 
+      this.onTapProp, 
+      this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+   });
 }
 
-class _SlikkerCardState extends State<SlikkerCard> {
+class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin{
 
    HSVColor color;
-   bool rounded;
    bool pressed;
+   AnimationController tapOffsetController;
+   Offset tapOffset = Offset(0, 0);
+   CurvedAnimation tapOffsetAnimation;
 
-   @override
-   void initState() {
+   @override void initState() {
       super.initState();
-      rounded = widget.corningStyle.index == 0;
       pressed = false;
       color = HSVColor.fromAHSV(
-         (widget.objectType.index == 0) ? 0.8 : 1, widget.accent, 
-         (widget.objectType.index == 0) ? 0.05 : 0.6, 
-         (widget.objectType.index == 0) ? 0.97 : 1
+         widget.isFloating ? 1 : 0.8, 
+         widget.accent, 
+         widget.isFloating ? 0.6 : 0.05, 
+         widget.isFloating ? 1 : 0.97
       );
+
+      tapOffsetController = AnimationController(
+         vsync: this,
+         duration: Duration(milliseconds: 175),
+      );
+
+      tapOffsetAnimation = CurvedAnimation(
+         curve: Curves.easeOut,
+         parent: tapOffsetController
+      );
+      
+      tapOffsetAnimation.addListener(() => setState(() {}));
    }
 
-   @override
-   Widget build(BuildContext context) {
+   @override void dispose() {
+      tapOffsetController.dispose();
+      super.dispose();
+   }
+
+   @override Widget build(BuildContext context) {
       return AnimatedContainer( 
          duration: Duration(milliseconds: 175),
          curve: Curves.easeOut,
-         margin: (widget.objectType.index == 0) ? EdgeInsets.only(bottom: 1.5, top: 1.5) : EdgeInsets.only(bottom: pressed ? 0 : 3, top: pressed ? 3 : 0),
          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular( widget.borderRadius ?? (rounded ? 12 : 26) ),
+            borderRadius: widget.borderRadius,
             color: Colors.transparent,
-            boxShadow: (widget.objectType.index == 0) ? [] : [
+            boxShadow: widget.isFloating ? [
                BoxShadow (
                   color: color.withSaturation(0.6).withAlpha(pressed ? 0.07 : 0.12).toColor(),
                   offset: Offset(0, pressed ? 5 : 7),
@@ -242,40 +270,54 @@ class _SlikkerCardState extends State<SlikkerCard> {
                   color: color.withSaturation(pressed ? 0.06 : 0.05).toColor(),
                   offset: Offset(0,3),
                ),
-            ],          
+            ] : [],          
          ),
-         child: ClipRRect(
-            borderRadius: BorderRadius.circular( widget.borderRadius ?? (rounded ? 12 : 26) ),
+         child: Transform.translate(
+            offset: Offset(0, widget.isFloating ? tapOffsetAnimation.value*3 : 0),
             child: Material(
-               color: (widget.objectType.index == 0) ? color.toColor() : Colors.white,
-               borderRadius: BorderRadius.circular( widget.borderRadius ?? (rounded ? 12 : 26)),
+               clipBehavior: Clip.hardEdge,
+               color: widget.isFloating ? Colors.white : color.toColor(),
+               borderRadius: widget.borderRadius,
                child: InkWell(
                   splashFactory: SlikkerRipple(),
-                  splashColor: color.withAlpha((widget.objectType.index == 0) ? 0.25 : 0.125)
-                     .withValue((widget.objectType.index == 0) ? 0.85 : 1)
-                     .withSaturation((widget.objectType.index == 0) ? 0.15 : 0.6)
+                  splashColor: color.withAlpha(widget.isFloating ? 0.125 : 0.25)
+                     .withValue(widget.isFloating ? 1 : 0.85)
+                     .withSaturation(widget.isFloating ? 0.6 : 0.15)
                      .toColor(),
                   highlightColor: color.withAlpha(0.01).toColor(),
                   hoverColor: Colors.transparent,
-                  onTapDown: (a) { HapticFeedback.lightImpact(); setState(() { pressed = true; }); },
-                  onTapCancel: () { setState(() => pressed = false ); },
+                  onTapDown: (a) { 
+                     HapticFeedback.lightImpact(); 
+                     tapOffsetController.forward();
+                     setState(() { pressed = true; }); 
+                  },
+                  onTapCancel: () { 
+                     setState(() => pressed = false ); 
+                     tapOffsetController.reverse(from: 1);
+                  },
                   onTap: () { 
-                     if (widget.onTap != null) { 
-                        if (widget.onTapProp != null) widget.onTap(widget.onTapProp);
-                        else widget.onTap();
+                     if (widget.onTap != null) {
+                        widget.onTapProp != null 
+                        ? widget.onTap(widget.onTapProp) 
+                        : widget.onTap();
                      }
+
                      Future.delayed( 
-                        Duration(milliseconds: 175), 
-                        () => setState(() => pressed = false )
+                        Duration(milliseconds: 175), () { 
+                           setState(() => pressed = false);
+                           tapOffsetController.reverse(from: 1);
+                        }
                      ); 
-                     setState(() => pressed = true ); },
+
+                     setState(() => pressed = true); 
+                  },
                   child: Padding(
-                     padding: widget.padding ?? EdgeInsets.all(0),
+                     padding: widget.padding,
                      child: widget.child
                   )
                ),
             ),
-         ),
+         )
       );
    }
 }

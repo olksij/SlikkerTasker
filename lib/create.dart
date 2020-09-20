@@ -34,9 +34,9 @@ class _CreatePageState extends State<CreatePage> {
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: SlikkerCard(
-               corningStyle: CorningStyle.partial, 
+               borderRadius: BorderRadius.circular(12), 
                accent: 240, 
-               objectType: ObjectType.field, 
+               isFloating: false,
                child: Center(
                   child: Text('Somethinggg'),
                ),
@@ -55,8 +55,7 @@ class _CreatePageState extends State<CreatePage> {
          ),
          floatingButton: SlikkerCard(
             accent: 240,
-            corningStyle: CorningStyle.full,
-            objectType: ObjectType.floating,
+            borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
             onTap: this.createEl,
             onTapProp: context,
@@ -131,11 +130,11 @@ class _CreatePropsState extends State<CreateProps> {
                      ),
                      Container(width: 20,),
                      SlikkerCard(
-                        corningStyle: CorningStyle.partial, 
+                        borderRadius: BorderRadius.circular(12), 
                         accent: 240, 
                         onTap: (d) { _toCreate[widget.value] = d(); this.setState(() {}); Navigator.pop(context); },
                         onTapProp: () => valueController.value.text,
-                        objectType: ObjectType.floating, 
+                        isFloating: true,
                         child: SizedBox(
                            height: 52,
                            width: 52,
@@ -165,8 +164,8 @@ class _CreatePropsState extends State<CreateProps> {
                Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C1F1F33))),
             ],
          ),
-			corningStyle: CorningStyle.partial,
-			objectType: data ? ObjectType.floating : ObjectType.field,
+         borderRadius: BorderRadius.circular(12),
+			isFloating: data,
 			padding: EdgeInsets.all(17),
 			onTap: this.enterValue,
 		);
