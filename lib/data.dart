@@ -35,6 +35,7 @@ Future<User> _signInWithCredential(googleAuth) async {
 Future<bool> isSignedIn() async {
    return GoogleSignIn().isSignedIn().then((signedIn) async { 
       if (signedIn) {
+         print((await (GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true)).authentication).accessToken);
          await _signInWithCredential(
             await (GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true))
             .authentication

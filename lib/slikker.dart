@@ -293,7 +293,7 @@ class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin
                   },
                   onTapCancel: () { 
                      setState(() => pressed = false ); 
-                     tapOffsetController.reverse(from: 1);
+                     tapOffsetController.reverse();
                   },
                   onTap: () { 
                      if (widget.onTap != null) {

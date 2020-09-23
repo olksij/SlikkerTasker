@@ -6,8 +6,55 @@ import 'data.dart';
 
 Map<String, dynamic> _toCreate = {};
 
+Widget _acceptButton(String value, Function data, BuildContext context, Function refresh ) => SlikkerCard(
+   onTap: () { 
+      _toCreate[value] = data(); 
+      refresh(); 
+      Navigator.pop(context); 
+   },
+   child: SizedBox(
+      height: 52,
+      width: 52,
+      child: Center(
+         child: Text('👍', style: TextStyle(fontSize: 18),)
+      ) 
+   )
+);
+
+
+TextEditingController _titleValueController = TextEditingController();
 List<CreateProps> _toggesList = [
-   CreateProps(title: 'Title', description: 'The title of your task.', value: 'title'),
+   CreateProps(
+      title: 'Title', 
+      description: 'The title of your task.', 
+      value: 'title',
+      input: (BuildContext context, Function refresh) => Row(
+         children: [
+            Expanded(
+               child: TextField(
+                  controller: _titleValueController,
+                  style: TextStyle(
+                     fontSize: 16.5,
+                     color: Color(0xFF1F1F33)
+                  ),
+                  decoration: InputDecoration(
+                     contentPadding: EdgeInsets.all(15),
+                     border: new OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                     ),
+                     hintText: 'Type something',
+                     hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                     filled: true,
+                     fillColor: Color(0xCCEDEDF7),
+                  ),
+               ),
+            ),
+            Container(width: 20,),
+            _acceptButton('title', () => _titleValueController.value.text, context, refresh)
+         ]
+      )
+   ),
    CreateProps(title: 'Description', description: 'The description of your task.', value: 'description'),
    CreateProps(title: 'Time out', description: 'Time till which task should be done.', value: 'ends'),
    CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
@@ -75,14 +122,14 @@ class _CreatePageState extends State<CreatePage> {
 }
 
 class CreateProps extends StatefulWidget {
-	final String title; final String description; final String value; 
-	CreateProps({ this.title, this.value, this.description });
+	final String title; final String description; final String value; final Function input;
+	CreateProps({ this.title, this.value, this.description, this.input });
 	@override _CreatePropsState createState() => _CreatePropsState();
 }
 
 class _CreatePropsState extends State<CreateProps> {
-   TextEditingController valueController = TextEditingController();
-
+   bool data;
+   void refresh() { setState(() => data = _toCreate[widget.value] != null); print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');}
    enterValue() => showModalBottomSheet(
       context: context, 
       isDismissible: true,
@@ -101,58 +148,13 @@ class _CreatePropsState extends State<CreateProps> {
                ]
             ),
             padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
-            child: SizedBox(
-               height: 55,
-               child: Row(
-                  children: [
-                     Expanded(
-                        child: Container(
-                           margin: EdgeInsets.only(bottom: 3),
-                           child: TextField(
-                              controller: valueController,
-                              style: TextStyle(
-                                 fontSize: 16.5,
-                                 color: Color(0xFF1F1F33)
-                              ),
-                              decoration: InputDecoration(
-                                 contentPadding: EdgeInsets.all(15),
-                                 border: new OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(12),
-                                 ),
-                                 hintText: 'Type something',
-                                 hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-                                 filled: true,
-                                 fillColor: Color(0xCCEDEDF7),
-                              ),
-                           ),
-                        )
-                     ),
-                     Container(width: 20,),
-                     SlikkerCard(
-                        borderRadius: BorderRadius.circular(12), 
-                        accent: 240, 
-                        onTap: (d) { _toCreate[widget.value] = d(); this.setState(() {}); Navigator.pop(context); },
-                        onTapProp: () => valueController.value.text,
-                        isFloating: true,
-                        child: SizedBox(
-                           height: 52,
-                           width: 52,
-                           child: Center(
-                              child: Text('👍', style: TextStyle(fontSize: 18),)
-                           ) 
-                        )
-                     )
-                  ]
-               )
-            )
+            child: widget.input(context, () { refresh(); })
          );
       }
    );
 
-	@override
-	Widget build(BuildContext context) {
-      bool data = _toCreate[widget.value] != null;
+	@override Widget build(BuildContext context) {
+      data = _toCreate[widget.value] != null;
 		return SlikkerCard(
 			accent: 240,
 			child: Column(

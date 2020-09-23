@@ -34,8 +34,6 @@ class HomePage extends StatelessWidget {
             initialData: null,
             builder: (context, snapshot){
                if (snapshot.hasError) return Text('Something went wrong');
-               //if (snapshot.connectionState == ConnectionState.waiting) return Text('loading');
-               
                List<Widget> cards = [];
                Map a = data.toMap();
                a.forEach((key, value) {
