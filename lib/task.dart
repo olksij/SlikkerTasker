@@ -12,10 +12,14 @@ class TaskPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: TaskCard(task)
          ), 
-         content: Text('hey..'), 
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',
          topButtonAction: () => Navigator.pushNamed(context, '/home'), 
+         content: SlikkerCard(
+            isFloating: false,
+            padding: EdgeInsets.all(15),
+            child: Text(task['description'] ?? "Hh", style: TextStyle(fontSize: 15, color: Color(0xAA1F1F33))),
+         ), 
          floatingButton: SlikkerCard(
             accent: 240,
             child: Text('edit'),
