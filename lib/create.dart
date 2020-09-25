@@ -4,8 +4,10 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'slikker.dart';
 import 'data.dart';
 
-Map<String, dynamic> _toCreate = {};
+/// The list of props 
+Map<String, dynamic> _toCreate;
 
+///
 Widget _acceptButton(String value, Function data, BuildContext context, Function refresh ) => SlikkerCard(
    onTap: () { 
       _toCreate[value] = data(); 
@@ -15,9 +17,7 @@ Widget _acceptButton(String value, Function data, BuildContext context, Function
    child: SizedBox(
       height: 52,
       width: 52,
-      child: Center(
-         child: Text('👍', style: TextStyle(fontSize: 18),)
-      ) 
+      child: Center( child: Text('👍', style: TextStyle(fontSize: 18))) 
    )
 );
 
@@ -55,7 +55,40 @@ List<CreateProps> _toggesList = [
          ]
       )
    ),
-   CreateProps(title: 'Description', description: 'The description of your task.', value: 'description'),
+   CreateProps(
+      title: 'Description', 
+      description: 'The description of your task.', 
+      value: 'description',
+      input: (BuildContext context, Function refresh) => Column(
+         children: [
+            Expanded(
+               child: TextField(
+                  expands: true,
+                  maxLines: null,
+                  minLines: null,
+                  controller: _titleValueController,
+                  style: TextStyle(
+                     fontSize: 16.5,
+                     color: Color(0xFF1F1F33)
+                  ),
+                  decoration: InputDecoration(
+                     contentPadding: EdgeInsets.all(15),
+                     border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                     ),
+                     hintText: 'Type something',
+                     hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                     filled: true,
+                     fillColor: Color(0xCCEDEDF7),
+                  ),
+               ),
+            ),
+            Container(height: 20,),
+            _acceptButton('description', () => _titleValueController.value.text, context, refresh)
+         ]
+      )
+   ),
    CreateProps(title: 'Time out', description: 'Time till which task should be done.', value: 'ends'),
    CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
 ];
