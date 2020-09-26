@@ -7,7 +7,6 @@ import 'data.dart';
 /// The list of props 
 Map<String, dynamic> _toCreate;
 
-///
 Widget _acceptButton(String value, Function data, BuildContext context, Function refresh ) => SlikkerCard(
    onTap: () { 
       _toCreate[value] = data(); 
@@ -23,37 +22,42 @@ Widget _acceptButton(String value, Function data, BuildContext context, Function
 
 
 TextEditingController _titleValueController = TextEditingController();
+TextEditingController _descriptionValueController = TextEditingController();
+
 List<CreateProps> _toggesList = [
    CreateProps(
       title: 'Title', 
       description: 'The title of your task.', 
       value: 'title',
-      input: (BuildContext context, Function refresh) => Row(
-         children: [
-            Expanded(
-               child: TextField(
-                  controller: _titleValueController,
-                  style: TextStyle(
-                     fontSize: 16.5,
-                     color: Color(0xFF1F1F33)
-                  ),
-                  decoration: InputDecoration(
-                     contentPadding: EdgeInsets.all(15),
-                     border: new OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12),
+      input: (BuildContext context, Function refresh) => SizedBox(
+         height: 52,
+         child: Row(
+            children: [
+               Expanded(
+                  child: TextField(
+                     controller: _titleValueController,
+                     style: TextStyle(
+                        fontSize: 16.5,
+                        color: Color(0xFF1F1F33)
                      ),
-                     hintText: 'Type something',
-                     hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-                     filled: true,
-                     fillColor: Color(0xCCEDEDF7),
+                     decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(15),
+                        border: new OutlineInputBorder(
+                           borderSide: BorderSide.none,
+                           borderRadius: BorderRadius.circular(12),
+                        ),
+                        hintText: 'Type something',
+                        hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
+                        filled: true,
+                        fillColor: Color(0xCCEDEDF7),
+                     ),
                   ),
                ),
-            ),
-            Container(width: 20,),
-            _acceptButton('title', () => _titleValueController.value.text, context, refresh)
-         ]
-      )
+               Container(width: 20,),
+               _acceptButton('title', () => _titleValueController.value.text, context, refresh)
+            ]
+         )
+      ),
    ),
    CreateProps(
       title: 'Description', 
@@ -66,7 +70,7 @@ List<CreateProps> _toggesList = [
                   expands: true,
                   maxLines: null,
                   minLines: null,
-                  controller: _titleValueController,
+                  controller: _descriptionValueController,
                   style: TextStyle(
                      fontSize: 16.5,
                      color: Color(0xFF1F1F33)
@@ -85,7 +89,7 @@ List<CreateProps> _toggesList = [
                ),
             ),
             Container(height: 20,),
-            _acceptButton('description', () => _titleValueController.value.text, context, refresh)
+            _acceptButton('description', () => _descriptionValueController.value.text, context, refresh)
          ]
       )
    ),
@@ -162,7 +166,9 @@ class CreateProps extends StatefulWidget {
 
 class _CreatePropsState extends State<CreateProps> {
    bool data;
-   void refresh() { setState(() => data = _toCreate[widget.value] != null); print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');}
+
+   void refresh() => setState(() => data = _toCreate[widget.value] != null);
+
    enterValue() => showModalBottomSheet(
       context: context, 
       isDismissible: true,
