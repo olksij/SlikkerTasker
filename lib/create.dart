@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'slikker.dart';
 import 'data.dart';
@@ -93,7 +94,14 @@ List<CreateProps> _toggesList = [
          ]
       )
    ),
-   CreateProps(title: 'Time out', description: 'Time till which task should be done.', value: 'ends'),
+   CreateProps(
+      title: 'Time out', 
+      description: 'Time till which task should be done.', 
+      value: 'ends',
+      input: (BuildContext context, Function refresh) => CupertinoDatePicker(
+         onDateTimeChanged: (a) => print(a),
+      ),
+   ),
    CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
 ];
 
