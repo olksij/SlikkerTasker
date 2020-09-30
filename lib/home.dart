@@ -10,8 +10,8 @@ class HomePage extends StatelessWidget {
       return SlikkerScaffold(
          header: SearchBar(),
          title: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-         topButtonIcon: Icons.account_circle_rounded,
-         topButtonTitle: 'Account',
+         topButtonIcon: Icons.book,
+         topButtonTitle: 'Projects',
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
          floatingButton: SlikkerCard(
             accent: 240,
