@@ -10,18 +10,18 @@ class SearchBar extends StatelessWidget {
                TextField(
                   style: TextStyle(
                      fontSize: 16.5,
-                     color: Color(0xFF1F1F33)                 
+                     color: Color(0xFF3D3D66)                 
                   ),
                   decoration: InputDecoration(
                      prefixIcon: Container(
-                        padding: EdgeInsets.all(15),
+                        padding: EdgeInsets.all(17),
                         child: Icon(
                            Icons.search, 
                            size: 22.0, 
-                           color: Color(0xFF1F1F33)
+                           color: Color(0xFF3D3D66)
                         ),
                      ),
-                     contentPadding: EdgeInsets.all(15),
+                     contentPadding: EdgeInsets.all(17),
                      border: new OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(12),
@@ -34,17 +34,23 @@ class SearchBar extends StatelessWidget {
                ),
                Align(
                   alignment: Alignment.centerRight,
-                  child: Container(
-                     width: 52,
-                     height: 52,
-                     child: Center(
-                        child: Icon(
-                           Icons.account_circle_outlined,
-                           size: 25,
-                           color: Color(0xFF1F1F33)
+                  child: Padding(
+                     padding: EdgeInsets.all(7),
+                     child: SlikkerCard(
+                        isFloating: false,
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                           width: 42,
+                           height: 42,
+                           child: Center(
+                              child: Icon(
+                                 Icons.person_rounded,
+                                 color: Color(0xFF3D3D66)
+                              ),
+                           )
                         ),
-                     )
-                  ),
+                     ),
+                  )
                )
             ]
          )

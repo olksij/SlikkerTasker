@@ -229,10 +229,10 @@ class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin
       super.initState();
       pressed = false;
       color = HSVColor.fromAHSV(
-         widget.isFloating ? 1 : 0.8, 
+         widget.isFloating ? 1 : 0.075, 
          widget.accent, 
-         widget.isFloating ? 0.6 : 0.05, 
-         widget.isFloating ? 1 : 0.97
+         widget.isFloating ? 0.6 : 0.3, 
+         widget.isFloating ? 1 : 0.75
       );
 
       tapOffsetController = AnimationController(

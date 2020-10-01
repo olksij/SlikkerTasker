@@ -39,7 +39,7 @@ List<CreateProps> _toggesList = [
                      controller: _titleValueController,
                      style: TextStyle(
                         fontSize: 16.5,
-                        color: Color(0xFF1F1F33)
+                        color: Color(0xFF3D3D66)
                      ),
                      decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(15),
@@ -74,7 +74,7 @@ List<CreateProps> _toggesList = [
                   controller: _descriptionValueController,
                   style: TextStyle(
                      fontSize: 16.5,
-                     color: Color(0xFF1F1F33)
+                     color: Color(0xFF3D3D66)
                   ),
                   decoration: InputDecoration(
                      contentPadding: EdgeInsets.all(15),
@@ -180,7 +180,7 @@ class _CreatePropsState extends State<CreateProps> {
    enterValue() => showModalBottomSheet(
       context: context, 
       isDismissible: true,
-      barrierColor: Color(0x551F1F33),
+      barrierColor: Color(0x553D3D66),
       backgroundColor: Colors.transparent,
       builder: (context) { 
          return Container(
@@ -208,9 +208,9 @@ class _CreatePropsState extends State<CreateProps> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text(_toCreate[widget.value] ?? widget.title, style: TextStyle(fontSize: 17, color: data ? Color(0xFF6666FF) : Color(0xFF1F1F33)),),
+               Text(_toCreate[widget.value] ?? widget.title, style: TextStyle(fontSize: 17, color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66)),),
                Container(height: 8),
-               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C1F1F33))),
+               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
             ],
          ),
          borderRadius: BorderRadius.circular(12),

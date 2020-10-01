@@ -18,7 +18,7 @@ class TaskPage extends StatelessWidget {
          content: SlikkerCard(
             isFloating: false,
             padding: EdgeInsets.all(15),
-            child: Text(task['description'] ?? "Hh", style: TextStyle(fontSize: 15, color: Color(0xAA1F1F33))),
+            child: Text(task['description'] ?? "Hh", style: TextStyle(fontSize: 15, color: Color(0xAA3D3D66))),
          ), 
          floatingButton: SlikkerCard(
             accent: 240,

@@ -1,5 +1,7 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import 'app_icons.dart';
+
 import 'slikker.dart';
 import 'parts.dart';
 import 'task.dart';
@@ -10,7 +12,7 @@ class HomePage extends StatelessWidget {
       return SlikkerScaffold(
          header: SearchBar(),
          title: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-         topButtonIcon: Icons.book,
+         topButtonIcon: AppIcons.schedule,
          topButtonTitle: 'Projects',
          topButtonAction: () => Navigator.pushNamed(context, '/account'),
          floatingButton: SlikkerCard(

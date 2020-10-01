@@ -30,7 +30,7 @@ class _FirstRunState extends State<FirstRun> {
                   else return SizedBox(
                      child: CircularProgressIndicator(
                         strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1F1F33)),
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3D3D66)),
                      ),
                      height: 16,
                      width: 16,
