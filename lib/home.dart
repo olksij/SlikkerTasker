@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
             accent: 240,
             borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: () { Navigator.pushNamed(context, '/create'); },
+            onTap: () => Navigator.pushNamed(context, '/create'),
             child: Row(
                mainAxisSize: MainAxisSize.min,
                children: <Widget>[

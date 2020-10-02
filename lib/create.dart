@@ -108,12 +108,6 @@ List<CreateProps> _toggesList = [
 class CreatePage extends StatefulWidget { @override _CreatePageState createState() => _CreatePageState(); }
 
 class _CreatePageState extends State<CreatePage> {
-   void createEl(context) { 
-      _toCreate['time'] = DateTime.now().millisecondsSinceEpoch;
-      newDoc(_toCreate); 
-      Navigator.pushNamed(context, '/home');
-   }
-
    @override void initState() { super.initState(); _toCreate = {}; }
 
 	@override
@@ -149,8 +143,11 @@ class _CreatePageState extends State<CreatePage> {
             accent: 240,
             borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: this.createEl,
-            onTapProp: context,
+            onTap: () {
+               _toCreate['time'] = DateTime.now().millisecondsSinceEpoch;
+               newDoc(_toCreate); 
+               Navigator.pushNamed(context, '/home');
+            },
             child: Row(
                mainAxisSize: MainAxisSize.min,
                children: <Widget>[

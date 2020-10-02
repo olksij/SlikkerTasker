@@ -38,8 +38,7 @@ class _FirstRunState extends State<FirstRun> {
                },
             )
             : Text('Continue with Google'),
-            onTap: this.localSetState,
-            onTapProp: () => loggingIn = true,
+            onTap: () => this.setState(() => loggingIn = true),
          ),
       );
    }

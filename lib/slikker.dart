@@ -70,7 +70,7 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
                               HapticFeedback.lightImpact(); 
                               pull100 = pullAct = true; 
                            }
-                           
+
                            if (percent < 100 && pull100) pull100 = pullAct = false; 
 
                            if (scrollInfo.dragDetails == null && pullAct) { 
@@ -214,6 +214,7 @@ class SlikkerCard extends StatefulWidget {
    /// `BorderRadius.all(Radius.circular(12))`
    final BorderRadiusGeometry borderRadius; 
 
+   /// The widget that is placed inside *SlikkerCard* widget
    final Widget child; 
 
    final EdgeInsetsGeometry padding; 
@@ -221,32 +222,27 @@ class SlikkerCard extends StatefulWidget {
    /// The `Function` that will be invoked on user's tap.
    final Function onTap; 
    
-   /// Parameters that will be used for function if needed.
-   final dynamic onTapProp;
-
    @override _SlikkerCardState createState() => _SlikkerCardState();
+
+   static fun() {}
 
    SlikkerCard({ 
       this.accent = 240, 
       this.isFloating = true, 
       this.child = const Text('hey?'), 
       this.padding = const EdgeInsets.all(0), 
-      this.onTap, 
-      this.onTapProp, 
+      this.onTap = fun, 
       this.borderRadius = const BorderRadius.all(Radius.circular(12)),
    });
 }
 
 class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin{
    HSVColor color;
-   bool pressed;
-   AnimationController tapOffsetController;
-   Offset tapOffset = Offset(0, 0);
-   CurvedAnimation tapOffsetAnimation;
+   AnimationController tapController;
+   CurvedAnimation tapAnimation;
 
    @override void initState() {
       super.initState();
-      pressed = false;
       color = HSVColor.fromAHSV(
          widget.isFloating ? 1 : 0.075, 
          widget.accent, 
@@ -254,45 +250,43 @@ class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin
          widget.isFloating ? 1 : 0.75
       );
 
-      tapOffsetController = AnimationController(
+      tapController = AnimationController(
          vsync: this,
          duration: Duration(milliseconds: 175),
       );
 
-      tapOffsetAnimation = CurvedAnimation(
+      tapAnimation = CurvedAnimation(
          curve: Curves.easeOut,
-         parent: tapOffsetController
+         parent: tapController
       );
       
-      tapOffsetAnimation.addListener(() => setState(() {}));
+      tapAnimation.addListener(() => setState(() {}));
    }
 
    @override void dispose() {
-      tapOffsetController.dispose();
+      tapController.dispose();
       super.dispose();
    }
 
    @override Widget build(BuildContext context) {
-      return AnimatedContainer( 
-         duration: Duration(milliseconds: 175),
-         curve: Curves.easeOut,
+      return Container( 
          decoration: BoxDecoration(
             borderRadius: widget.borderRadius,
             color: Colors.transparent,
             boxShadow: widget.isFloating ? [
                BoxShadow (
-                  color: color.withSaturation(0.6).withAlpha(pressed ? 0.07 : 0.12).toColor(),
-                  offset: Offset(0, pressed ? 5 : 7),
-                  blurRadius: pressed ? 30 : 40,
+                  color: color.withSaturation(0.6).withAlpha(0.12 + tapAnimation.value * -0.05).toColor(),
+                  offset: Offset(0, 7 + tapAnimation.value * -2),
+                  blurRadius: 40 + tapAnimation.value * -10,
                ),
                BoxShadow (
-                  color: color.withSaturation(pressed ? 0.06 : 0.05).toColor(),
+                  color: color.withSaturation(0.05 + tapAnimation.value * 0.01).toColor(),
                   offset: Offset(0,3),
                ),
             ] : [],          
          ),
          child: Transform.translate(
-            offset: Offset(0, widget.isFloating ? tapOffsetAnimation.value*3 : 0),
+            offset: Offset(0, widget.isFloating ? tapAnimation.value*3 : 0),
             child: Material(
                clipBehavior: Clip.hardEdge,
                color: widget.isFloating ? Colors.white : color.toColor(),
@@ -307,28 +301,19 @@ class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin
                   hoverColor: Colors.transparent,
                   onTapDown: (a) { 
                      HapticFeedback.lightImpact(); 
-                     tapOffsetController.forward();
-                     setState(() { pressed = true; }); 
+                     tapController.forward();
                   },
                   onTapCancel: () { 
-                     setState(() => pressed = false ); 
-                     tapOffsetController.reverse();
+                     tapController.reverse();
                   },
                   onTap: () { 
-                     if (widget.onTap != null) {
-                        widget.onTapProp != null 
-                        ? widget.onTap(widget.onTapProp) 
-                        : widget.onTap();
-                     }
-
+                     widget.onTap();
+                     tapController.forward();
                      Future.delayed( 
                         Duration(milliseconds: 175), () { 
-                           setState(() => pressed = false);
-                           tapOffsetController.reverse(from: 1);
+                           tapController.reverse(from: 1);
                         }
                      ); 
-
-                     setState(() => pressed = true); 
                   },
                   child: Padding(
                      padding: widget.padding,
