@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
          title: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          topButtonIcon: AppIcons.schedule,
          topButtonTitle: 'Projects',
-         topButtonAction: () => Navigator.pushNamed(context, '/account'),
+         topButtonAction: () => Navigator.pushNamed(context, '/schedules'),
          floatingButton: SlikkerCard(
             accent: 240,
             borderRadius: BorderRadius.circular(54),

@@ -5,6 +5,7 @@ import 'data.dart';
 import 'home.dart';
 import 'intro.dart';
 import 'create.dart';
+import 'schedules.dart';
 
 void main() => runApp(Planner());
 
@@ -34,6 +35,7 @@ class Planner extends StatelessWidget {
                   '/home': (context) => HomePage(),
                   '/create': (context) => CreatePage(),
                   '/account': (context) => AccountPage(),
+                  '/schedules': (context) => SchedulesPage(),
                },
             );
          }

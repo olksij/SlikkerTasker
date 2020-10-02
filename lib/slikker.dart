@@ -6,49 +6,54 @@ export 'package:slikker_ripple/slikker_ripple.dart';
 export 'package:flutter/material.dart';
 
 /// Widget that helps to build a page. 
-/// Full documentation be later
+/// Full documentation will be later
 class SlikkerScaffold extends StatefulWidget {
-   /// Widget that is displayed on top of `header`. Useally is a text which indicates which page is it. In Material design it wuld be `AppBarTitle`
+   /// Widget that is displayed on top of `header`. Useally is a text which 
+   /// indicates which page is it. In Material design it wuld be `AppBarTitle`
    final Widget title; 
 
-   /// Widget that is displayed on top of `content`. In Material Design it would be the `AppBar`.
+   /// Widget that is displayed on top of `content`. In Material Design it 
+   /// would be the `AppBar`.
    final Widget header; 
 
-   /// Widget, usually `ListView`/`GridView` that contains other widgets. Content of the page.
+   /// Widget, usually `ListView`/`GridView` that contains other widgets. 
+   /// Content of the page.
    final Widget content; 
 
-   /// `TopButton`'s title. Usually text that hints which action will be taken when user taps the button or pulls the page.
+   /// `TopButton`'s title. Usually text that hints which action will be taken 
+   /// when user taps the button or pulls the page.
    final String topButtonTitle; 
 
-   /// `TopButton`'s icon. Usually used for hinting which action will be taken when user taps the button or pulls the page.
+   /// `TopButton`'s icon. Usually used for hinting which action will be taken 
+   /// when user taps the button or pulls the page.
    final IconData topButtonIcon; 
 
-   /// The function that will be called when user pulls the page or taps the `TopButton`.
+   /// The function that will be called when user pulls the page or taps the 
+   /// `TopButton`.
    final Function topButtonAction;
    
-   /// Widget that is placed in the bottom of the screen, always visible, and floats above the `content`.
+   /// Widget that is placed in the bottom of the screen, always visible, and 
+   /// floats above the `content`.
    final Widget floatingButton; 
 
    SlikkerScaffold({ this.title, this.header, this.content, 
-   this.topButtonAction, this.floatingButton,this.topButtonTitle, this.topButtonIcon, });
+   this.topButtonAction, this.floatingButton,this.topButtonTitle, 
+   this.topButtonIcon, });
 
    @override _SlikkerScaffoldState createState() => _SlikkerScaffoldState();
 }
 
 class _SlikkerScaffoldState extends State<SlikkerScaffold> {
-   bool pull100; bool pullAct; bool startedAtZero; TopButton topButton;
+   bool pull100; bool pullAct; bool startedAtZero; Function refreshTopButton;
 
    @override void initState() {
       super.initState();
-      pull100 = false; pullAct = false;
+      pull100 = false; 
+      pullAct = false;
       startedAtZero = false;
-      topButton = TopButton(
-         title: widget.topButtonTitle, 
-         icon: widget.topButtonIcon, 
-         accent: 240,
-         onTap: widget.topButtonAction,
-      );
    }
+
+   void topButtonCallback(Function topButtonFunction) => refreshTopButton = topButtonFunction;
    
    @override Widget build(BuildContext context) {
   		return Material(
@@ -60,16 +65,22 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
                   NotificationListener<ScrollNotification>(
                      onNotification: (scrollInfo) {
                         if (scrollInfo is ScrollUpdateNotification && startedAtZero) {
-                           int scroll = scrollInfo.metrics.pixels.round();
-                           int percent = scroll <= 0 ? ( scroll >= -100 ? 0-scroll : 100 ) : 0;
-                           if (percent == 100 && !pull100) { HapticFeedback.lightImpact(); pull100 = true; pullAct = true; }
-                           if (percent != 100 && pull100) { pull100 = false; pullAct = false; }
-                           if (scrollInfo is ScrollUpdateNotification && percent == 100 && scrollInfo.dragDetails == null 
-                           && pullAct) { pullAct = false; widget.topButtonAction(); }
-                           _topButtonState.refresh(percent);
+                           int percent = -scrollInfo.metrics.pixels.round();
+                           if (percent >= 100 && !pull100) { 
+                              HapticFeedback.lightImpact(); 
+                              pull100 = pullAct = true; 
+                           }
+                           
+                           if (percent < 100 && pull100) pull100 = pullAct = false; 
+
+                           if (scrollInfo.dragDetails == null && pullAct) { 
+                              pullAct = false; 
+                              widget.topButtonAction(); 
+                           }
+                           refreshTopButton(percent);
                         } 
                         else if (scrollInfo is ScrollStartNotification) startedAtZero = scrollInfo.metrics.pixels <= 0; 
-                        return true;
+                        return false;
                      },
                      child: ListView(
                         scrollDirection: Axis.vertical,
@@ -82,6 +93,7 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
                                  icon: widget.topButtonIcon, 
                                  accent: 240,
                                  onTap: widget.topButtonAction,
+                                 refreshFunction: topButtonCallback,
                               ) 
                            ),
                            Container( height: MediaQuery.of(context).size.height/3.7 ),
@@ -128,24 +140,24 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
 
 
 
-_TopButtonState _topButtonState;
-class TopButton extends StatefulWidget {    
-   final String title; final IconData icon; final double accent; final Function onTap;
-   TopButton({ @required this.title, @required this.icon, @required this.accent, this.onTap });
+class TopButton extends StatefulWidget {       
+   final String title; final IconData icon; 
+   final double accent; final Function onTap; 
+   final Function refreshFunction;
 
-   @override _TopButtonState createState() {  _topButtonState = _TopButtonState(); return _topButtonState; }
+   TopButton({ this.title, this.icon, this.accent, this.onTap, this.refreshFunction });
+
+   @override _TopButtonState createState() => _TopButtonState();
 }
 
 class _TopButtonState extends State<TopButton> {
-   int percent = 0;
-   Color color;
-   bool inTree = false;
+   int percent = 0; Color color;
 
-   void refresh(p) { if (percent != p && inTree) setState(() => percent = p); }
+   void refresh(p) { if (percent != p) setState(() => percent = p); }
 
    @override void initState() {
       super.initState();
-      inTree = true;
+      widget.refreshFunction(refresh);
       color = HSVColor.fromAHSV(1, widget.accent, 0.4, 0.2).toColor();
    }
 
@@ -193,14 +205,22 @@ class _TopButtonState extends State<TopButton> {
 class SlikkerCard extends StatefulWidget {
    /// The Hue which will be used for your card.
    final double accent; 
-   /// If `true` *[DEFAULT]*, your widget gets shadows, pressing-like tap feedback, and z-axis.
+
+   /// If `true` *[DEFAULT]*, your widget gets shadows, pressing-like tap 
+   /// feedback, and z-axis.
    final bool isFloating; 
-   /// Decides how curved will be sides of your card. Default is `BorderRadius.all(Radius.circular(12))`
+
+   /// Decides how curved will be sides of your card. Default is 
+   /// `BorderRadius.all(Radius.circular(12))`
    final BorderRadiusGeometry borderRadius; 
+
    final Widget child; 
+
    final EdgeInsetsGeometry padding; 
+
    /// The `Function` that will be invoked on user's tap.
    final Function onTap; 
+   
    /// Parameters that will be used for function if needed.
    final dynamic onTapProp;
 
@@ -218,7 +238,6 @@ class SlikkerCard extends StatefulWidget {
 }
 
 class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin{
-
    HSVColor color;
    bool pressed;
    AnimationController tapOffsetController;
