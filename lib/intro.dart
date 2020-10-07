@@ -24,7 +24,7 @@ class _FirstRunState extends State<FirstRun> {
                future: signIn(),
                builder: (context, user) {
                   if (user.hasData) {
-                     Future.delayed(Duration(seconds: 1), () => Navigator.pushNamed(context, '/home'));
+                     Navigator.pushNamed(context, '/home');
                      return Text(user.data.displayName.toString()); 
                   }
                   else return SizedBox(

@@ -7,11 +7,17 @@ import 'intro.dart';
 import 'create.dart';
 import 'schedules.dart';
 
-void main() => runApp(Planner());
+void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+   isSignedIn().then((value) => runApp(Planner(isSignedIn: value)));
+}
 
 class Planner extends StatelessWidget {
-	@override
-	Widget build(BuildContext context) {
+   final bool isSignedIn;
+
+   Planner({ this.isSignedIn });
+
+	@override Widget build(BuildContext context) {
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
@@ -21,24 +27,18 @@ class Planner extends StatelessWidget {
          systemNavigationBarDividerColor: Color(0xFFFF0000)
 		));
 
-		return FutureBuilder<bool>(
-         future: isSignedIn(),
-         builder: (context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) return Container(color: Color(0xFFF2F2F5));
-            return MaterialApp(
-               color: Color(0xFFF6F6FC),
-               theme: ThemeData(fontFamily: 'Manrope'),
-               title: 'Yaayyay',
-               initialRoute: snapshot.data ? '/home' : '/init',
-               routes: {
-                  '/init': (context) => FirstRun(),
-                  '/home': (context) => HomePage(),
-                  '/create': (context) => CreatePage(),
-                  '/account': (context) => AccountPage(),
-                  '/schedules': (context) => SchedulesPage(),
-               },
-            );
-         }
+		return MaterialApp(
+         color: Color(0xFFF6F6FC),
+         theme: ThemeData(fontFamily: 'Manrope'),
+         title: 'Yaayyay',
+         initialRoute: isSignedIn ? '/home' : '/init',
+         routes: {
+            '/init': (context) => FirstRun(),
+            '/home': (context) => HomePage(),
+            '/create': (context) => CreatePage(),
+            '/account': (context) => AccountPage(),
+            '/schedules': (context) => SchedulesPage(),
+         },
       );
 	}
 }

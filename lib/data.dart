@@ -8,31 +8,30 @@ import 'package:path_provider/path_provider.dart';
 const double version = 0.9;
 
 bool signedIn; User user; CollectionReference firestoreDB;
-List reminders; Box settings; Box data;
+Box settings; Box data; Box account;
 
 Map<String, dynamic> getDefaults() => {
    'time': DateTime.now().millisecondsSinceEpoch,
 };
 
-Future<User> _signInWithCredential(googleAuth) async {
-   await Firebase.initializeApp();
-   user = (await FirebaseAuth.instance.signInWithCredential(
-      GoogleAuthProvider.credential(
-         accessToken: googleAuth.accessToken,
-         idToken: googleAuth.idToken,
-      )
-   )).user; 
-
-   Hive.init((await getApplicationDocumentsDirectory()).path);
-   firestoreDB = FirebaseFirestore.instance.collection(user.uid);
-   settings = await Hive.openBox('.settings');
-   data = await Hive.openBox('data');
-
-   firestoreConnect();
-   return user;
+Future<bool> _signInWithCredential(AuthCredential credential) async {
+   if (credential == null) { account.clear(); return false; }
+   return FirebaseAuth.instance.signInWithCredential(credential)
+   .then((c) { user = c.user; firestoreConnect(); return true; })
+   .catchError((a) => false); 
 }
 
 Future<bool> isSignedIn() async {
+   Hive.init((await getApplicationDocumentsDirectory()).path);
+   await Firebase.initializeApp();
+   settings = await Hive.openBox('.settings');
+   data = await Hive.openBox('data');
+   account = await Hive.openBox('.account');
+   print((account.get('credential')));
+   return _signInWithCredential(AuthCredential()); //TODO: class props
+}
+
+/*Future<bool> isSignedIn1() async {
    return GoogleSignIn().isSignedIn().then((signedIn) async { 
       if (signedIn) {
          print((await (GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true)).authentication).accessToken);
@@ -44,19 +43,27 @@ Future<bool> isSignedIn() async {
       }
       else return false;
    });
-}
+}*/
 
 Future<User> signIn() async {
-   return await _signInWithCredential(
-      await (
-         await GoogleSignIn().signIn()
-      ).authentication
-   );
+   return GoogleSignIn().signIn().then((a) async {
+      GoogleSignInAuthentication auth = await a.authentication;
+      account.put('accessToken', auth.accessToken);
+      AuthCredential credential = GoogleAuthProvider.credential(
+         accessToken: auth.accessToken,
+         idToken: auth.idToken
+      );
+      print(credential.asMap());
+      account.put('credential', credential.asMap());
+      await _signInWithCredential(credential);
+      return user;
+   }).catchError((a) => false);
 }
 
 Stream<BoxEvent> getDBData() { return data.watch(); }
 
 firestoreConnect() async {
+   firestoreDB = FirebaseFirestore.instance.collection(user.uid);
    if (settings.get('version') != version) {
       Map cloudSettings = (await firestoreDB.doc('.settings').get()).data();
       if (settings.isEmpty || (cloudSettings['version'] == version && cloudSettings['time'] > settings.get('time'))) {
