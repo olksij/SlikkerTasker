@@ -23,18 +23,23 @@ class _FirstRunState extends State<FirstRun> {
             child: loggingIn ? FutureBuilder(
                future: signIn(),
                builder: (context, user) {
-                  if (user.hasData) {
+                  if (user.hasData && user.data) {
                      Navigator.pushNamed(context, '/home');
                      return Text(user.data.displayName.toString()); 
                   }
-                  else return SizedBox(
-                     child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3D3D66)),
-                     ),
-                     height: 16,
-                     width: 16,
-                  );
+                  else if (!user.hasData)
+                     return SizedBox(
+                        child: CircularProgressIndicator(
+                           strokeWidth: 3,
+                           valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3D3D66)),
+                        ),
+                        height: 16,
+                        width: 16,
+                     );
+                  else {
+                     setState(() => loggingIn = false);
+                     return Container();
+                  }
                },
             )
             : Text('Continue with Google'),

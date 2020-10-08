@@ -14,9 +14,17 @@ Map<String, dynamic> getDefaults() => {
    'time': DateTime.now().millisecondsSinceEpoch,
 };
 
-Future<bool> _signInWithCredential(AuthCredential credential) async {
-   if (credential == null) { account.clear(); return false; }
-   return FirebaseAuth.instance.signInWithCredential(credential)
+Future<bool> _signInWithCredential(Map credential) async {
+   credential = credential ?? {}; 
+   if (credential['providerId'] == null || credential['signInMethod'] == null || credential['idToken'] == null) { account.clear(); return false; }
+   return FirebaseAuth.instance.signInWithCredential(
+      OAuthCredential(
+         providerId: credential['providerId'],
+         signInMethod: credential['signInMethod'],
+         idToken: credential['idToken'],
+         accessToken: credential['accessToken'],
+      )
+   )
    .then((c) { user = c.user; firestoreConnect(); return true; })
    .catchError((a) => false); 
 }
@@ -27,35 +35,22 @@ Future<bool> isSignedIn() async {
    settings = await Hive.openBox('.settings');
    data = await Hive.openBox('data');
    account = await Hive.openBox('.account');
-   print((account.get('credential')));
-   return _signInWithCredential(AuthCredential()); //TODO: class props
+   print(account.get('credential'));
+   print(account.toMap());
+   return _signInWithCredential(account.get('credential'));
 }
-
-/*Future<bool> isSignedIn1() async {
-   return GoogleSignIn().isSignedIn().then((signedIn) async { 
-      if (signedIn) {
-         print((await (GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true)).authentication).accessToken);
-         await _signInWithCredential(
-            await (GoogleSignIn().currentUser ?? await GoogleSignIn().signInSilently(suppressErrors: true))
-            .authentication
-         );
-         return true;
-      }
-      else return false;
-   });
-}*/
 
 Future<User> signIn() async {
    return GoogleSignIn().signIn().then((a) async {
       GoogleSignInAuthentication auth = await a.authentication;
       account.put('accessToken', auth.accessToken);
-      AuthCredential credential = GoogleAuthProvider.credential(
+      OAuthCredential credential = GoogleAuthProvider.credential(
          accessToken: auth.accessToken,
          idToken: auth.idToken
       );
       print(credential.asMap());
       account.put('credential', credential.asMap());
-      await _signInWithCredential(credential);
+      await _signInWithCredential(credential.asMap());
       return user;
    }).catchError((a) => false);
 }
