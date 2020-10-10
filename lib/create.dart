@@ -145,7 +145,7 @@ class _CreatePageState extends State<CreatePage> {
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
             onTap: () {
                _toCreate['time'] = DateTime.now().millisecondsSinceEpoch;
-               newDoc(_toCreate); 
+               data.put('D'+DateTime.now().millisecondsSinceEpoch.toString(), _toCreate);
                Navigator.pushNamed(context, '/home');
             },
             child: Row(

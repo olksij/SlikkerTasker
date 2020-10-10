@@ -38,8 +38,8 @@ firestoreConnect() async {
    firestoreDB = FirebaseFirestore.instance.collection(user.uid);
    if (settings.get('version') != version) {
       Map cloudSettings = (await firestoreDB.doc('.settings').get()).data();
-      if (settings.isEmpty || (cloudSettings['version'] == version && cloudSettings['time'] > settings.get('time'))) {
-         settings.clear(); settings.putAll(cloudSettings);
+      if (settings.isEmpty || cloudSettings['time'] > settings.get('time')) {
+         settings.putAll(cloudSettings);
       }
       else {
          Map<String, dynamic> oldMap = Map<String, dynamic>.from(settings.toMap());
@@ -47,6 +47,7 @@ firestoreConnect() async {
          getDefaults().forEach((key, value) => settings.put(key, oldMap[key] ?? value));
          settings.put('version', version);
       }
+      refreshDB(true, doc: '.settings', value: Map<String, dynamic>.from(settings.toMap()));
    }    
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
    settings.watch().listen((event) => refreshDB(true, doc: '.settings', value: Map<String, dynamic>.from(settings.toMap())));
@@ -54,8 +55,11 @@ firestoreConnect() async {
 }
 
 void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<String, dynamic> value }) async {
-   if (!isLocal) { snapshot
-      .where((docChange) => docChange.doc.id != '.settings' ? (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time'] : false) 
+   if (!isLocal) snapshot
+      .where((docChange) {
+         return data.get(docChange.doc.id)['time'] != null
+         && data.get(docChange.doc.id)['time'] < docChange.doc.data()['time'];
+      }) 
       .forEach((change) {
          if (change.type.index == 0 || change.type.index == 1) {
             if (change.doc.id != '.settings') data.put(change.doc.id, change.doc.data()); 
@@ -63,10 +67,5 @@ void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<St
          }
          else data.delete(change.doc.id); 
       }); 
-   }
    else firestoreDB.doc(doc).set(value);
-}
-
-void newDoc(Map<String, dynamic> value) {
-   data.put('D'+DateTime.now().millisecondsSinceEpoch.toString(), value);
 }

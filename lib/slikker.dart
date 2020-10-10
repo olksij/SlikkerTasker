@@ -171,11 +171,11 @@ class _TopButtonState extends State<TopButton> {
          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-               percent == 0 ? 
+               percent < 1 ? 
                   Icon(
                      widget.icon, 
                      color: color, 
-                     size: 22,
+                     size: 20,
                   ) : Padding(
                      padding: EdgeInsets.all(3),
                      child: SizedBox(

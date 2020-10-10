@@ -8,6 +8,7 @@ import 'home.dart';
 import 'intro.dart';
 import 'create.dart';
 import 'schedules.dart';
+import 'tracker.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class Planner extends StatelessWidget {
             '/create': (context) => CreatePage(),
             '/account': (context) => AccountPage(),
             '/schedules': (context) => SchedulesPage(),
+            '/tracker': (context) => TrackerPage(),
          },
       );
 	}
