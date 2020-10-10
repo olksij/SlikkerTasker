@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'data.dart';
 import 'home.dart';
@@ -7,9 +9,14 @@ import 'intro.dart';
 import 'create.dart';
 import 'schedules.dart';
 
-void main() {
+void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-   isSignedIn().then((value) => runApp(Planner(isSignedIn: value)));
+   Hive.init((await getApplicationDocumentsDirectory()).path);
+   settings = await Hive.openBox('.settings');
+   data = await Hive.openBox('data');
+   print(settings.get('isSignedIn'));
+   if (settings.get('isSignedIn') ?? false) signIn();
+   runApp(Planner(isSignedIn: settings.get('isSignedIn') ?? false));
 }
 
 class Planner extends StatelessWidget {
@@ -18,7 +25,7 @@ class Planner extends StatelessWidget {
    Planner({ this.isSignedIn });
 
 	@override Widget build(BuildContext context) {
-      WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
+      WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
 		SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 			statusBarIconBrightness: Brightness.dark,
 			statusBarColor: Color(0x00BABADB),
@@ -30,7 +37,7 @@ class Planner extends StatelessWidget {
 		return MaterialApp(
          color: Color(0xFFF6F6FC),
          theme: ThemeData(fontFamily: 'Manrope'),
-         title: 'Yaayyay',
+         title: 'Tasker :)',
          initialRoute: isSignedIn ? '/home' : '/init',
          routes: {
             '/init': (context) => FirstRun(),

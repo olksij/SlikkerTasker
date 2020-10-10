@@ -21,13 +21,13 @@ class _FirstRunState extends State<FirstRun> {
             accent: 240,
             borderRadius: BorderRadius.circular(54),
             child: loggingIn ? FutureBuilder(
-               future: signIn(),
-               builder: (context, user) {
-                  if (user.hasData && user.data) {
+               future: signIn(silently: false),
+               builder: (context, value) {
+                  if (value.hasData && value.data) {
                      Navigator.pushNamed(context, '/home');
-                     return Text(user.data.displayName.toString()); 
+                     return Text('yay'); 
                   }
-                  else if (!user.hasData)
+                  else if (!value.hasData)
                      return SizedBox(
                         child: CircularProgressIndicator(
                            strokeWidth: 3,

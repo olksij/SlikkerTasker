@@ -3,7 +3,7 @@ description: Planner, tracker, diary, and a habit maker.
 
 publish_to: 'none'
 
-version: 0.0.110-alpha
+version: 0.0.111-alpha
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -14,7 +14,7 @@ dependencies:
   firebase_core: ^0.5.0
   firebase_auth: ^0.18.0
   google_sign_in: ^4.5.3
-  cloud_firestore: ^0.14.0
+  cloud_firestore: ^0.14.1
   firebase_analytics: ^6.0.0
   flutter_staggered_grid_view: ^0.3.2
   hive_generator: ^0.8.1
