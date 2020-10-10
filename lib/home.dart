@@ -59,7 +59,26 @@ class HomePage extends StatelessWidget {
                   crossAxisSpacing: 20.0,
                );
             }
-         ),
+         )
       );
 	}
+}
+
+class _ConnectivityStatus extends StatefulWidget {
+  @override 
+  __ConnectivityStatusState createState() => __ConnectivityStatusState();
+}
+
+class __ConnectivityStatusState extends State<_ConnectivityStatus> {
+   @override
+   void initState() {
+         super.initState();
+   }
+   @override Widget build(BuildContext context) {
+      return SlikkerCard(
+         isFloating: false,
+         padding: EdgeInsets.all(15),
+         child: Text(''),
+      );
+   }
 }

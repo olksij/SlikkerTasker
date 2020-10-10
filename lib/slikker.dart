@@ -44,16 +44,34 @@ class SlikkerScaffold extends StatefulWidget {
 }
 
 class _SlikkerScaffoldState extends State<SlikkerScaffold> {
-   bool pull100; bool pullAct; bool startedAtZero; Function refreshTopButton;
+   bool pull100; bool pullAct; bool active; Function refreshTopButton;
 
    @override void initState() {
       super.initState();
-      pull100 = false; 
-      pullAct = false;
-      startedAtZero = false;
+      pull100 = pullAct = active = false; 
    }
 
    void topButtonCallback(Function topButtonFunction) => refreshTopButton = topButtonFunction;
+   
+   bool scrolled(ScrollNotification info) {
+      int percent = -info.metrics.pixels.round();
+      if (info is ScrollUpdateNotification && active) {
+         if (percent >= 100 && !pull100) { 
+            HapticFeedback.lightImpact(); 
+            pull100 = pullAct = true; 
+         }
+
+         if (percent < 100 && pull100) pull100 = pullAct = false; 
+
+         if (info.dragDetails == null && pullAct) { 
+            pullAct = false; 
+            widget.topButtonAction(); 
+         }
+         refreshTopButton(percent);
+      }
+      if (info is ScrollStartNotification) active = percent >= 0; 
+      return false;
+   }
    
    @override Widget build(BuildContext context) {
   		return Material(
@@ -63,32 +81,14 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
             child: Stack(
                children: [
                   NotificationListener<ScrollNotification>(
-                     onNotification: (scrollInfo) {
-                        if (scrollInfo is ScrollUpdateNotification && startedAtZero) {
-                           int percent = -scrollInfo.metrics.pixels.round();
-                           if (percent >= 100 && !pull100) { 
-                              HapticFeedback.lightImpact(); 
-                              pull100 = pullAct = true; 
-                           }
-
-                           if (percent < 100 && pull100) pull100 = pullAct = false; 
-
-                           if (scrollInfo.dragDetails == null && pullAct) { 
-                              pullAct = false; 
-                              widget.topButtonAction(); 
-                           }
-                           refreshTopButton(percent);
-                        } 
-                        else if (scrollInfo is ScrollStartNotification) startedAtZero = scrollInfo.metrics.pixels <= 0; 
-                        return false;
-                     },
+                     onNotification: (scrollInfo) => scrolled(scrollInfo),
                      child: ListView(
                         scrollDirection: Axis.vertical,
                         physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                         children: <Widget>[
                            Container( height: 52 ),
                            Center( 
-                              child: TopButton(
+                              child: _TopButton(
                                  title: widget.topButtonTitle, 
                                  icon: widget.topButtonIcon, 
                                  accent: 240,
@@ -140,20 +140,20 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
 
 
 
-class TopButton extends StatefulWidget {       
+class _TopButton extends StatefulWidget {       
    final String title; final IconData icon; 
    final double accent; final Function onTap; 
    final Function refreshFunction;
 
-   TopButton({ this.title, this.icon, this.accent, this.onTap, this.refreshFunction });
+   _TopButton({ this.title, this.icon, this.accent, this.onTap, this.refreshFunction });
 
    @override _TopButtonState createState() => _TopButtonState();
 }
 
-class _TopButtonState extends State<TopButton> {
+class _TopButtonState extends State<_TopButton> {
    int percent = 0; Color color;
 
-   void refresh(p) { if (percent != p) setState(() => percent = p); }
+   void refresh(p) { if (percent != p && this.mounted) setState(() => percent = p); }
 
    @override void initState() {
       super.initState();
