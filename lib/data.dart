@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 const double version = 0.9;
 
 bool signedIn; User user; CollectionReference firestoreDB;
-Box settings; Box data;
+Box settings; Box data; 
 
 Map<String, dynamic> getDefaults() => {
    'time': DateTime.now().millisecondsSinceEpoch,
@@ -15,8 +15,10 @@ Map<String, dynamic> getDefaults() => {
 
 Future<bool> signIn({ bool silently = true }) async {
    await Firebase.initializeApp();
+   refreshStatus('Initializing..');
    return (silently ? GoogleSignIn().signInSilently() : GoogleSignIn().signIn())
    .then((account) async {
+      refreshStatus('Authoricating..');
       GoogleSignInAuthentication auth = await account.authentication;
       print(auth.serverAuthCode);
       return FirebaseAuth.instance.signInWithCredential(
@@ -35,6 +37,7 @@ Future<bool> signIn({ bool silently = true }) async {
 }
 
 firestoreConnect() async {
+   refreshStatus('Connecting..');
    firestoreDB = FirebaseFirestore.instance.collection(user.uid);
    if (settings.get('version') != version) {
       Map cloudSettings = (await firestoreDB.doc('.settings').get()).data();
@@ -48,10 +51,11 @@ firestoreConnect() async {
          settings.put('version', version);
       }
       refreshDB(true, doc: '.settings', value: Map<String, dynamic>.from(settings.toMap()));
-   }    
+   }
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
    settings.watch().listen((event) => refreshDB(true, doc: '.settings', value: Map<String, dynamic>.from(settings.toMap())));
    data.watch().listen((event) => refreshDB(true, doc: event.key, value: event.value));
+   refreshStatus('');
 }
 
 void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<String, dynamic> value }) async {
@@ -69,3 +73,6 @@ void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<St
       }); 
    else firestoreDB.doc(doc).set(value);
 }
+
+Function connectivityStatusRefresher = (a) {}; String connectivityStatus = '';
+void refreshStatus(String status) { connectivityStatusRefresher(status); connectivityStatus = status; }

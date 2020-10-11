@@ -31,34 +31,39 @@ class HomePage extends StatelessWidget {
                ]
             ),
          ),
-         content: StreamBuilder(
-            stream: data.watch(),
-            initialData: null,
-            builder: (context, snapshot){
-               if (snapshot.hasError) return Text('Something went wrong');
-               List<Widget> cards = [];
-               Map a = data.toMap();
-               a.forEach((key, value) {
-                  cards.add(
-                     TaskCard(Map<String,dynamic>.from(value), 
-                        onTap: () => Navigator.push(context, MaterialPageRoute(
-                           builder: (context) => TaskPage(Map<String, dynamic>.from(value)),
-                        )),
-                     ),
-                  );
-               });
-               return StaggeredGridView.countBuilder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  itemCount: cards.length,
-                  itemBuilder: (BuildContext context, int index) => cards[index],
-                  staggeredTileBuilder: (int index) =>
-                     StaggeredTile.fit(1),
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 20.0,
-               );
-            }
+         content: Column(
+            children: [
+               _ConnectivityStatus(),
+               StreamBuilder(
+                  stream: data.watch(),
+                  initialData: null,
+                  builder: (context, snapshot){
+                     if (snapshot.hasError) return Text('Something went wrong');
+                     List<Widget> cards = [];
+                     Map a = data.toMap();
+                     a.forEach((key, value) {
+                        cards.add(
+                           TaskCard(Map<String,dynamic>.from(value), 
+                              onTap: () => Navigator.push(context, MaterialPageRoute(
+                                 builder: (context) => TaskPage(Map<String, dynamic>.from(value)),
+                              )),
+                           ),
+                        );
+                     });
+                     return StaggeredGridView.countBuilder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        itemCount: cards.length,
+                        itemBuilder: (BuildContext context, int index) => cards[index],
+                        staggeredTileBuilder: (int index) =>
+                           StaggeredTile.fit(1),
+                        mainAxisSpacing: 20.0,
+                        crossAxisSpacing: 20.0,
+                     );
+                  }
+               )
+            ]
          )
       );
 	}
@@ -70,15 +75,37 @@ class _ConnectivityStatus extends StatefulWidget {
 }
 
 class __ConnectivityStatusState extends State<_ConnectivityStatus> {
-   @override
-   void initState() {
-         super.initState();
+   String connectivity = '';
+
+   @override void initState() {
+      super.initState();
+      connectivityStatusRefresher = refresh;
+      connectivity = connectivityStatus;
    }
+
+   void refresh(String status) => setState(() => connectivity = status);
+
    @override Widget build(BuildContext context) {
-      return SlikkerCard(
-         isFloating: false,
-         padding: EdgeInsets.all(15),
-         child: Text(''),
-      );
+      return connectivity != '' ? 
+      Column(
+         children: [
+            Flex(
+               direction: Axis.horizontal,
+               children: [
+                  Expanded(
+                     child: SlikkerCard(
+                        isFloating: false,
+                        padding: EdgeInsets.all(15),
+                        child: Center(
+                           child: Text(connectivity,),
+                        )
+                     ),
+                  )
+               ],
+            ),
+            
+            Container(height: 30,)
+         ]
+      ) : Container();
    }
 }
