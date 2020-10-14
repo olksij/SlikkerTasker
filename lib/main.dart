@@ -13,11 +13,11 @@ import 'tracker.dart';
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
    Hive.init((await getApplicationDocumentsDirectory()).path);
-   settings = await Hive.openBox('.settings');
+   app = await Hive.openBox('.app');
    data = await Hive.openBox('data');
-   print(settings.get('isSignedIn'));
-   if (settings.get('isSignedIn') ?? false) signIn();
-   runApp(Planner(isSignedIn: settings.get('isSignedIn') ?? false));
+   signedIn = app.get('isSignedIn');
+   if (signedIn ?? false) signIn();
+   runApp(Planner(isSignedIn: signedIn ?? false));
 }
 
 class Planner extends StatelessWidget {
