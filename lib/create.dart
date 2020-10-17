@@ -25,6 +25,7 @@ class _TaskTogges {
    static TextEditingController _titleValueController = TextEditingController();
    static TextEditingController _descriptionValueController = TextEditingController();
 
+   // ignore: unused_element
    static List<CreateProps> get list => [
       CreateProps(
          title: 'Title', 
@@ -96,6 +97,7 @@ class _TaskTogges {
 
 
 class _ProjectTogges {
+   // ignore: unused_element
    static List<CreateProps> get list => [
       CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
       CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
@@ -108,6 +110,7 @@ class _ProjectTogges {
 
 
 enum CreatePageType { task, project }
+List _pageTogges = [ _TaskTogges.list, _ProjectTogges.list ];
 
 class CreatePage extends StatefulWidget { 
    final CreatePageType pageType;
@@ -120,7 +123,7 @@ class _CreatePageState extends State<CreatePage> {
 
    @override void initState() { 
       super.initState(); _toCreate = {}; 
-      _toggesList = widget.pageType == CreatePageType.task ? _TaskTogges.list : _ProjectTogges.list; 
+      _toggesList = _pageTogges[widget.pageType.index]; 
    }
 
 	@override

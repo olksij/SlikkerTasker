@@ -10,16 +10,49 @@ import 'data.dart';
 class HomePage extends StatelessWidget {
 	Widget build(BuildContext context) {
       return SlikkerScaffold(
-         header: SearchBar(),
+         header: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Stack(
+               children:[
+                  SlikkerTextField(
+                     accent: 240,
+                     prefixIcon: Icons.search,
+                     hintText: 'Search everything',
+                     padding: EdgeInsets.fromLTRB(15, 15, 42, 15),
+                  ),
+                  Align(
+                     alignment: Alignment.centerRight,
+                     child: Padding(
+                        padding: EdgeInsets.all(7),
+                        child: SlikkerCard(
+                           onTap: () => Navigator.pushNamed(context, '/timeline'),
+                           isFloating: false,
+                           borderRadius: BorderRadius.circular(6),
+                           child: Container(
+                              width: 42,
+                              height: 42,
+                              child: Center(
+                                 child: Icon(
+                                    AppIcons.timeline,
+                                    color: Color(0xFF3D3D66)
+                                 ),
+                              )
+                           ),
+                        ),
+                     )
+                  )
+               ]
+            )
+         ),
          title: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
-         topButtonIcon: AppIcons.schedule,
-         topButtonTitle: 'Projects',
-         topButtonAction: () => Navigator.pushNamed(context, '/schedules'),
+         topButtonIcon: Icons.account_circle_rounded,
+         topButtonTitle: 'Account',
+         topButtonAction: () => Navigator.pushNamed(context, '/account'),
          floatingButton: SlikkerCard(
             accent: 240,
             borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: () => Navigator.pushNamed(context, '/create'),
+            onTap: () { Navigator.pushNamed(context, '/createTask'); },
             child: Row(
                mainAxisSize: MainAxisSize.min,
                children: <Widget>[

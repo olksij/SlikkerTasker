@@ -10,5 +10,5 @@ class AppIcons {
   static const _kFontFam = 'AppIcons';
   static const _kFontPkg = null;
 
-  static const IconData schedule = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData timeline = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

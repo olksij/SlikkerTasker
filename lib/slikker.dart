@@ -207,20 +207,30 @@ class SlikkerTextField extends StatelessWidget {
    final double accent;
    final int minLines;
    final int maxLines;
+   final IconData prefixIcon;
+   final EdgeInsetsGeometry padding;
 
-   const SlikkerTextField({ this.controller, this.hintText, this.accent, this.minLines, this.maxLines });
+   const SlikkerTextField({ this.controller, this.hintText, this.accent, this.minLines, this.maxLines, this.prefixIcon, this.padding });
 
    @override Widget build(BuildContext context) {
       return TextField(
          minLines: minLines,
-         maxLines: maxLines,
+         maxLines: maxLines ?? 1,
          controller: controller,
          style: TextStyle(
             fontSize: 16.5,
             color: HSVColor.fromAHSV(1, accent, 0.4, 0.4).toColor()
          ),
          decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(15),
+            prefixIcon: prefixIcon != null ? Container(
+               padding: EdgeInsets.all(17),
+               child: Icon(
+                  prefixIcon, 
+                  size: 22.0, 
+                  color: Color(0xFF3D3D66)
+               ),
+            ) : null,
+            contentPadding: padding ?? EdgeInsets.all(15),
             border: new OutlineInputBorder(
                borderSide: BorderSide.none,
                borderRadius: BorderRadius.circular(12),

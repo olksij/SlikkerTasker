@@ -1,6 +1,6 @@
 import 'slikker.dart';
 
-class SchedulesPage extends StatelessWidget {
+class TimelinePage extends StatelessWidget {
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
          topButtonTitle: 'Back',

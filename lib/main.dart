@@ -7,7 +7,7 @@ import 'data.dart';
 import 'home.dart';
 import 'intro.dart';
 import 'create.dart';
-import 'schedules.dart';
+import 'timeline.dart';
 import 'tracker.dart';
 
 void main() async {
@@ -46,7 +46,7 @@ class Planner extends StatelessWidget {
             '/createTask': (context) => CreatePage(CreatePageType.task),
             '/createProject': (context) => CreatePage(CreatePageType.project),
             '/account': (context) => AccountPage(),
-            '/schedules': (context) => SchedulesPage(),
+            '/timeline': (context) => TimelinePage(),
             '/tracker': (context) => TrackerPage(),
          },
       );
