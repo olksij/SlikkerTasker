@@ -43,7 +43,8 @@ class Planner extends StatelessWidget {
          routes: {
             '/init': (context) => FirstRun(),
             '/home': (context) => HomePage(),
-            '/create': (context) => CreatePage(),
+            '/createTask': (context) => CreatePage(CreatePageType.task),
+            '/createProject': (context) => CreatePage(CreatePageType.project),
             '/account': (context) => AccountPage(),
             '/schedules': (context) => SchedulesPage(),
             '/tracker': (context) => TrackerPage(),

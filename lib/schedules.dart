@@ -9,7 +9,8 @@ class SchedulesPage extends StatelessWidget {
          title: Text('Schedules', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
-            child: Text('new proj')
+            child: Text('new proj'),
+            onTap: () => Navigator.pushNamed(context, '/createProject'),
          ),
          content: Container(),
          header: Padding(

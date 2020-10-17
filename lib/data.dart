@@ -43,7 +43,7 @@ firestoreConnect() async {
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
    data.watch().listen((event) => refreshDB(true, doc: event.key, value: event.value));
 
-   Map tempSettings = data.get('.settings') ?? {};
+   Map<String, dynamic> tempSettings = Map<String, dynamic>.of(data.get('.settings')) ?? {};
    getDefaults().forEach((key, value) => tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
    data.put('.settings', tempSettings);
    refreshDB(true, doc: '.settings', value: tempSettings);

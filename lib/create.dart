@@ -25,7 +25,7 @@ Widget _acceptButton(String value, Function data, BuildContext context, Function
 TextEditingController _titleValueController = TextEditingController();
 TextEditingController _descriptionValueController = TextEditingController();
 
-List<CreateProps> _toggesList = [
+List<CreateProps> _taskToggesList = [
    CreateProps(
       title: 'Title', 
       description: 'The title of your task.', 
@@ -105,10 +105,35 @@ List<CreateProps> _toggesList = [
    CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
 ];
 
-class CreatePage extends StatefulWidget { @override _CreatePageState createState() => _CreatePageState(); }
+
+
+
+
+List<CreateProps> _projectToggesList = [
+   CreateProps(title: 'Name', description: 'Name', value: 'Name'),
+   CreateProps(title: 'Name', description: 'Name', value: 'Name'),
+   CreateProps(title: 'Name', description: 'Name', value: 'Name'),
+];
+
+
+
+
+
+enum CreatePageType { task, project }
+
+class CreatePage extends StatefulWidget { 
+   final CreatePageType pageType;
+   const CreatePage(this.pageType);
+   @override _CreatePageState createState() => _CreatePageState(); 
+}
 
 class _CreatePageState extends State<CreatePage> {
-   @override void initState() { super.initState(); _toCreate = {}; }
+   List<CreateProps> _toggesList;
+
+   @override void initState() { 
+      super.initState(); _toCreate = {}; 
+      _toggesList = widget.pageType == CreatePageType.task ? _taskToggesList : _projectToggesList; 
+   }
 
 	@override
 	Widget build(BuildContext context) {
@@ -145,7 +170,7 @@ class _CreatePageState extends State<CreatePage> {
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
             onTap: () {
                _toCreate['time'] = DateTime.now().millisecondsSinceEpoch;
-               data.put('D'+DateTime.now().millisecondsSinceEpoch.toString(), _toCreate);
+               data.put((widget.pageType == CreatePageType.task ? 'D' : 'P')+DateTime.now().millisecondsSinceEpoch.toString(), _toCreate);
                Navigator.pushNamed(context, '/home');
             },
             child: Row(
