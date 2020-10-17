@@ -73,7 +73,7 @@ class TaskCard extends StatelessWidget {
             children: [
                Padding(
                   padding: EdgeInsets.all(4),
-                  child: Text(task['title'], style: TextStyle(fontSize: 18, color: Color(0xFF6666FF))),
+                  child: Text(task['title'] ?? 'Undefined', style: TextStyle(fontSize: 18, color: Color(0xFF6666FF))),
                ),
                Row(
                   crossAxisAlignment: CrossAxisAlignment.end,

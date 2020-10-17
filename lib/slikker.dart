@@ -201,6 +201,40 @@ class _TopButtonState extends State<_TopButton> {
 
 
 
+class SlikkerTextField extends StatelessWidget {
+   final TextEditingController controller;
+   final String hintText;
+   final double accent;
+   final int minLines;
+   final int maxLines;
+
+   const SlikkerTextField({ this.controller, this.hintText, this.accent, this.minLines, this.maxLines });
+
+   @override Widget build(BuildContext context) {
+      return TextField(
+         minLines: minLines,
+         maxLines: maxLines,
+         controller: controller,
+         style: TextStyle(
+            fontSize: 16.5,
+            color: HSVColor.fromAHSV(1, accent, 0.4, 0.4).toColor()
+         ),
+         decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(15),
+            border: new OutlineInputBorder(
+               borderSide: BorderSide.none,
+               borderRadius: BorderRadius.circular(12),
+            ),
+            hintText: hintText,
+            hintStyle: TextStyle( color: HSVColor.fromAHSV(0.5, accent, 0.1, 0.7).toColor(), fontWeight: FontWeight.w600, ),
+            filled: true,
+            fillColor: HSVColor.fromAHSV(0.8, accent, 0.04, 0.97).toColor(),
+         ),
+      );
+   }
+}
+
+
 
 class SlikkerCard extends StatefulWidget {
    /// The Hue which will be used for your card.

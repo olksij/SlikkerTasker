@@ -21,29 +21,51 @@ Widget _acceptButton(String value, Function data, BuildContext context, Function
    )
 );
 
+class _TaskTogges {
+   static TextEditingController _titleValueController = TextEditingController();
+   static TextEditingController _descriptionValueController = TextEditingController();
 
-TextEditingController _titleValueController = TextEditingController();
-TextEditingController _descriptionValueController = TextEditingController();
-
-List<CreateProps> _taskToggesList = [
-   CreateProps(
-      title: 'Title', 
-      description: 'The title of your task.', 
-      value: 'title',
-      input: (BuildContext context, Function refresh) => SizedBox(
-         height: 52,
-         child: Row(
+   static List<CreateProps> get list => [
+      CreateProps(
+         title: 'Title', 
+         description: 'The title of your task.', 
+         value: 'title',
+         input: (BuildContext context, Function refresh) => SizedBox(
+            height: 52,
+            child: Row(
+               children: [
+                  Expanded(
+                     child: SlikkerTextField(
+                        accent: 240,
+                        controller: _titleValueController,
+                        hintText: 'Type something',
+                     )
+                  ),
+                  Container(width: 20,),
+                  _acceptButton('title', () => _titleValueController.value.text, context, refresh)
+               ]
+            )
+         ),
+      ),
+      CreateProps(
+         title: 'Description', 
+         description: 'The description of your task.', 
+         value: 'description',
+         input: (BuildContext context, Function refresh) => Column(
             children: [
                Expanded(
                   child: TextField(
-                     controller: _titleValueController,
+                     expands: true,
+                     maxLines: null,
+                     minLines: null,
+                     controller: _descriptionValueController,
                      style: TextStyle(
                         fontSize: 16.5,
                         color: Color(0xFF3D3D66)
                      ),
                      decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(15),
-                        border: new OutlineInputBorder(
+                        border: OutlineInputBorder(
                            borderSide: BorderSide.none,
                            borderRadius: BorderRadius.circular(12),
                         ),
@@ -54,66 +76,32 @@ List<CreateProps> _taskToggesList = [
                      ),
                   ),
                ),
-               Container(width: 20,),
-               _acceptButton('title', () => _titleValueController.value.text, context, refresh)
+               Container(height: 20,),
+               _acceptButton('description', () => _descriptionValueController.value.text, context, refresh)
             ]
          )
       ),
-   ),
-   CreateProps(
-      title: 'Description', 
-      description: 'The description of your task.', 
-      value: 'description',
-      input: (BuildContext context, Function refresh) => Column(
-         children: [
-            Expanded(
-               child: TextField(
-                  expands: true,
-                  maxLines: null,
-                  minLines: null,
-                  controller: _descriptionValueController,
-                  style: TextStyle(
-                     fontSize: 16.5,
-                     color: Color(0xFF3D3D66)
-                  ),
-                  decoration: InputDecoration(
-                     contentPadding: EdgeInsets.all(15),
-                     border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12),
-                     ),
-                     hintText: 'Type something',
-                     hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-                     filled: true,
-                     fillColor: Color(0xCCEDEDF7),
-                  ),
-               ),
-            ),
-            Container(height: 20,),
-            _acceptButton('description', () => _descriptionValueController.value.text, context, refresh)
-         ]
-      )
-   ),
-   CreateProps(
-      title: 'Time out', 
-      description: 'Time till which task should be done.', 
-      value: 'ends',
-      input: (BuildContext context, Function refresh) => CupertinoDatePicker(
-         onDateTimeChanged: (a) => print(a),
+      CreateProps(
+         title: 'Time out', 
+         description: 'Time till which task should be done.', 
+         value: 'ends',
+         input: (BuildContext context, Function refresh) => CupertinoDatePicker(
+            onDateTimeChanged: (a) => print(a),
+         ),
       ),
-   ),
-   CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
-];
+      CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
+   ];
+}
 
 
 
-
-
-List<CreateProps> _projectToggesList = [
-   CreateProps(title: 'Name', description: 'Name', value: 'Name'),
-   CreateProps(title: 'Name', description: 'Name', value: 'Name'),
-   CreateProps(title: 'Name', description: 'Name', value: 'Name'),
-];
+class _ProjectTogges {
+   static List<CreateProps> get list => [
+      CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
+      CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
+      CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
+   ];
+}
 
 
 
@@ -132,7 +120,7 @@ class _CreatePageState extends State<CreatePage> {
 
    @override void initState() { 
       super.initState(); _toCreate = {}; 
-      _toggesList = widget.pageType == CreatePageType.task ? _taskToggesList : _projectToggesList; 
+      _toggesList = widget.pageType == CreatePageType.task ? _TaskTogges.list : _ProjectTogges.list; 
    }
 
 	@override
