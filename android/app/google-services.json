@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1063142144569:android:adf85f8851bd9388452be8",
+        "mobilesdk_app_id": "1:1063142144569:android:8a03738813747426452be8",
         "android_client_info": {
-          "package_name": "sh.now.alexbesida.planner"
+          "package_name": "sh.now.alexbesida.tasker"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1063142144569-m21d0q60lreot1acmacansubrdq8gbu7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sh.now.alexbesida.tasker",
+            "certificate_hash": "ea85375b2394a36437c9516a4b45bb3b7fda4ad5"
+          }
+        },
         {
           "client_id": "1063142144569-94tsd6e3ql4m28ftbg1nsc0oiio175dm.apps.googleusercontent.com",
           "client_type": 3
@@ -21,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCUKsQW6eZdS6Dc8Be51nc3rW12mCQiG6U"
+          "current_key": "AIzaSyAS3RHaJNaEjHjcCCNqVZtoaIKFmVMtyfE"
         }
       ],
       "services": {

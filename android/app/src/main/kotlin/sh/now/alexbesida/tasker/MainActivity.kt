@@ -1,4 +1,4 @@
-package sh.now.alexbesida.planner
+package sh.now.alexbesida.tasker
 
 import io.flutter.embedding.android.FlutterActivity
 

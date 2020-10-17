@@ -5,7 +5,6 @@
 *.swp
 .DS_Store
 .atom/
-.vscode/
 .buildlog/
 .history
 .svn/
@@ -40,6 +39,3 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-
-# Exceptions to above rules.
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages

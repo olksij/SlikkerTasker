@@ -1,4 +1,4 @@
-import 'package:planner/parts.dart';
+import 'parts.dart';
 import 'slikker.dart';
 
 class TaskPage extends StatelessWidget {

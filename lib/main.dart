@@ -17,13 +17,13 @@ void main() async {
    data = await Hive.openBox('data');
    signedIn = app.get('isSignedIn');
    if (signedIn ?? false) signIn();
-   runApp(Planner(isSignedIn: signedIn ?? false));
+   runApp(Tasker(isSignedIn: signedIn ?? false));
 }
 
-class Planner extends StatelessWidget {
+class Tasker extends StatelessWidget {
    final bool isSignedIn;
 
-   Planner({ this.isSignedIn });
+   Tasker({ this.isSignedIn });
 
 	@override Widget build(BuildContext context) {
       WidgetsBinding.instance.renderView.automaticSystemUiAdjustment = false;
