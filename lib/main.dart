@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'data.dart';
 import 'home.dart';
@@ -12,7 +13,7 @@ import 'tracker.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-   Hive.init((await getApplicationDocumentsDirectory()).path);
+   Hive.init(!kIsWeb ? (await getApplicationDocumentsDirectory()).path : null);
    app = await Hive.openBox('.app');
    data = await Hive.openBox('data');
    signedIn = app.get('isSignedIn');
