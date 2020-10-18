@@ -1,7 +1,6 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'app_icons.dart';
-
 import 'slikker.dart';
 import 'parts.dart';
 import 'task.dart';
@@ -75,7 +74,7 @@ class HomePage extends StatelessWidget {
                      List<Widget> cards = [];
                      Map a = data.toMap();
                      a.forEach((key, value) {
-                        if (key != '.settings') cards.add(
+                        if (key[0] == 'D' || key[0] == 'D') cards.add(
                            TaskCard(Map<String,dynamic>.from(value), 
                               onTap: () => Navigator.push(context, MaterialPageRoute(
                                  builder: (context) => TaskPage(Map<String, dynamic>.from(value)),

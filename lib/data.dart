@@ -40,14 +40,14 @@ firestoreConnect() async {
    refreshStatus('Connecting..');
    firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
-   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
-   data.watch().listen((event) => refreshDB(true, doc: event.key, value: event.value));
-
    Map<String, dynamic> tempSettings = Map<String, dynamic>.from(data.get('.settings') ?? {});
    getDefaults().forEach((key, value) => tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
    data.clear();
    data.put('.settings', tempSettings);
    refreshDB(true, doc: '.settings', value: tempSettings);
+
+   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
+   data.watch().listen((event) => refreshDB(true, doc: event.key, value: event.value));
 
    refreshStatus('');
 }
@@ -61,3 +61,8 @@ void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<St
 
 Function connectivityStatusRefresher = (a) {}; String connectivityStatus = '';
 void refreshStatus(String status) { connectivityStatusRefresher(status); connectivityStatus = status; }
+
+void uploadData(String type, Map map) {
+   map['time'] = DateTime.now().millisecondsSinceEpoch;
+   data.put(type + map['time'].toString(), map);
+}

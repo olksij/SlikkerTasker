@@ -160,8 +160,7 @@ class _CreatePageState extends State<CreatePage> {
             borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
             onTap: () {
-               _toCreate['time'] = DateTime.now().millisecondsSinceEpoch;
-               data.put((widget.pageType == CreatePageType.task ? 'D' : 'P')+DateTime.now().millisecondsSinceEpoch.toString(), _toCreate);
+               uploadData(['Т','P'][widget.pageType.index], _toCreate);
                Navigator.pushNamed(context, '/home');
             },
             child: Row(
