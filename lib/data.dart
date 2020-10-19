@@ -45,8 +45,12 @@ firestoreConnect() async {
    data.clear();
 
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => event.docChanges
-   .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time']) 
-   .forEach((change) => data.put(change.doc.id, change.doc.data())));
+   .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time'] 
+      || docChange.type == DocumentChangeType.removed) 
+   .forEach((change) {
+      if (change.type == DocumentChangeType.removed) data.delete(change.doc.id);
+      else data.put(change.doc.id, change.doc.data());
+   }));
 
    data.watch().listen((event) { if (event.value != null) firestoreDB.doc(event.key).set(event.value); });
 
