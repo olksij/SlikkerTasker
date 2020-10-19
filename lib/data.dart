@@ -43,20 +43,17 @@ firestoreConnect() async {
    Map<String, dynamic> tempSettings = Map<String, dynamic>.from(data.get('.settings') ?? {});
    getDefaults().forEach((key, value) => tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
    data.clear();
-   data.put('.settings', tempSettings);
-   refreshDB(true, doc: '.settings', value: tempSettings);
 
-   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => refreshDB(false, snapshot: event.docChanges));
-   data.watch().listen((event) => refreshDB(true, doc: event.key, value: event.value));
+   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => event.docChanges
+   .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time']) 
+   .forEach((change) => data.put(change.doc.id, change.doc.data())));
+
+   data.watch().listen((event) { if (event.value != null) firestoreDB.doc(event.key).set(event.value); });
+
+   data.put('.settings', tempSettings);
+   firestoreDB.doc('.settings').set(tempSettings);
 
    refreshStatus('');
-}
-
-void refreshDB(bool isLocal, { List<DocumentChange> snapshot, String doc, Map<String, dynamic> value }) async {
-   if (!isLocal) snapshot
-      .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time']) 
-      .forEach((change) => data.put(change.doc.id, change.doc.data())); 
-   else firestoreDB.doc(doc).set(value);
 }
 
 Function connectivityStatusRefresher = (a) {}; String connectivityStatus = '';
