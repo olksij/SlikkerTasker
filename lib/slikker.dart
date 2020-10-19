@@ -50,8 +50,6 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
       super.initState();
       pull100 = pullAct = active = false; 
    }
-
-   void topButtonCallback(Function topButtonFunction) => refreshTopButton = topButtonFunction;
    
    bool scrolled(ScrollNotification info) {
       int percent = -info.metrics.pixels.round();
@@ -93,7 +91,7 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
                                  icon: widget.topButtonIcon, 
                                  accent: 240,
                                  onTap: widget.topButtonAction,
-                                 refreshFunction: topButtonCallback,
+                                 refreshFunction: (Function topButtonFunction) => refreshTopButton = topButtonFunction,
                               ) 
                            ),
                            Container( height: MediaQuery.of(context).size.height/3.7 ),

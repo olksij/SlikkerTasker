@@ -11,12 +11,8 @@ Map<String, dynamic> _toCreate;
 
 
 // Accept button in bottomModalSheet
-Widget _acceptButton(String value, Function data, BuildContext context, Function refresh ) => SlikkerCard(
-   onTap: () { 
-      _toCreate[value] = data(); 
-      refresh(); 
-      Navigator.pop(context); 
-   },
+Widget _acceptButton(Function onTap) => SlikkerCard(
+   onTap: onTap,
    child: SizedBox(
       height: 52,
       width: 52,
@@ -24,19 +20,18 @@ Widget _acceptButton(String value, Function data, BuildContext context, Function
    )
 );
 
-
 // Togges used in Create Page for Task creation
 class _TaskTogges {
    static TextEditingController _titleValueController = TextEditingController();
    static TextEditingController _descriptionValueController = TextEditingController();
 
-   // ignore: unused_element
-   static List<CreateProps> get list => [
+   static List<CreateProps> list(Function callback) => [
       CreateProps(
+         callback: callback,
          title: 'Title', 
          description: 'The title of your task.', 
          value: 'title',
-         input: (BuildContext context, Function refresh) => SizedBox(
+         input: (Function pop) => SizedBox(
             height: 52,
             child: Row(
                children: [
@@ -47,46 +42,33 @@ class _TaskTogges {
                         hintText: 'Type something',
                      )
                   ),
-                  Container(width: 20,),
-                  _acceptButton('title', () => _titleValueController.value.text, context, refresh)
+                  Container(width: 20),
+                  _acceptButton(() => pop(_titleValueController.value.text))
                ]
             )
          ),
       ),
+
       CreateProps(
+         callback: callback,
          title: 'Description', 
          description: 'The description of your task.', 
          value: 'description',
-         input: (BuildContext context, Function refresh) => Column(
+         input: (Function pop) => Column(
             children: [
-               Expanded(
-                  child: TextField(
-                     expands: true,
-                     maxLines: null,
-                     minLines: null,
-                     controller: _descriptionValueController,
-                     style: TextStyle(
-                        fontSize: 16.5,
-                        color: Color(0xFF3D3D66)
-                     ),
-                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(15),
-                        border: OutlineInputBorder(
-                           borderSide: BorderSide.none,
-                           borderRadius: BorderRadius.circular(12),
-                        ),
-                        hintText: 'Type something',
-                        hintStyle: TextStyle( color: Color(0x88A1A1B2), fontWeight: FontWeight.w600, ),
-                        filled: true,
-                        fillColor: Color(0xCCEDEDF7),
-                     ),
-                  ),
+               SlikkerTextField(
+                  accent: 240,
+                  controller: _descriptionValueController,
+                  hintText: 'Type something here :)',
+                  maxLines: 6,
+                  minLines: 3,
                ),
-               Container(height: 20,),
-               _acceptButton('description', () => _descriptionValueController.value.text, context, refresh)
+               Container(height: 20),
+               _acceptButton(() => pop(_descriptionValueController.value.text))
             ]
          )
       ),
+
       CreateProps(
          title: 'Time out', 
          description: 'Time till which task should be done.', 
@@ -102,11 +84,10 @@ class _TaskTogges {
 
 // Togges used in Create Page for Project creation
 class _ProjectTogges {
-   // ignore: unused_element
-   static List<CreateProps> get list => [
-      CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
-      CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
-      CreateProps(title: 'Name', description: 'Name', value: 'Name', input: (a, b) {}),
+   static List<CreateProps> list(Function callback) => [
+      CreateProps(callback: callback, title: 'Name', description: 'Name', value: 'Name', input: (a) {}),
+      CreateProps(callback: callback, title: 'Name', description: 'Name', value: 'Name', input: (a) {}),
+      CreateProps(callback: callback, title: 'Name', description: 'Name', value: 'Name', input: (a) {}),
    ];
 }
 
@@ -116,9 +97,6 @@ class _ProjectTogges {
 
 // Decides which togges will be used
 enum CreatePageType { task, project }
-List _pageTogges = [ _TaskTogges.list, _ProjectTogges.list ];
-
-
 
 class CreatePage extends StatefulWidget { 
    final CreatePageType pageType;
@@ -128,10 +106,13 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
    List<CreateProps> _toggesList;
+   Function refreshPreviewFunction;
+
+   void refreshPreview() => refreshPreviewFunction();
 
    @override void initState() { 
       super.initState(); _toCreate = {}; 
-      _toggesList = _pageTogges[widget.pageType.index]; 
+      _toggesList = widget.pageType == CreatePageType.task ? _TaskTogges.list(refreshPreview) : _ProjectTogges.list(refreshPreview);
    }
 
 	@override Widget build(BuildContext context) {
@@ -142,16 +123,7 @@ class _CreatePageState extends State<CreatePage> {
          title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: TaskCard(
-               _toCreate,
-               buttonIcon: Icons.save_rounded,
-               accent: 240,
-               isButtonEnabled: _toCreate['title'] != null || _toCreate['description'] != null,
-               onButtonTap: () {
-                  uploadData(['Т','P'][widget.pageType.index], _toCreate);
-                  Navigator.pushNamed(context, '/home');
-               },
-            )
+            child: CardPreview(['Т','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
          ),
          content: StaggeredGridView.countBuilder(
             shrinkWrap: true,
@@ -168,14 +140,58 @@ class _CreatePageState extends State<CreatePage> {
    }
 }
 
+class CardPreview extends StatefulWidget { 
+   final String type;
+   final Map data;
+   final Function callback;
+
+   const CardPreview(this.type, this.data, this.callback);
+   @override _CardPreviewState createState() => _CardPreviewState(); 
+}
+
+class _CardPreviewState extends State<CardPreview> {
+
+   @override
+   void initState() {
+      super.initState();
+      widget.callback(() => setState(() {}));
+   }
+   
+   @override Widget build(BuildContext context) {
+      return TaskCard(
+         _toCreate,
+         buttonIcon: Icons.save_rounded,
+         accent: 240,
+         isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,
+         onButtonTap: () {
+            uploadData(widget.type, widget.data);
+            Navigator.pushNamed(context, '/home');
+         },
+      );
+   }
+}
+
+
+
+
 class CreateProps extends StatefulWidget {
-	final String title; final String description; final String value; final Function input;
-	CreateProps({ this.title, this.value, this.description, this.input });
+	final String title; 
+   final String description; 
+   final String value; 
+   final Function input;
+   final Function callback;
+   
+	CreateProps({ this.title, this.value, this.description, this.input, this.callback });
 	@override _CreatePropsState createState() => _CreatePropsState();
 }
 
 class _CreatePropsState extends State<CreateProps> {
    bool data;
+
+   @override void initState() { 
+      super.initState(); 
+      data = _toCreate[widget.value] != null;
+   }
 
    enterValue() => showModalBottomSheet(
       context: context, 
@@ -195,13 +211,17 @@ class _CreatePropsState extends State<CreateProps> {
                ]
             ),
             padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
-            child: widget.input(context, () => setState(() => data = _toCreate[widget.value] != null))
+            child: widget.input((newData) {
+               _toCreate[widget.value] = newData;
+               setState(() => data = newData != null);
+               widget.callback();
+               Navigator.pop(context);
+            })
          );
       }
    );
 
 	@override Widget build(BuildContext context) {
-      data = _toCreate[widget.value] != null;
 		return SlikkerCard(
 			accent: 240,
 			child: Column(
