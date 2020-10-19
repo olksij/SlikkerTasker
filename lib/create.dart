@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tasker/parts.dart';
 
 import 'slikker.dart';
 import 'data.dart';
@@ -8,6 +9,8 @@ import 'data.dart';
 /// The list of props 
 Map<String, dynamic> _toCreate;
 
+
+// Accept button in bottomModalSheet
 Widget _acceptButton(String value, Function data, BuildContext context, Function refresh ) => SlikkerCard(
    onTap: () { 
       _toCreate[value] = data(); 
@@ -21,6 +24,8 @@ Widget _acceptButton(String value, Function data, BuildContext context, Function
    )
 );
 
+
+// Togges used in Create Page for Task creation
 class _TaskTogges {
    static TextEditingController _titleValueController = TextEditingController();
    static TextEditingController _descriptionValueController = TextEditingController();
@@ -95,7 +100,7 @@ class _TaskTogges {
 }
 
 
-
+// Togges used in Create Page for Project creation
 class _ProjectTogges {
    // ignore: unused_element
    static List<CreateProps> get list => [
@@ -109,8 +114,11 @@ class _ProjectTogges {
 
 
 
+// Decides which togges will be used
 enum CreatePageType { task, project }
 List _pageTogges = [ _TaskTogges.list, _ProjectTogges.list ];
+
+
 
 class CreatePage extends StatefulWidget { 
    final CreatePageType pageType;
@@ -126,24 +134,24 @@ class _CreatePageState extends State<CreatePage> {
       _toggesList = _pageTogges[widget.pageType.index]; 
    }
 
-	@override
-	Widget build(BuildContext context) {
+	@override Widget build(BuildContext context) {
       return SlikkerScaffold(
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',
-         topButtonAction: () => Navigator.pushNamed(context, '/home'),
+         topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/timetable'),
          title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: SlikkerCard(
-               borderRadius: BorderRadius.circular(12), 
-               accent: 240, 
-               isFloating: false,
-               child: Center(
-                  child: Text('Somethinggg'),
-               ),
-               padding: EdgeInsets.all(12),
-            ),
+            child: TaskCard(
+               _toCreate,
+               buttonIcon: Icons.save_rounded,
+               accent: 240,
+               isButtonEnabled: _toCreate['title'] != null || _toCreate['description'] != null,
+               onButtonTap: () {
+                  uploadData(['Т','P'][widget.pageType.index], _toCreate);
+                  Navigator.pushNamed(context, '/home');
+               },
+            )
          ),
          content: StaggeredGridView.countBuilder(
             shrinkWrap: true,
@@ -155,25 +163,7 @@ class _CreatePageState extends State<CreatePage> {
             mainAxisSpacing: 20.0,
             crossAxisSpacing: 20.0,
          ),
-         floatingButton: SlikkerCard(
-            accent: 240,
-            borderRadius: BorderRadius.circular(54),
-            padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: () {
-               uploadData(['Т','P'][widget.pageType.index], _toCreate);
-               Navigator.pushNamed(context, '/home');
-            },
-            child: Row(
-               mainAxisSize: MainAxisSize.min,
-               children: <Widget>[
-                  Icon(Icons.save, color: Color(0xFF6666FF),), 
-                  Container(width: 7, height: 24),
-                  Text('Go..!', style: TextStyle(
-                     color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16
-                  ),)
-               ]
-            ),
-			),
+         floatingButton: Container(),
       );
    }
 }
@@ -186,8 +176,6 @@ class CreateProps extends StatefulWidget {
 
 class _CreatePropsState extends State<CreateProps> {
    bool data;
-
-   void refresh() => setState(() => data = _toCreate[widget.value] != null);
 
    enterValue() => showModalBottomSheet(
       context: context, 
@@ -207,7 +195,7 @@ class _CreatePropsState extends State<CreateProps> {
                ]
             ),
             padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
-            child: widget.input(context, () { refresh(); })
+            child: widget.input(context, () => setState(() => data = _toCreate[widget.value] != null))
          );
       }
    );

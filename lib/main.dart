@@ -8,7 +8,7 @@ import 'data.dart';
 import 'home.dart';
 import 'intro.dart';
 import 'create.dart';
-import 'timeline.dart';
+import 'timetable.dart';
 import 'tracker.dart';
 
 void main() async {
@@ -47,7 +47,7 @@ class Tasker extends StatelessWidget {
             '/createTask': (context) => CreatePage(CreatePageType.task),
             '/createProject': (context) => CreatePage(CreatePageType.project),
             '/account': (context) => AccountPage(),
-            '/timeline': (context) => TimelinePage(),
+            '/timetable': (context) => TimetablePage(),
             '/tracker': (context) => TrackerPage(),
          },
       );

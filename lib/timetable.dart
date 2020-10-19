@@ -1,15 +1,15 @@
 import 'slikker.dart';
 
-class TimelinePage extends StatelessWidget {
+class TimetablePage extends StatelessWidget {
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
          topButtonAction: () => Navigator.pushNamed(context, '/home'),
-         title: Text('Schedules', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         title: Text('Timetable', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
-            child: Text('new proj'),
+            child: Text('New project'),
             onTap: () => Navigator.pushNamed(context, '/createProject'),
          ),
          content: Container(),

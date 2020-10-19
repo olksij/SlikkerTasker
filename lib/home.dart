@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                      child: Padding(
                         padding: EdgeInsets.all(7),
                         child: SlikkerCard(
-                           onTap: () => Navigator.pushNamed(context, '/timeline'),
+                           onTap: () => Navigator.pushNamed(context, '/timetable'),
                            isFloating: false,
                            borderRadius: BorderRadius.circular(6),
                            child: Container(
@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
                      a.forEach((key, value) {
                         if (key[0] == 'D' || key[0] == 'D') cards.add(
                            TaskCard(Map<String,dynamic>.from(value), 
-                              onTap: () => Navigator.push(context, MaterialPageRoute(
+                              onCardTap: () => Navigator.push(context, MaterialPageRoute(
                                  builder: (context) => TaskPage(Map<String, dynamic>.from(value)),
                               )),
                            ),
