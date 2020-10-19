@@ -1,4 +1,8 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 import 'slikker.dart';
+import 'data.dart';
+import 'parts.dart';
 
 class TimetablePage extends StatelessWidget {
    @override Widget build(BuildContext context) {
@@ -12,7 +16,33 @@ class TimetablePage extends StatelessWidget {
             child: Text('New project'),
             onTap: () => Navigator.pushNamed(context, '/createProject'),
          ),
-         content: Container(),
+         content: StreamBuilder(
+            stream: data.watch(),
+            initialData: null,
+            builder: (context, snapshot){
+               if (snapshot.hasError) return Text('Something went wrong');
+               List<Widget> cards = [];
+               Map a = data.toMap();
+               a.forEach((key, value) {
+                  if (key[0] == 'P' || key[0] == 'P') cards.add(
+                     TaskCard(Map<String,dynamic>.from(value), 
+                        onCardTap: () {},
+                     ),
+                  );
+               });
+               return StaggeredGridView.countBuilder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  itemCount: cards.length,
+                  itemBuilder: (BuildContext context, int index) => cards[index],
+                  staggeredTileBuilder: (int index) =>
+                     StaggeredTile.fit(1),
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+               );
+            }
+         ),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: SlikkerCard(

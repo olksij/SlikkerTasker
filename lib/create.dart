@@ -20,6 +20,23 @@ Widget _acceptButton(Function onTap) => SlikkerCard(
    )
 );
 
+Widget _singleLineTextField(TextEditingController controller, Function pop) => SizedBox(
+   height: 52,
+   child: Row(
+      children: [
+         Expanded(
+            child: SlikkerTextField(
+               accent: 240,
+               controller: controller,
+               hintText: 'Type something',
+            )
+         ),
+         Container(width: 20),
+         _acceptButton(() => pop(controller.value.text))
+      ]
+   )
+);
+
 // Togges used in Create Page for Task creation
 class _TaskTogges {
    static TextEditingController _titleValueController = TextEditingController();
@@ -31,22 +48,7 @@ class _TaskTogges {
          title: 'Title', 
          description: 'The title of your task.', 
          value: 'title',
-         input: (Function pop) => SizedBox(
-            height: 52,
-            child: Row(
-               children: [
-                  Expanded(
-                     child: SlikkerTextField(
-                        accent: 240,
-                        controller: _titleValueController,
-                        hintText: 'Type something',
-                     )
-                  ),
-                  Container(width: 20),
-                  _acceptButton(() => pop(_titleValueController.value.text))
-               ]
-            )
-         ),
+         input: (Function pop) => _singleLineTextField(_titleValueController, pop)
       ),
 
       CreateProps(
@@ -82,12 +84,40 @@ class _TaskTogges {
 }
 
 
+
+
+
 // Togges used in Create Page for Project creation
 class _ProjectTogges {
+   static TextEditingController _titleValueController = TextEditingController();
+
    static List<CreateProps> list(Function callback) => [
-      CreateProps(callback: callback, title: 'Name', description: 'Name', value: 'Name', input: (a) {}),
-      CreateProps(callback: callback, title: 'Name', description: 'Name', value: 'Name', input: (a) {}),
-      CreateProps(callback: callback, title: 'Name', description: 'Name', value: 'Name', input: (a) {}),
+      CreateProps(callback: callback, 
+         title: 'Title', 
+         description: 'The title of your project. Required', 
+         value: 'title', 
+         input: (Function pop) => _singleLineTextField(_titleValueController, pop)
+      ),
+      CreateProps(
+         callback: callback, 
+         title: 'Relaxable?', 
+         description: 'Does it suit for break time?', 
+         value: 'relaxable', input: (a) {}
+      ),
+      CreateProps(
+         callback: callback, 
+         title: 'Color', 
+         description: "Accent color for task. Used in timeline and as app's accent for about view and tasks.", 
+         value: 'color', input: (a) {}
+      ),
+      CreateProps(
+         callback: callback, 
+         title: 'Type', 
+         description: 'You do that in free time or it should be in your timetable?', 
+         value: 'type', 
+         input: (a) {}
+      ),
+      CreateProps(callback: callback, title: 'Goal', description: 'When project should be marked as finished', value: 'goal', input: (a) {}),
    ];
 }
 
@@ -123,7 +153,7 @@ class _CreatePageState extends State<CreatePage> {
          title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: CardPreview(['Т','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
+            child: _CardPreview(['Т','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
          ),
          content: StaggeredGridView.countBuilder(
             shrinkWrap: true,
@@ -140,32 +170,31 @@ class _CreatePageState extends State<CreatePage> {
    }
 }
 
-class CardPreview extends StatefulWidget { 
-   final String type;
-   final Map data;
-   final Function callback;
 
-   const CardPreview(this.type, this.data, this.callback);
+
+
+
+class _CardPreview extends StatefulWidget { 
+   final String type; final Map data; final Function callback;
+   const _CardPreview(this.type, this.data, this.callback);
    @override _CardPreviewState createState() => _CardPreviewState(); 
 }
 
-class _CardPreviewState extends State<CardPreview> {
+class _CardPreviewState extends State<_CardPreview> {
 
-   @override
-   void initState() {
+   @override void initState() {
       super.initState();
       widget.callback(() => setState(() {}));
    }
    
    @override Widget build(BuildContext context) {
-      return TaskCard(
-         _toCreate,
+      return TaskCard(_toCreate,
          buttonIcon: Icons.save_rounded,
          accent: 240,
          isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,
          onButtonTap: () {
             uploadData(widget.type, widget.data);
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/timetable');
          },
       );
    }
