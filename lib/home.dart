@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                      child: Padding(
                         padding: EdgeInsets.all(7),
                         child: SlikkerCard(
-                           onTap: () => Navigator.pushNamed(context, '/timetable'),
+                           onTap: () => Navigator.pushNamed(context, '/projects'),
                            isFloating: false,
                            borderRadius: BorderRadius.circular(6),
                            child: Container(

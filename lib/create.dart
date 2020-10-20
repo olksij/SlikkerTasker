@@ -149,7 +149,7 @@ class _CreatePageState extends State<CreatePage> {
       return SlikkerScaffold(
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',
-         topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/timetable'),
+         topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/projects'),
          title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
@@ -194,7 +194,7 @@ class _CardPreviewState extends State<_CardPreview> {
          isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,
          onButtonTap: () {
             uploadData(widget.type, widget.data);
-            Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/timetable');
+            Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/projects');
          },
       );
    }
