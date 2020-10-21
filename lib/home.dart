@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
                      Map a = data.toMap();
                      a.forEach((key, value) {
                         if (key[0] == 'D' || key[0] == 'D') cards.add(
-                           TaskCard(Map<String,dynamic>.from(value), 
+                           InfoCard(Map<String,dynamic>.from(value), 
                               onCardTap: () => Navigator.push(context, MaterialPageRoute(
                                  builder: (context) => TaskPage(Map<String, dynamic>.from(value)),
                               )),

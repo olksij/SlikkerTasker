@@ -108,7 +108,7 @@ class _ProjectTogges {
          callback: callback, 
          title: 'Color', 
          description: "Accent color for task. Used in timeline and as app's accent for about view and tasks.", 
-         value: 'color', input: (a) {}
+         value: 'accent', input: (a) {}
       ),
       CreateProps(
          callback: callback, 
@@ -188,7 +188,7 @@ class _CardPreviewState extends State<_CardPreview> {
    }
    
    @override Widget build(BuildContext context) {
-      return TaskCard(_toCreate,
+      return InfoCard(_toCreate,
          buttonIcon: Icons.save_rounded,
          accent: 240,
          isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,

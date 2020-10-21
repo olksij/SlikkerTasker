@@ -10,7 +10,7 @@ class TaskPage extends StatelessWidget {
          title: Text('Task', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: TaskCard(task, onCardTap: () {},)
+            child: InfoCard(task, onCardTap: () {},)
          ), 
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',

@@ -1,58 +1,67 @@
 import 'slikker.dart';
 
-class TaskCard extends StatelessWidget {
-   final Map<String, dynamic> task; 
-   final Function onCardTap; 
-   final Function onButtonTap; 
-   final IconData buttonIcon; 
-   final bool isButtonEnabled;
-   final double accent;
-   const TaskCard(this.task, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true });
+class InfoCard extends StatelessWidget {
+	final Map<String, dynamic> data; 
+	final Function onCardTap; 
+	final Function onButtonTap; 
+	final IconData buttonIcon; 
+	final bool isButtonEnabled;
+	final bool showButton;
+	final double accent;
+	const InfoCard(this.data, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true, this.showButton = true });
 
-   @override Widget build(BuildContext context) {
-      return SlikkerCard(
-         onTap: this.onCardTap ?? () {},
-         padding: EdgeInsets.all(13),
-         accent: accent ?? 240,
-         borderRadius: BorderRadius.circular(12),
-         child: Stack( 
-            alignment: Alignment.bottomRight,
-            children: [
-               Padding(
-                  padding: EdgeInsets.all(4),
-                  child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                        Text(task['title'] ?? (task['description'] ?? 'Enter title'), style: TextStyle(fontSize: 18, color: Color(0xFF6666FF))),
-                        Container(height: 4),
-                        Text(task['description'] ?? "Nothing to show", style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
-                        if (task['project'] != null) Text(task['project'], style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
-                        if (task['finish'] != null) Text(task['finish'], style: TextStyle(fontSize: 14, color: Color(0x4C6666FF))),
-                     ],
-                  ),
-               ),
-               Align(
-                  alignment: Alignment.bottomRight,
-                  child: SlikkerCard(
-                     borderRadius: BorderRadius.circular(8), 
-                     accent: 240, 
-                     isFloating: false,
-                     onTap: isButtonEnabled ? onButtonTap ?? () {} : () {},
-                     child: Container(
-                        height: 46,
-                        width: 46,
-                        child: Center(
-                           child: Icon(
-                              buttonIcon ?? Icons.play_arrow_rounded, 
-                              color: Color(isButtonEnabled ? 0xFF6666FF : 0x886666FF), 
-                              size: buttonIcon != null ? 28 : 32,
-                           ),
-                        ),
-                     )
-                  ),
-               )
-            ]
-         ),
-      );
-   }
+	List<Widget> cardInfo() {
+
+		List<Widget> more = [ for (var i = 0; i < data.length; i++) 
+			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) 
+			Text(data[i], style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.4, 1).toColor())),
+		];
+
+		return [
+			Text(data['title'] ?? (data['description'] ?? 'Enter title'), style: TextStyle(fontSize: 18, color: HSVColor.fromAHSV(1, accent, 0.4, 1).toColor())),
+			Container(height: 4),
+			more.length != 0 ? more : Text('No description', style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.4, 1).toColor()))
+		];
+	}
+
+	@override Widget build(BuildContext context) {
+		return SlikkerCard(
+			onTap: this.onCardTap ?? () {},
+			padding: EdgeInsets.all(13),
+			accent: accent ?? 240,
+			borderRadius: BorderRadius.circular(12),
+			child: Stack( 
+				alignment: Alignment.bottomRight,
+				children: [
+					Padding(
+						padding: EdgeInsets.all(4),
+						child: Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+							children: cardInfo()
+						),
+					),
+					Align(
+						alignment: Alignment.bottomRight,
+						child: SlikkerCard(
+							borderRadius: BorderRadius.circular(8), 
+							accent: accent ?? 240, 
+							isFloating: false,
+							onTap: isButtonEnabled ? onButtonTap ?? () {} : () {},
+							child: Container(
+								height: 46,
+								width: 46,
+								child: Center(
+									child: Icon(
+										buttonIcon ?? Icons.play_arrow_rounded, 
+										color: HSVColor.fromAHSV(isButtonEnabled ? 1 : 0.5, accent, 0.4, 1).toColor(), 
+										size: buttonIcon != null ? 28 : 32,
+									),
+								),
+							)
+						),
+					)
+				]
+			),
+		);
+	}
 }
