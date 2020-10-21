@@ -8,24 +8,26 @@ class InfoCard extends StatelessWidget {
 	final bool isButtonEnabled;
 	final bool showButton;
 	final double accent;
-	const InfoCard(this.data, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true, this.showButton = true });
+   final bool isFloating;
+	const InfoCard(this.data, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true, this.showButton = true, this.isFloating });
 
 	List<Widget> cardInfo() {
 
 		List<Widget> more = [ for (var i = 0; i < data.length; i++) 
 			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) 
-			Text(data[i], style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.4, 1).toColor())),
+			Text(data[i], style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor())),
 		];
 
 		return [
-			Text(data['title'] ?? (data['description'] ?? 'Enter title'), style: TextStyle(fontSize: 18, color: HSVColor.fromAHSV(1, accent, 0.4, 1).toColor())),
+			Text(data['title'] ?? (data['description'] ?? 'Enter title'), style: TextStyle(fontSize: 18, color: HSVColor.fromAHSV(1, accent, 0.6, 1).toColor())),
 			Container(height: 4),
-			more.length != 0 ? more : Text('No description', style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.4, 1).toColor()))
+			more.length != 0 ? more : Text('No description', style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor()))
 		];
 	}
 
 	@override Widget build(BuildContext context) {
 		return SlikkerCard(
+         isFloating: isFloating ?? true,
 			onTap: this.onCardTap ?? () {},
 			padding: EdgeInsets.all(13),
 			accent: accent ?? 240,
@@ -53,7 +55,7 @@ class InfoCard extends StatelessWidget {
 								child: Center(
 									child: Icon(
 										buttonIcon ?? Icons.play_arrow_rounded, 
-										color: HSVColor.fromAHSV(isButtonEnabled ? 1 : 0.5, accent, 0.4, 1).toColor(), 
+										color: HSVColor.fromAHSV(isButtonEnabled ? 1 : 0.5, accent, 0.6, 1).toColor(), 
 										size: buttonIcon != null ? 28 : 32,
 									),
 								),

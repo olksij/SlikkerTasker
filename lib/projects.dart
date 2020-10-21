@@ -26,6 +26,7 @@ class ProjectsPage extends StatelessWidget {
                a.forEach((key, value) {
                   if (key[0] == 'P') cards.add(
                      InfoCard(Map<String,dynamic>.from(value), 
+                        isFloating: false,
                         onCardTap: () {},
                         showButton: false,
                         accent: value['accent'],

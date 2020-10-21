@@ -294,7 +294,7 @@ class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin
 
       tapController = AnimationController(
          vsync: this,
-         duration: Duration(milliseconds: 175),
+         duration: Duration(milliseconds: 150),
       );
 
       tapAnimation = CurvedAnimation(
@@ -349,13 +349,9 @@ class _SlikkerCardState extends State<SlikkerCard> with TickerProviderStateMixin
                      tapController.reverse();
                   },
                   onTap: () { 
-                     widget.onTap();
                      tapController.forward();
-                     Future.delayed( 
-                        Duration(milliseconds: 175), () { 
-                           tapController.reverse(from: 1);
-                        }
-                     ); 
+                     Future.delayed( Duration(milliseconds: 150), () => tapController.reverse(from: 1) ); 
+                     Future.delayed( Duration(milliseconds: 100), () => widget.onTap()); 
                   },
                   child: Padding(
                      padding: widget.padding,
