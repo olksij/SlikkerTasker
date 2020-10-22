@@ -12,8 +12,10 @@ class TimetablePage extends StatelessWidget {
          title: Text('Timetable', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
-            child: Text('New schedule'),
-            onTap: () {},
+            child: Text('New timetable'),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+               builder: (context) => TimetableEditor({}),
+            )),
          ),
          content: StreamBuilder(
             stream: data.watch(),
@@ -39,6 +41,23 @@ class TimetablePage extends StatelessWidget {
             }
          ),
          header: Container(),
+      );
+   }
+}
+
+class TimetableEditor extends StatelessWidget {
+   final Map timetable;
+
+   const TimetableEditor(this.timetable);
+
+   @override Widget build(BuildContext context) {
+      return SlikkerScaffold(
+         header: SlikkerTextField(isFloating: true, accent: 240,),
+         content: Container(),
+         title: Container(),
+         topButtonTitle: 'Back',
+         topButtonIcon: Icons.arrow_back,
+         topButtonAction: () => Navigator.pushNamed(context, '/timetable'),
       );
    }
 }
