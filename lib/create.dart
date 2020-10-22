@@ -150,7 +150,7 @@ class _CreatePageState extends State<CreatePage> {
          topButtonIcon: Icons.arrow_back,
          topButtonTitle: 'Back',
          topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/projects'),
-         title: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
+         customTitle: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: _CardPreview(['Т','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)

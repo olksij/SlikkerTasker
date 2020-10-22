@@ -2,6 +2,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'slikker.dart';
 import 'data.dart';
+import 'timetable_editor.dart';
 
 class TimetablePage extends StatelessWidget {
    @override Widget build(BuildContext context) {
@@ -9,7 +10,7 @@ class TimetablePage extends StatelessWidget {
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
          topButtonAction: () => Navigator.pushNamed(context, '/projects'),
-         title: Text('Timetable', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         customTitle: Text('Timetable', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
             child: Text('New timetable'),
@@ -41,23 +42,6 @@ class TimetablePage extends StatelessWidget {
             }
          ),
          header: Container(),
-      );
-   }
-}
-
-class TimetableEditor extends StatelessWidget {
-   final Map timetable;
-
-   const TimetableEditor(this.timetable);
-
-   @override Widget build(BuildContext context) {
-      return SlikkerScaffold(
-         header: SlikkerTextField(isFloating: true, accent: 240,),
-         content: Container(),
-         title: Container(),
-         topButtonTitle: 'Back',
-         topButtonIcon: Icons.arrow_back,
-         topButtonAction: () => Navigator.pushNamed(context, '/timetable'),
       );
    }
 }

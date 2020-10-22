@@ -7,7 +7,7 @@ class TaskPage extends StatelessWidget {
 
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
-         title: Text('Task', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
+         customTitle: Text('Task', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,), 
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: InfoCard(task, onCardTap: () {},)

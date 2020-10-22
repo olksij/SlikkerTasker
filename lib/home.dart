@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
                   SlikkerTextField(
                      accent: 240,
                      prefixIcon: Icons.search,
+                     prefixIconPadding: EdgeInsets.all(17),
                      hintText: 'Search everything',
                      padding: EdgeInsets.fromLTRB(15, 15, 42, 15),
                   ),
@@ -43,7 +44,7 @@ class HomePage extends StatelessWidget {
                ]
             )
          ),
-         title: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         customTitle: Text('Tasker', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          topButtonIcon: Icons.account_circle_rounded,
          topButtonTitle: 'Account',
          topButtonAction: () => Navigator.pushNamed(context, '/account'),

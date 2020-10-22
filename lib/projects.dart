@@ -10,7 +10,7 @@ class ProjectsPage extends StatelessWidget {
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
          topButtonAction: () => Navigator.pushNamed(context, '/home'),
-         title: Text('Projects', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         customTitle: Text('Projects', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
             child: Text('New project'),

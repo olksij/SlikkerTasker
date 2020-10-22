@@ -8,12 +8,15 @@ export 'package:flutter/material.dart';
 /// Widget that helps to build a page. 
 /// Full documentation will be later
 class SlikkerScaffold extends StatefulWidget {
-   /// Widget that is displayed on top of `header`. Useally is a text which 
+   /// Text that is displayed above `header`. Useally is a text which 
    /// indicates which page is it. In Material design it wuld be `AppBarTitle`
-   final Widget title; 
+   final String title; 
 
-   /// Widget that is displayed on top of `content`. In Material Design it 
-   /// would be the `AppBar`.
+   /// Custom title widget, that is placed above `header`.
+   final Widget customTitle;
+
+   /// Widget that is displayed above `content`. In Material Design it 
+   /// is usually `AppBar`.
    final Widget header; 
 
    /// Widget, usually `ListView`/`GridView` that contains other widgets. 
@@ -38,7 +41,7 @@ class SlikkerScaffold extends StatefulWidget {
 
    SlikkerScaffold({ this.title, this.header, this.content, 
    this.topButtonAction, this.floatingButton,this.topButtonTitle, 
-   this.topButtonIcon, });
+   this.topButtonIcon, this.customTitle, });
 
    @override _SlikkerScaffoldState createState() => _SlikkerScaffoldState();
 }
@@ -95,9 +98,13 @@ class _SlikkerScaffoldState extends State<SlikkerScaffold> {
                               ) 
                            ),
                            Container( height: MediaQuery.of(context).size.height/3.7 ),
-                           widget.title, 
+                           widget.customTitle ?? Text(
+                              widget.title, 
+                              style: TextStyle(fontSize: 36.0), 
+                              textAlign: TextAlign.center,
+                           ) ?? Container(), 
                            Container( height: 20 ),
-                           widget.header,
+                           widget.header ?? Container(),
                            Padding(
                               child:widget.content,
                               padding: EdgeInsets.all(30),
@@ -200,117 +207,48 @@ class _TopButtonState extends State<_TopButton> {
 
 
 
-class SlikkerTextField extends StatefulWidget {
-   final double accent; 
-   final bool isFloating; 
-   final BorderRadiusGeometry borderRadius; 
+class SlikkerTextField extends StatelessWidget {
    final TextEditingController controller;
    final String hintText;
+   final double accent;
    final int minLines;
    final int maxLines;
    final IconData prefixIcon;
    final EdgeInsetsGeometry padding;
-   
-   @override _SlikkerTextFieldState createState() => _SlikkerTextFieldState();
+   final EdgeInsetsGeometry prefixIconPadding;
+   final double prefixIconSize;
+   final bool isTransperent;
 
-   SlikkerTextField({ 
-      this.accent = 240, 
-      this.isFloating = false, 
-      this.borderRadius = const BorderRadius.all(Radius.circular(12)), 
-      this.controller, 
-      this.hintText = '', 
-      this.minLines, 
-      this.maxLines, 
-      this.prefixIcon, 
-      this.padding = const EdgeInsets.all(12),
-   });
-}
-
-class _SlikkerTextFieldState extends State<SlikkerTextField> with TickerProviderStateMixin{
-   HSVColor color;
-   AnimationController tapController;
-   CurvedAnimation tapAnimation;
-
-   @override void initState() {
-      super.initState();
-      color = HSVColor.fromAHSV(
-         widget.isFloating ? 1 : 0.075, 
-         widget.accent, 
-         widget.isFloating ? 0.6 : 0.3, 
-         widget.isFloating ? 1 : 0.75
-      );
-
-      tapController = AnimationController(
-         vsync: this,
-         duration: Duration(milliseconds: 150),
-      );
-
-      tapAnimation = CurvedAnimation(
-         curve: Curves.easeOut,
-         parent: tapController
-      );
-      
-      tapAnimation.addListener(() => setState(() {}));
-   }
-
-   @override void dispose() {
-      tapController.dispose();
-      super.dispose();
-   }
+   const SlikkerTextField({ this.controller, this.hintText, this.accent, this.minLines, this.maxLines, this.prefixIcon, this.padding, this.isTransperent = false, this.prefixIconPadding, this.prefixIconSize });
 
    @override Widget build(BuildContext context) {
-      return Transform.translate(
-         offset: Offset(0, widget.isFloating ? tapAnimation.value*3 : 0),
-         child: Container( 
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-               borderRadius: widget.borderRadius,
-               color: widget.isFloating ? Colors.white : color.toColor(),
-               boxShadow: widget.isFloating ? [
-                  BoxShadow (
-                     color: color.withSaturation(0.6).withAlpha(0.12 + tapAnimation.value * -0.05).toColor(),
-                     offset: Offset(0, 7 + tapAnimation.value * -2),
-                     blurRadius: 40 + tapAnimation.value * -10,
-                  ),
-                  BoxShadow (
-                     color: color.withSaturation(0.05 + tapAnimation.value * 0.01).toColor(),
-                     offset: Offset(0,3),
-                  ),
-               ] : [],          
+      return TextField(
+         minLines: minLines,
+         maxLines: maxLines ?? 1,
+         controller: controller,
+         style: TextStyle(
+            fontSize: 16.5,
+            color: HSVColor.fromAHSV(1, accent, 0.4, 0.4).toColor()
+         ),
+         decoration: InputDecoration(
+            prefixIcon: prefixIcon != null ? Container(
+               padding: prefixIconPadding ?? padding ?? EdgeInsets.all(15),
+               child: Icon(
+                  prefixIcon, 
+                  size: prefixIconSize ?? 22.0, 
+                  color: Color(0xFF3D3D66)
+               ),
+            ) : null,
+            contentPadding: padding ?? EdgeInsets.all(15),
+            border: new OutlineInputBorder(
+               borderSide: BorderSide.none,
+               borderRadius: BorderRadius.circular(12),
             ),
-            child: TextField(
-               onTap: () { 
-                  tapController.forward();
-                  Future.delayed( Duration(milliseconds: 150), () => tapController.reverse(from: 1) ); 
-               },
-               minLines: widget.minLines,
-               maxLines: widget.maxLines ?? 1,
-               controller: widget.controller,
-               style: TextStyle(
-                  fontSize: 16.5,
-                  color: HSVColor.fromAHSV(1, widget.accent, 0.4, 0.4).toColor()
-               ),
-               decoration: InputDecoration(
-                  prefixIcon: widget.prefixIcon != null ? Container(
-                     padding: EdgeInsets.all(17),
-                     child: Icon(
-                        widget.prefixIcon, 
-                        size: 22.0, 
-                        color: Color(0xFF3D3D66)
-                     ),
-                  ) : null,
-                  contentPadding: widget.padding,
-                  border: new OutlineInputBorder(
-                     borderSide: BorderSide.none,
-                     borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: widget.hintText,
-                  hintStyle: TextStyle( color: HSVColor.fromAHSV(0.5, widget.accent, 0.1, 0.7).toColor(), fontWeight: FontWeight.w600, ),
-                  filled: true,
-                  fillColor: widget.isFloating ? Color(0xFFFFFFFF) : HSVColor.fromAHSV(0.8, widget.accent, 0.04, 0.97).toColor(),
-               ),
-            )
-         )
+            hintText: hintText,
+            hintStyle: TextStyle( color: HSVColor.fromAHSV(0.5, accent, 0.1, 0.7).toColor(), fontWeight: FontWeight.w600, ),
+            filled: true,
+            fillColor: isTransperent ? Colors.transparent : HSVColor.fromAHSV(0.8, accent, 0.04, 0.97).toColor(),
+         ),
       );
    }
 }

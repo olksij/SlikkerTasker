@@ -6,7 +6,7 @@ class TrackerPage extends StatelessWidget {
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
          topButtonAction: () => Navigator.pushNamed(context, '/home'),
-         title: Text('proj name', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
+         customTitle: Text('proj name', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center,),
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
             child: Text('start')
