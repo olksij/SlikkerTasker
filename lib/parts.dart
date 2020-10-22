@@ -55,7 +55,7 @@ class InfoCard extends StatelessWidget {
 								child: Center(
 									child: Icon(
 										buttonIcon ?? Icons.play_arrow_rounded, 
-										color: HSVColor.fromAHSV(isButtonEnabled ? 1 : 0.5, accent, 0.6, 1).toColor(), 
+										color: HSVColor.fromAHSV(isButtonEnabled ? 1 : 0.5, accent, isButtonEnabled ? 0.6 : 0.3, isButtonEnabled ? 1 : 0.5).toColor(), 
 										size: buttonIcon != null ? 28 : 32,
 									),
 								),

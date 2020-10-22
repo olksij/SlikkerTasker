@@ -39,7 +39,7 @@ class TimetableEditor extends StatelessWidget {
                                  child: Center(
                                     child: Icon(
                                        Icons.save_rounded,
-                                       color: Color(0xFF3D3D66)
+                                       color: Color(0xFF6666FF)
                                     ),
                                  )
                               ),
