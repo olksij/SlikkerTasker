@@ -1,5 +1,6 @@
 import 'parts.dart';
 import 'slikker.dart';
+import 'create.dart';
 
 class TaskPage extends StatelessWidget {
    final Map<String, dynamic> task;
@@ -22,10 +23,15 @@ class TaskPage extends StatelessWidget {
          ), 
          floatingButton: SlikkerCard(
             accent: 240,
-            child: Text('edit'),
             borderRadius: BorderRadius.circular(54),
-            padding: EdgeInsets.all(12),
-         )
+            padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
+            onTap: () => Navigator.push(context, 
+               MaterialPageRoute(
+                  builder: (context) => CreatePage(CreatePageType.task, task),
+               )
+            ),
+            child: Icon(Icons.edit_rounded, size: 26, color: Color(0xFF6666FF),), 
+         ),
       );
    }
 }

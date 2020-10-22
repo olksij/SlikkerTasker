@@ -45,8 +45,6 @@ class Tasker extends StatelessWidget {
          routes: {
             '/init': (context) => FirstRun(),
             '/home': (context) => HomePage(),
-            '/createTask': (context) => CreatePage(CreatePageType.task),
-            '/createProject': (context) => CreatePage(CreatePageType.project),
             '/account': (context) => AccountPage(),
             '/projects': (context) => ProjectsPage(),
             '/timetable': (context) => TimetablePage(),

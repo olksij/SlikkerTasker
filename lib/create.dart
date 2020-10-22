@@ -130,7 +130,10 @@ enum CreatePageType { task, project }
 
 class CreatePage extends StatefulWidget { 
    final CreatePageType pageType;
-   const CreatePage(this.pageType);
+   final Map map;
+
+   const CreatePage(this.pageType, this.map);
+
    @override _CreatePageState createState() => _CreatePageState(); 
 }
 
@@ -141,7 +144,7 @@ class _CreatePageState extends State<CreatePage> {
    void refreshPreview() => refreshPreviewFunction();
 
    @override void initState() { 
-      super.initState(); _toCreate = {}; 
+      super.initState(); _toCreate = widget.map ?? {}; 
       _toggesList = widget.pageType == CreatePageType.task ? _TaskTogges.list(refreshPreview) : _ProjectTogges.list(refreshPreview);
    }
 

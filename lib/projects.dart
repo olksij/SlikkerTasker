@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'slikker.dart';
 import 'data.dart';
 import 'parts.dart';
+import 'create.dart';
 
 class ProjectsPage extends StatelessWidget {
    @override Widget build(BuildContext context) {
@@ -14,7 +15,11 @@ class ProjectsPage extends StatelessWidget {
          floatingButton: SlikkerCard(
             padding: EdgeInsets.all(17),
             child: Text('New project'),
-            onTap: () => Navigator.pushNamed(context, '/createProject'),
+            onTap: () => Navigator.push(context, 
+               MaterialPageRoute(
+                  builder: (context) => CreatePage(CreatePageType.task, {}),
+               )
+            ),
          ),
          content: StreamBuilder(
             stream: data.watch(),

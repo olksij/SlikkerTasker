@@ -5,6 +5,7 @@ import 'slikker.dart';
 import 'parts.dart';
 import 'task.dart';
 import 'data.dart';
+import 'create.dart';
 
 class HomePage extends StatelessWidget {
 	Widget build(BuildContext context) {
@@ -52,7 +53,11 @@ class HomePage extends StatelessWidget {
             accent: 240,
             borderRadius: BorderRadius.circular(54),
             padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-            onTap: () { Navigator.pushNamed(context, '/createTask'); },
+            onTap: () => Navigator.push(context, 
+               MaterialPageRoute(
+                  builder: (context) => CreatePage(CreatePageType.task, {}),
+               )
+            ),
             child: Row(
                mainAxisSize: MainAxisSize.min,
                children: <Widget>[
