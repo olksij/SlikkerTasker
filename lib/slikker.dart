@@ -180,7 +180,7 @@ class _TopButtonState extends State<_TopButton> {
                   Icon(
                      widget.icon, 
                      color: color, 
-                     size: 20,
+                     size: 22,
                   ) : Padding(
                      padding: EdgeInsets.all(3),
                      child: SizedBox(
