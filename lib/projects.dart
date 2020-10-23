@@ -17,7 +17,7 @@ class ProjectsPage extends StatelessWidget {
             child: Text('New project'),
             onTap: () => Navigator.push(context, 
                MaterialPageRoute(
-                  builder: (context) => CreatePage(CreatePageType.task, {}),
+                  builder: (context) => CreatePage(CreatePageType.project, {}),
                )
             ),
          ),
@@ -32,7 +32,11 @@ class ProjectsPage extends StatelessWidget {
                   if (key[0] == 'P') cards.add(
                      InfoCard(Map<String,dynamic>.from(value), 
                         isFloating: false,
-                        onCardTap: () {},
+                        onCardTap: () => Navigator.push(context, 
+                           MaterialPageRoute(
+                              builder: (context) => CreatePage(CreatePageType.project, value),
+                           )
+                        ),
                         showButton: false,
                         accent: value['accent'],
                      ),

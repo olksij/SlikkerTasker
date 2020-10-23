@@ -102,13 +102,29 @@ class _ProjectTogges {
          callback: callback, 
          title: 'Relaxable?', 
          description: 'Does it suit for break time?', 
-         value: 'relaxable', input: (a) {}
+         value: 'relaxable', 
+         input: (a) {}
       ),
       CreateProps(
          callback: callback, 
          title: 'Color', 
          description: "Accent color for task. Used in timeline and as app's accent for about view and tasks.", 
-         value: 'accent', input: (a) {}
+         value: 'accent', 
+         display: (value) => Container(
+            height: 10,
+            //width: 36,
+            decoration: BoxDecoration(
+               borderRadius: BorderRadius.circular(5),
+               boxShadow: [
+                  BoxShadow(
+                     blurRadius: 10,
+                     color: HSVColor.fromAHSV(0.3, value, 0.6, 1).toColor()
+                  )
+               ],
+               color: HSVColor.fromAHSV(1, value, 0.6, 1).toColor()
+            ),
+         ),
+         input: (a) {}
       ),
       CreateProps(
          callback: callback, 
@@ -117,7 +133,13 @@ class _ProjectTogges {
          value: 'type', 
          input: (a) {}
       ),
-      CreateProps(callback: callback, title: 'Goal', description: 'When project should be marked as finished', value: 'goal', input: (a) {}),
+      CreateProps(
+         callback: callback, 
+         title: 'Goal', 
+         description: 'When project should be marked as finished', 
+         value: 'goal', 
+         input: (a) {}
+      ),
    ];
 }
 
@@ -212,8 +234,9 @@ class CreateProps extends StatefulWidget {
    final String value; 
    final Function input;
    final Function callback;
+   final Function display;
    
-	CreateProps({ this.title, this.value, this.description, this.input, this.callback });
+	CreateProps({ this.title, this.value, this.description, this.input, this.callback, this.display });
 	@override _CreatePropsState createState() => _CreatePropsState();
 }
 
@@ -260,7 +283,14 @@ class _CreatePropsState extends State<CreateProps> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text(_toCreate[widget.value] ?? widget.title, style: TextStyle(fontSize: 17, color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66)),),
+               widget.display != null && _toCreate[widget.value] != null
+                  ? widget.display(_toCreate[widget.value]) 
+                  : Text(_toCreate[widget.value] ?? widget.title, 
+                     style: TextStyle(
+                     fontSize: 17, 
+                     color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66)
+                  )
+               ),
                Container(height: 8),
                Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
             ],
