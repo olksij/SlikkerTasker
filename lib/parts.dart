@@ -1,7 +1,7 @@
 import 'slikker.dart';
 
 class InfoCard extends StatelessWidget {
-	final Map<String, dynamic> data; 
+	final Map data; 
 	final Function onCardTap; 
 	final Function onButtonTap; 
 	final IconData buttonIcon; 

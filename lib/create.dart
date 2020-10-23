@@ -7,7 +7,7 @@ import 'slikker.dart';
 import 'data.dart';
 
 /// The list of props 
-Map<String, dynamic> _toCreate;
+Map _toCreate;
 
 
 // Accept button in bottomModalSheet

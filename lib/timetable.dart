@@ -15,7 +15,7 @@ class TimetablePage extends StatelessWidget {
             padding: EdgeInsets.all(17),
             child: Text('Create'),
             onTap: () => Navigator.push(context, MaterialPageRoute(
-               builder: (context) => TimetableEditor({}),
+               builder: (context) => TimetableEditor(),
             )),
          ),
          content: StreamBuilder(

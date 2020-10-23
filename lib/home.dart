@@ -17,9 +17,9 @@ class HomePage extends StatelessWidget {
                   SlikkerTextField(
                      accent: 240,
                      prefixIcon: Icons.search,
-                     prefixIconPadding: EdgeInsets.all(17),
                      hintText: 'Search everything',
-                     padding: EdgeInsets.fromLTRB(15, 15, 42, 15),
+                     prefixIconPadding: EdgeInsets.all(18),
+                     padding: EdgeInsets.fromLTRB(18, 18, 42, 18),
                   ),
                   Align(
                      alignment: Alignment.centerRight,
@@ -30,8 +30,8 @@ class HomePage extends StatelessWidget {
                            isFloating: false,
                            borderRadius: BorderRadius.circular(6),
                            child: Container(
-                              width: 42,
-                              height: 42,
+                              width: 46,
+                              height: 46,
                               child: Center(
                                  child: Icon(
                                     AppIcons.timeline,

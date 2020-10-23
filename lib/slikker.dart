@@ -219,27 +219,38 @@ class SlikkerTextField extends StatelessWidget {
    final double prefixIconSize;
    final bool isTransperent;
 
-   const SlikkerTextField({ this.controller, this.hintText, this.accent, this.minLines, this.maxLines, this.prefixIcon, this.padding, this.isTransperent = false, this.prefixIconPadding, this.prefixIconSize });
+   const SlikkerTextField({ 
+      this.controller, 
+      this.hintText = '', 
+      this.accent = 240.0, 
+      this.minLines, 
+      this.maxLines, 
+      this.prefixIcon, 
+      this.padding = const EdgeInsets.all(15), 
+      this.isTransperent = false, 
+      this.prefixIconPadding, 
+      this.prefixIconSize = 24.0
+   });
 
    @override Widget build(BuildContext context) {
       return TextField(
          minLines: minLines,
-         maxLines: maxLines ?? 1,
+         maxLines: maxLines,
          controller: controller,
          style: TextStyle(
-            fontSize: 16.5,
+            fontSize: 17,
             color: HSVColor.fromAHSV(1, accent, 0.4, 0.4).toColor()
          ),
          decoration: InputDecoration(
             prefixIcon: prefixIcon != null ? Container(
-               padding: prefixIconPadding ?? padding ?? EdgeInsets.all(15),
+               padding: prefixIconPadding ?? padding,
                child: Icon(
                   prefixIcon, 
-                  size: prefixIconSize ?? 22.0, 
+                  size: prefixIconSize, 
                   color: Color(0xFF3D3D66)
                ),
             ) : null,
-            contentPadding: padding ?? EdgeInsets.all(15),
+            contentPadding: padding,
             border: new OutlineInputBorder(
                borderSide: BorderSide.none,
                borderRadius: BorderRadius.circular(12),

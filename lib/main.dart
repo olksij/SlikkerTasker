@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'data.dart';
 import 'home.dart';
 import 'intro.dart';
-import 'create.dart';
 import 'projects.dart';
 import 'timetable.dart';
 import 'tracker.dart';

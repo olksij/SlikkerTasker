@@ -4,8 +4,9 @@ class TimetableEditor extends StatelessWidget {
    final Map timetable;
    final double accent;
 
-   const TimetableEditor(this.timetable, { 
-      this.accent = 240
+   const TimetableEditor({ 
+      this.timetable = const {'days': []},
+      this.accent = 240 
    });
 
    @override Widget build(BuildContext context) {
@@ -50,7 +51,52 @@ class TimetableEditor extends StatelessWidget {
                )
             )
          ),
-         content: Container(),
+         content: ListView(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: [
+               for (Map day in timetable['days']) SlikkerCard(
+                  accent: 240,
+                  isFloating: false,
+                  onTap: () {},
+                  padding: EdgeInsets.symmetric(vertical: 17, horizontal: 15),
+                  child: Row(
+                     children: [
+                        for (Map project in day['projects']) Padding(
+                           padding: EdgeInsets.symmetric(horizontal: 2),
+                           child: Flexible(
+                              flex: project['duration'],
+                              child: Container(
+                                 height: 10,
+                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                              ),
+                           ),
+                        ),
+                     ],
+                  ),
+               ),
+               SlikkerCard(
+                  isFloating: false,
+                  child: Container(
+                     height: 52,
+                     child: Center(
+                        child: Row(
+                           mainAxisSize: MainAxisSize.min,
+                           children: <Widget>[
+                              Icon(Icons.add, color: HSVColor.fromAHSV(0.75, accent, 0.15, 0.5).toColor(),), 
+                              Container(width: 7, height: 24),
+                              Text('Add new day', style: TextStyle(
+                                 color: HSVColor.fromAHSV(0.75, accent, 0.15, 0.5).toColor(), 
+                                 fontWeight: FontWeight.w600, 
+                                 fontSize: 16
+                              ))
+                           ]
+                        ),
+                     ),
+                  ),
+               )
+            ],
+         ),
          title: 'Editor',
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
