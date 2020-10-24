@@ -1,4 +1,4 @@
-import 'slikker.dart';
+import 'package:tasker/reusable/slikker.dart';
 
 class TimetableEditor extends StatelessWidget {
    final Map timetable;

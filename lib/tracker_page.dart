@@ -1,4 +1,4 @@
-import 'slikker.dart';
+import 'package:tasker/reusable/slikker.dart';
 
 class TrackerPage extends StatelessWidget {
    @override Widget build(BuildContext context) {

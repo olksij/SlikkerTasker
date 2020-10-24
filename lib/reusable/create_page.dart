@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:tasker/parts.dart';
+import 'package:tasker/reusable/info_card.dart';
 
-import 'slikker.dart';
-import 'data.dart';
+import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/data.dart';
 
 /// The list of props 
 Map _toCreate;

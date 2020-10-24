@@ -4,12 +4,12 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'data.dart';
-import 'home.dart';
-import 'intro.dart';
-import 'projects.dart';
-import 'timetable.dart';
-import 'tracker.dart';
+import 'package:tasker/data.dart';
+import 'package:tasker/home_page.dart';
+import 'package:tasker/login_page.dart';
+import 'package:tasker/timetable/projects_page.dart';
+import 'package:tasker/timetable/timetable_page.dart';
+import 'package:tasker/tracker_page.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();

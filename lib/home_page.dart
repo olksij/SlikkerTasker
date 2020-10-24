@@ -1,11 +1,11 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import 'app_icons.dart';
-import 'slikker.dart';
-import 'parts.dart';
-import 'task.dart';
-import 'data.dart';
-import 'create.dart';
+import 'package:tasker/app_icons.dart';
+import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/reusable/info_card.dart';
+import 'package:tasker/task_page.dart';
+import 'package:tasker/data.dart';
+import 'package:tasker/reusable/create_page.dart';
 
 class HomePage extends StatelessWidget {
 	Widget build(BuildContext context) {

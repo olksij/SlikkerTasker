@@ -1,4 +1,4 @@
-import 'slikker.dart';
+import 'package:tasker/reusable/slikker.dart';
 
 class InfoCard extends StatelessWidget {
 	final Map data; 
