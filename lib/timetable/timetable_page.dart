@@ -2,7 +2,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
-import 'package:tasker/timetable/timetable_editor_page.dart';
+import 'package:tasker/timetable/timetable_editor.dart';
 
 class TimetablePage extends StatelessWidget {
    @override Widget build(BuildContext context) {

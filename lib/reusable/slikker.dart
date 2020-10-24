@@ -218,6 +218,7 @@ class SlikkerTextField extends StatelessWidget {
    final EdgeInsetsGeometry prefixIconPadding;
    final double prefixIconSize;
    final bool isTransperent;
+   final BorderRadius borderRadius;
 
    const SlikkerTextField({ 
       this.controller, 
@@ -229,7 +230,8 @@ class SlikkerTextField extends StatelessWidget {
       this.padding = const EdgeInsets.all(15), 
       this.isTransperent = false, 
       this.prefixIconPadding, 
-      this.prefixIconSize = 24.0
+      this.prefixIconSize = 24.0, 
+      this.borderRadius = const BorderRadius.all(Radius.circular(12.0))
    });
 
    @override Widget build(BuildContext context) {
@@ -253,7 +255,7 @@ class SlikkerTextField extends StatelessWidget {
             contentPadding: padding,
             border: new OutlineInputBorder(
                borderSide: BorderSide.none,
-               borderRadius: BorderRadius.circular(12),
+               borderRadius: borderRadius,
             ),
             hintText: hintText,
             hintStyle: TextStyle( color: HSVColor.fromAHSV(0.5, accent, 0.1, 0.7).toColor(), fontWeight: FontWeight.w600, ),

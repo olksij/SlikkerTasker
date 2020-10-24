@@ -1,4 +1,5 @@
 import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/timetable/day_editor.dart';
 
 class TimetableEditor extends StatelessWidget {
    final Map timetable;
@@ -76,6 +77,7 @@ class TimetableEditor extends StatelessWidget {
                   ),
                ),
                SlikkerCard(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DayEditor())),
                   isFloating: false,
                   child: Container(
                      height: 52,

@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/reusable/info_card.dart';
-import 'package:tasker/reusable/create_page.dart';
+import 'package:tasker/create_page.dart';
 
 class ProjectsPage extends StatelessWidget {
    @override Widget build(BuildContext context) {

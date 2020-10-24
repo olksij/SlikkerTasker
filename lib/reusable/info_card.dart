@@ -14,14 +14,29 @@ class InfoCard extends StatelessWidget {
 	List<Widget> cardInfo() {
 
 		List<Widget> more = [ for (var i = 0; i < data.length; i++) 
-			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) 
-			Text(data[i], style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor())),
+			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) Text(data[i], 
+            style: TextStyle(
+               fontSize: 14, 
+               color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor()
+            )
+         ),
 		];
 
 		return [
-			Text(data['title'] ?? (data['description'] ?? 'Enter title'), style: TextStyle(fontSize: 18, color: HSVColor.fromAHSV(1, accent, 0.6, 1).toColor())),
+			Text(data['title'] ?? (data['description'] ?? 'Enter title'), 
+            style: TextStyle(
+               fontSize: 18, 
+               color: HSVColor.fromAHSV(1, accent, 0.6, 1).toColor()
+            )
+         ),
 			Container(height: 4),
-			more.length != 0 ? more : Text('No description', style: TextStyle(fontSize: 14, color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor()))
+			more.length != 0 ? more 
+         : Text('No description', 
+            style: TextStyle(
+               fontSize: 14, 
+               color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor()
+            )
+         )
 		];
 	}
 
