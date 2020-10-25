@@ -21,6 +21,65 @@ class _DayEditorState extends State<DayEditor> {
       newDay = Map.from(widget.oldDay);
    }
 
+   List<Widget> _buildAgenda(Map day) {
+      List<Widget> toReturn = [];
+      int i = 0;
+      double time = day['wakeup'].hour + day['wakeup'].minute/60;
+
+      while (i <= day['projects'].length) {
+         toReturn.add( Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+               SizedBox(
+                  height: 80,
+                  child: Stack(
+                  children: [
+                     Padding(
+                           padding: EdgeInsets.all(2),
+                           child: Text(TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context)),
+                     ),
+                     if (i == day['projects'].length) Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                           padding: EdgeInsets.all(2),
+                           child: Text(TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context)),
+                        )
+                     ),
+                  ],
+               ),),
+               Container(width: 20),
+               Expanded(
+                  child: i != day['projects'].length ? SlikkerCard(
+                     accent: 240,
+                     isFloating: false,
+                     padding: EdgeInsets.all(15),
+                     child: Text(day['projects'][i]['title']),
+                  ) : SlikkerCard(
+                     accent: 240,
+                     isFloating: false,
+                     padding: EdgeInsets.all(15),
+                     child: SizedBox(
+                        height: 50,
+                        child: Row(
+                           children: [
+                              Icon(Icons.add_rounded),
+                              Container(width: 20),
+                              Flexible(
+                                 child: Text('What you gonna do at this time?')
+                              )
+                           ]
+                        ),
+                     )
+                  )
+               )
+            ]
+         ));
+         if (i != day['projects'].length) time += day['projects'][i]['duration'];
+         i++;
+      }
+      return toReturn;
+   }
+
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
          header: Padding(
@@ -64,50 +123,7 @@ class _DayEditorState extends State<DayEditor> {
                   color: HSVColor.fromAHSV(0.7, widget.accent, 0.4, 0.4).toColor()
                ))
             ),
-         ) : Column(
-            children: [
-               for (int i = 0; i <= newDay['projects'].length; i++) Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                           padding: EdgeInsets.all(2),
-                           child: Text(i != newDay['projects'].length 
-                              ? newDay['projects'][i]['start'].format(context) 
-                              : 'later'
-                           ),
-                        )
-                     ),
-                     Container(width: 20,),
-                     Expanded(
-                        child: i != newDay['projects'].length ? SlikkerCard(
-                           accent: 240,
-                           isFloating: false,
-                           padding: EdgeInsets.all(15),
-                           child: Text(newDay['projects'][i]['title']),
-                        ) : SlikkerCard(
-                           accent: 240,
-                           isFloating: false,
-                           padding: EdgeInsets.all(15),
-                           child: SizedBox(
-                              height: 50,
-                              child: Row(
-                                 children: [
-                                    Icon(Icons.add_rounded),
-                                    Container(width: 20),
-                                    Flexible(
-                                       child: Text('What you gonna do at this time?')
-                                    )
-                                 ]
-                              ),
-                           )
-                        )
-                     )
-                  ]
-               )
-            ]
-         ),
+         ) : Column(children: _buildAgenda(newDay)),
          title: 'Editor',
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
