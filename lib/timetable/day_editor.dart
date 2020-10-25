@@ -31,23 +31,37 @@ class _DayEditorState extends State<DayEditor> {
          toReturn.add( Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               SizedBox(
+               Container(
                   height: 70,
+                  padding: EdgeInsets.symmetric(vertical: 3),
                   child: Stack(
-                  children: [
-                     Padding(
-                        padding: EdgeInsets.all(3),
-                        child: Text(TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context)),
-                     ),
-                     Align(
-                        alignment: Alignment.bottomRight,
-                        child: (i == day['projects'].length) ? Padding(
-                           padding: EdgeInsets.all(3),
-                           child: Text(TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context)),
-                        ) : Container()
-                     )
-                  ],
-               ),),
+                     alignment: AlignmentDirectional.topCenter,
+                     children: [
+                        Text(
+                           TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context),
+                           style: TextStyle(
+                              color: HSVColor.fromAHSV(0.7, widget.accent, 0.2, 0.4).toColor()
+                           ),
+                        ),
+                        Align(
+                           alignment: Alignment.bottomCenter,
+                           child: (i == day['projects'].length) ? Text(
+                              TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context),
+                              style: TextStyle(
+                                 color: HSVColor.fromAHSV(0.4, widget.accent, 0.2, 0.4).toColor()
+                              ),
+                           ) : Container(
+                              height: 30,
+                              width: 3,
+                              decoration: BoxDecoration(
+                                 color: HSVColor.fromAHSV(0.1, widget.accent, 0.2, 0.4).toColor(),
+                                 borderRadius: BorderRadius.circular(1.5)
+                              ),
+                           )
+                        )
+                     ],
+                  ),
+               ),
                Container(width: 20),
                Expanded(
                   child: i != day['projects'].length 
