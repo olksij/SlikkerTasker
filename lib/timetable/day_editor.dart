@@ -68,10 +68,31 @@ class _DayEditorState extends State<DayEditor> {
                   ? SlikkerCard(
                      accent: 240,
                      isFloating: false,
-                     padding: EdgeInsets.all(15),
+                     padding: EdgeInsets.all(10),
                      child: Container(
-                        height: 40,
-                        child: Text((day['projects'][i] ?? {})['title'] ?? 'LL hey')
+                        height: 39,
+                        child: Row(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                              SlikkerCard(
+                                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                                 accent: 240,
+                                 isFloating: false,
+                                 borderRadius: BorderRadius.circular(8),
+                                 child: Text('PROJECT  👉'),
+                                 onTap: () {},
+                              ),
+                              Expanded(child: Container(),),
+                              SlikkerCard(
+                                 accent: 240,
+                                 onTap: () {},
+                                 isFloating: false,
+                                 borderRadius: BorderRadius.circular(8),
+                                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                 child: Text('DURATION'),
+                              ),
+                           ],
+                        )
                      ),
                   ) 
                   : SlikkerCard(
