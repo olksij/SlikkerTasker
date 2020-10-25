@@ -19,47 +19,54 @@ class _DayEditorState extends State<DayEditor> {
    @override void initState() {
       super.initState();
       newDay = Map.from(widget.oldDay);
+      newDay['projects'] = List.from(newDay['projects']);
    }
 
    List<Widget> _buildAgenda(Map day) {
       List<Widget> toReturn = [];
       int i = 0;
       double time = day['wakeup'].hour + day['wakeup'].minute/60;
-
+      print(day['projects']);
       while (i <= day['projects'].length) {
          toReturn.add( Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
                SizedBox(
-                  height: 80,
+                  height: 70,
                   child: Stack(
                   children: [
                      Padding(
-                           padding: EdgeInsets.all(2),
-                           child: Text(TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context)),
+                        padding: EdgeInsets.all(3),
+                        child: Text(TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context)),
                      ),
-                     if (i == day['projects'].length) Align(
+                     Align(
                         alignment: Alignment.bottomRight,
-                        child: Padding(
-                           padding: EdgeInsets.all(2),
+                        child: (i == day['projects'].length) ? Padding(
+                           padding: EdgeInsets.all(3),
                            child: Text(TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context)),
-                        )
-                     ),
+                        ) : Container()
+                     )
                   ],
                ),),
                Container(width: 20),
                Expanded(
-                  child: i != day['projects'].length ? SlikkerCard(
+                  child: i != day['projects'].length 
+                  ? SlikkerCard(
                      accent: 240,
                      isFloating: false,
                      padding: EdgeInsets.all(15),
-                     child: Text(day['projects'][i]['title']),
-                  ) : SlikkerCard(
+                     child: Container(
+                        height: 40,
+                        child: Text((day['projects'][i] ?? {})['title'] ?? 'LL hey')
+                     ),
+                  ) 
+                  : SlikkerCard(
+                     onTap: () => setState(() => newDay['projects'].add({})),
                      accent: 240,
                      isFloating: false,
                      padding: EdgeInsets.all(15),
                      child: SizedBox(
-                        height: 50,
+                        height: 40,
                         child: Row(
                            children: [
                               Icon(Icons.add_rounded),
@@ -74,7 +81,8 @@ class _DayEditorState extends State<DayEditor> {
                )
             ]
          ));
-         if (i != day['projects'].length) time += day['projects'][i]['duration'];
+         toReturn.add(Container(height: 10,));
+         if (i != day['projects'].length) time += day['projects'][i]['duration'] ?? 1;
          i++;
       }
       return toReturn;
