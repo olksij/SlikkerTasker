@@ -1,4 +1,8 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/data.dart';
+import 'package:tasker/timetable/timetable_builder.dart';
 
 class DayEditor extends StatefulWidget {
    final Map oldDay;
@@ -22,106 +26,10 @@ class _DayEditorState extends State<DayEditor> {
       newDay['projects'] = List.from(newDay['projects']);
    }
 
-   List<Widget> _buildAgenda(Map day) {
-      List<Widget> toReturn = [];
-      int i = 0;
-      double time = day['wakeup'].hour + day['wakeup'].minute/60;
-      print(day['projects']);
-      while (i <= day['projects'].length) {
-         toReturn.add( Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-               Container(
-                  height: 70,
-                  padding: EdgeInsets.symmetric(vertical: 3),
-                  child: Stack(
-                     alignment: AlignmentDirectional.topCenter,
-                     children: [
-                        Text(
-                           TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context),
-                           style: TextStyle(
-                              color: HSVColor.fromAHSV(0.7, widget.accent, 0.2, 0.4).toColor()
-                           ),
-                        ),
-                        Align(
-                           alignment: Alignment.bottomCenter,
-                           child: (i == day['projects'].length) ? Text(
-                              TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context),
-                              style: TextStyle(
-                                 color: HSVColor.fromAHSV(0.4, widget.accent, 0.2, 0.4).toColor()
-                              ),
-                           ) : Container(
-                              height: 30,
-                              width: 3,
-                              decoration: BoxDecoration(
-                                 color: HSVColor.fromAHSV(0.1, widget.accent, 0.2, 0.4).toColor(),
-                                 borderRadius: BorderRadius.circular(1.5)
-                              ),
-                           )
-                        )
-                     ],
-                  ),
-               ),
-               Container(width: 20),
-               Expanded(
-                  child: i != day['projects'].length 
-                  ? SlikkerCard(
-                     accent: 240,
-                     isFloating: false,
-                     padding: EdgeInsets.all(10),
-                     child: Container(
-                        height: 39,
-                        child: Row(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                              SlikkerCard(
-                                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                 accent: 240,
-                                 isFloating: false,
-                                 borderRadius: BorderRadius.circular(8),
-                                 child: Text('PROJECT  👉'),
-                                 onTap: () {},
-                              ),
-                              Expanded(child: Container(),),
-                              SlikkerCard(
-                                 accent: 240,
-                                 onTap: () {},
-                                 isFloating: false,
-                                 borderRadius: BorderRadius.circular(8),
-                                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                                 child: Text('DURATION'),
-                              ),
-                           ],
-                        )
-                     ),
-                  ) 
-                  : SlikkerCard(
-                     onTap: () => setState(() => newDay['projects'].add({})),
-                     accent: 240,
-                     isFloating: false,
-                     padding: EdgeInsets.all(15),
-                     child: SizedBox(
-                        height: 40,
-                        child: Row(
-                           children: [
-                              Icon(Icons.add_rounded),
-                              Container(width: 20),
-                              Flexible(
-                                 child: Text('What you gonna do at this time?')
-                              )
-                           ]
-                        ),
-                     )
-                  )
-               )
-            ]
-         ));
-         toReturn.add(Container(height: 10,));
-         if (i != day['projects'].length) time += day['projects'][i]['duration'] ?? 1;
-         i++;
-      }
-      return toReturn;
-   }
+   void setWakeUp() => showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+   ).then((time) => setState(() => newDay['wakeup'] = time));
 
    @override Widget build(BuildContext context) {
       return SlikkerScaffold(
@@ -140,10 +48,7 @@ class _DayEditorState extends State<DayEditor> {
                      Expanded(child: Container()),
                      SlikkerCard(
                         accent: 240,
-                        onTap: () => showTimePicker(
-                           initialTime: TimeOfDay.now(),
-                           context: context,
-                        ).then((time) => setState(() => newDay['wakeup'] = time)),
+                        onTap: setWakeUp,
                         isFloating: false,
                         borderRadius: BorderRadius.circular(8),
                         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -158,6 +63,7 @@ class _DayEditorState extends State<DayEditor> {
          ),
          content: newDay['wakeup'] == null ? SlikkerCard(
             accent: 240,
+            onTap: setWakeUp,
             isFloating: false,
             child: Padding(
                padding: EdgeInsets.all(20),
@@ -166,7 +72,63 @@ class _DayEditorState extends State<DayEditor> {
                   color: HSVColor.fromAHSV(0.7, widget.accent, 0.4, 0.4).toColor()
                ))
             ),
-         ) : Column(children: _buildAgenda(newDay)),
+         ) : AgendaBuilder(
+            accent: 240,
+            day: newDay,
+            newItem: () => showModalBottomSheet(
+               context: context, 
+               isDismissible: true,
+               barrierColor: Color(0x553D3D66),
+               backgroundColor: Colors.transparent,
+               isScrollControlled: true,
+               builder: (context) { 
+                  return Container(
+                     decoration: BoxDecoration(
+                        color: Color(0xFFF6F6FC),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                        boxShadow: [
+                           BoxShadow(
+                              color: Color(0x301E1E33),
+                              blurRadius: 35
+                           )
+                        ]
+                     ),
+                     padding: EdgeInsets.all(25),
+                     child: DraggableScrollableSheet(
+                        builder: (BuildContext context, ScrollController scrollController) { 
+                           List<Widget> cards = [];
+                           data.toMap().forEach((key, value) {
+                              if (key[0] == 'P' || key[0] == 'P') cards.add(
+                                 SlikkerCard(
+                                    padding: EdgeInsets.all(15),
+                                    accent: value['accent'] ?? widget.accent,
+                                    child: Text(value['title'], style: TextStyle(
+                                       color: HSVColor.fromAHSV(1, value['accent'] ?? widget.accent, 0.6, 1).toColor()
+                                    ),),
+                                    isFloating: false,
+                                 ),
+                              );
+                           });
+                           return StaggeredGridView.countBuilder(
+                              physics: BouncingScrollPhysics(),
+                              controller: scrollController,
+                              crossAxisCount: 2,
+                              itemCount: cards.length,
+                              itemBuilder: (BuildContext context, int index) => cards[index],
+                              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                              mainAxisSpacing: 20.0,
+                              crossAxisSpacing: 20.0,
+                           );
+                        },
+                        expand: false,
+                        initialChildSize: 0.4,
+                        maxChildSize: 0.7,
+                        minChildSize: 0.2,
+                     )
+                  );
+               }
+            ),
+         ),
          title: 'Editor',
          topButtonTitle: 'Back',
          topButtonIcon: Icons.arrow_back,
