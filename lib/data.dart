@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
+import 'package:tasker/reusable/slikker.dart';
 
 bool signedIn; User user; CollectionReference firestoreDB;
 Box app; Box data; 
@@ -67,3 +68,5 @@ void uploadData(String type, Map map) {
    map['time'] = DateTime.now().millisecondsSinceEpoch;
    data.put(type + map['time'].toString(), map);
 }
+
+Color accentColor(double alpha, double hue, double saturation, double value) => HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();

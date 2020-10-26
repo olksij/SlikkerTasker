@@ -1,5 +1,6 @@
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/timetable/day_editor.dart';
+import 'package:tasker/data.dart';
 
 class TimetableEditor extends StatelessWidget {
    final Map timetable;
@@ -85,10 +86,10 @@ class TimetableEditor extends StatelessWidget {
                         child: Row(
                            mainAxisSize: MainAxisSize.min,
                            children: <Widget>[
-                              Icon(Icons.add, color: HSVColor.fromAHSV(0.75, accent, 0.15, 0.5).toColor(),), 
+                              Icon(Icons.add, color: accentColor(0.75, accent, 0.15, 0.5)), 
                               Container(width: 7, height: 24),
                               Text('Add new day', style: TextStyle(
-                                 color: HSVColor.fromAHSV(0.75, accent, 0.15, 0.5).toColor(), 
+                                 color: accentColor(0.75, accent, 0.15, 0.5), 
                                  fontWeight: FontWeight.w600, 
                                  fontSize: 16
                               ))

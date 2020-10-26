@@ -43,7 +43,7 @@ class _DayEditorState extends State<DayEditor> {
                      Container(width: 10),
                      Text('When your day starts?', style: TextStyle(
                         fontSize: 17, 
-                        color: HSVColor.fromAHSV(1, widget.accent, 0.4, 0.4).toColor()
+                        color: accentColor(1, widget.accent, 0.4, 0.4)
                      )),
                      Expanded(child: Container()),
                      SlikkerCard(
@@ -54,7 +54,7 @@ class _DayEditorState extends State<DayEditor> {
                         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                         child: Text(newDay['wakeup']?.format(context) ?? 'Tap!', style: TextStyle(
                            fontSize: 15, 
-                           color: HSVColor.fromAHSV(newDay['wakeup'] != null ? 1 : 0.5, widget.accent, 0.4, 0.4).toColor()
+                           color: accentColor(newDay['wakeup'] != null ? 1 : 0.5, widget.accent, 0.4, 0.4)
                         )),
                      ),
                   ],
@@ -69,7 +69,7 @@ class _DayEditorState extends State<DayEditor> {
                padding: EdgeInsets.all(20),
                child: Text('To continue setuping your day, enter time when you wake up.', style: TextStyle(
                   fontSize: 16, 
-                  color: HSVColor.fromAHSV(0.7, widget.accent, 0.4, 0.4).toColor()
+                  color: accentColor(0.7, widget.accent, 0.4, 0.4)
                ))
             ),
          ) : AgendaBuilder(
@@ -103,8 +103,8 @@ class _DayEditorState extends State<DayEditor> {
                                     padding: EdgeInsets.all(15),
                                     accent: value['accent'] ?? widget.accent,
                                     child: Text(value['title'], style: TextStyle(
-                                       color: HSVColor.fromAHSV(1, value['accent'] ?? widget.accent, 0.6, 1).toColor()
-                                    ),),
+                                       color: accentColor(1, value['accent'] ?? widget.accent, 0.6, 1)
+                                    )),
                                     isFloating: false,
                                  ),
                               );

@@ -1,4 +1,5 @@
 import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/data.dart';
 
 class AgendaBuilder extends StatefulWidget {
    final Function newItem;
@@ -31,7 +32,7 @@ class _AgendaBuilderState extends State<AgendaBuilder> {
                         Text(
                            TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context),
                            style: TextStyle(
-                              color: HSVColor.fromAHSV(0.7, widget.accent, 0.2, 0.4).toColor()
+                              color: accentColor(0.7, widget.accent, 0.2, 0.4)
                            ),
                         ),
                         Align(
@@ -39,13 +40,13 @@ class _AgendaBuilderState extends State<AgendaBuilder> {
                            child: (i == widget.day['projects'].length) ? Text(
                               TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context),
                               style: TextStyle(
-                                 color: HSVColor.fromAHSV(0.4, widget.accent, 0.2, 0.4).toColor()
+                                 color: accentColor(0.4, widget.accent, 0.2, 0.4)
                               ),
                            ) : Container(
                               height: 30,
                               width: 3,
                               decoration: BoxDecoration(
-                                 color: HSVColor.fromAHSV(0.1, widget.accent, 0.2, 0.4).toColor(),
+                                 color: accentColor(0.1, widget.accent, 0.2, 0.4),
                                  borderRadius: BorderRadius.circular(1.5)
                               ),
                            )

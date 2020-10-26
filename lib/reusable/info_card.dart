@@ -1,4 +1,5 @@
 import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/data.dart';
 
 class InfoCard extends StatelessWidget {
 	final Map data; 
@@ -17,7 +18,7 @@ class InfoCard extends StatelessWidget {
 			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) Text(data[i], 
             style: TextStyle(
                fontSize: 14, 
-               color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor()
+               color: accentColor(0.4, accent, 0.6, 1)
             )
          ),
 		];
@@ -26,7 +27,7 @@ class InfoCard extends StatelessWidget {
 			Text(data['title'] ?? (data['description'] ?? 'Enter title'), 
             style: TextStyle(
                fontSize: 18, 
-               color: HSVColor.fromAHSV(1, accent, 0.6, 1).toColor()
+               color: accentColor(1, accent, 0.6, 1)
             )
          ),
 			Container(height: 4),
@@ -34,7 +35,7 @@ class InfoCard extends StatelessWidget {
          : Text('No description', 
             style: TextStyle(
                fontSize: 14, 
-               color: HSVColor.fromAHSV(0.4, accent, 0.6, 1).toColor()
+               color: accentColor(0.4, accent, 0.6, 1)
             )
          )
 		];
@@ -70,7 +71,7 @@ class InfoCard extends StatelessWidget {
 								child: Center(
 									child: Icon(
 										buttonIcon ?? Icons.play_arrow_rounded, 
-										color: HSVColor.fromAHSV(isButtonEnabled ? 1 : 0.5, accent, isButtonEnabled ? 0.6 : 0.3, isButtonEnabled ? 1 : 0.5).toColor(), 
+										color: isButtonEnabled ? accentColor(1, accent, 0.6, 1) : accentColor(0.5, accent, 0.3, 0.5), 
 										size: buttonIcon != null ? 28 : 32,
 									),
 								),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:slikker_ripple/slikker_ripple.dart';
+import 'package:tasker/data.dart';
 
 export 'package:slikker_ripple/slikker_ripple.dart';
 export 'package:flutter/material.dart';
@@ -163,7 +164,7 @@ class _TopButtonState extends State<_TopButton> {
    @override void initState() {
       super.initState();
       widget.refreshFunction(refresh);
-      color = HSVColor.fromAHSV(1, widget.accent, 0.4, 0.2).toColor();
+      color = accentColor(1, widget.accent, 0.4, 0.2);
    }
 
    @override Widget build(BuildContext context) {
@@ -241,7 +242,7 @@ class SlikkerTextField extends StatelessWidget {
          controller: controller,
          style: TextStyle(
             fontSize: 17,
-            color: HSVColor.fromAHSV(1, accent, 0.4, 0.4).toColor()
+            color: accentColor(1, accent, 0.4, 0.4)
          ),
          decoration: InputDecoration(
             prefixIcon: prefixIcon != null ? Container(
@@ -258,9 +259,9 @@ class SlikkerTextField extends StatelessWidget {
                borderRadius: borderRadius,
             ),
             hintText: hintText,
-            hintStyle: TextStyle( color: HSVColor.fromAHSV(0.5, accent, 0.1, 0.7).toColor(), fontWeight: FontWeight.w600, ),
+            hintStyle: TextStyle( color: accentColor(0.5, accent, 0.1, 0.7), fontWeight: FontWeight.w600, ),
             filled: true,
-            fillColor: isTransperent ? Colors.transparent : HSVColor.fromAHSV(0.8, accent, 0.04, 0.97).toColor(),
+            fillColor: isTransperent ? Colors.transparent : accentColor(0.8, accent, 0.04, 0.97),
          ),
       );
    }

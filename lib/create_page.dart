@@ -118,10 +118,10 @@ class _ProjectTogges {
                boxShadow: [
                   BoxShadow(
                      blurRadius: 10,
-                     color: HSVColor.fromAHSV(0.3, value, 0.6, 1).toColor()
+                     color: accentColor(0.3, value, 0.6, 1)
                   )
                ],
-               color: HSVColor.fromAHSV(1, value, 0.6, 1).toColor()
+               color: accentColor(1, value, 0.6, 1)
             ),
          ),
          input: (a) {}
