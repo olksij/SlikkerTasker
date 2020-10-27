@@ -1,8 +1,7 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/timetable/timetable_builder.dart';
+import 'package:tasker/timetable/day_editor_additem.dart';
 
 class DayEditor extends StatefulWidget {
    final Map oldDay;
@@ -84,7 +83,7 @@ class _DayEditorState extends State<DayEditor> {
                builder: (context) { 
                   return Container(
                      decoration: BoxDecoration(
-                        color: Color(0xFFF6F6FC),
+                        color: Color(0xFFFAFAFF),
                         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                         boxShadow: [
                            BoxShadow(
@@ -94,37 +93,7 @@ class _DayEditorState extends State<DayEditor> {
                         ]
                      ),
                      padding: EdgeInsets.all(25),
-                     child: DraggableScrollableSheet(
-                        builder: (BuildContext context, ScrollController scrollController) { 
-                           List<Widget> cards = [];
-                           data.toMap().forEach((key, value) {
-                              if (key[0] == 'P' || key[0] == 'P') cards.add(
-                                 SlikkerCard(
-                                    padding: EdgeInsets.all(15),
-                                    accent: value['accent'] ?? widget.accent,
-                                    child: Text(value['title'], style: TextStyle(
-                                       color: accentColor(1, value['accent'] ?? widget.accent, 0.6, 1)
-                                    )),
-                                    isFloating: false,
-                                 ),
-                              );
-                           });
-                           return StaggeredGridView.countBuilder(
-                              physics: BouncingScrollPhysics(),
-                              controller: scrollController,
-                              crossAxisCount: 2,
-                              itemCount: cards.length,
-                              itemBuilder: (BuildContext context, int index) => cards[index],
-                              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                              mainAxisSpacing: 20.0,
-                              crossAxisSpacing: 20.0,
-                           );
-                        },
-                        expand: false,
-                        initialChildSize: 0.4,
-                        maxChildSize: 0.7,
-                        minChildSize: 0.2,
-                     )
+                     child: AddItem(accent: widget.accent,)
                   );
                }
             ),

@@ -13,7 +13,6 @@ class InfoCard extends StatelessWidget {
 	const InfoCard(this.data, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true, this.showButton = true, this.isFloating });
 
 	List<Widget> cardInfo() {
-
 		List<Widget> more = [ for (var i = 0; i < data.length; i++) 
 			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) Text(data[i], 
             style: TextStyle(
