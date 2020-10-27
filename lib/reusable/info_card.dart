@@ -13,9 +13,9 @@ class InfoCard extends StatelessWidget {
 	const InfoCard(this.data, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true, this.showButton = true, this.isFloating });
 
 	List<Widget> cardInfo() {
-		List<Widget> more = [ for (var i = 0; i < data.length; i++) 
-			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i))) Text(data[i], 
-            style: TextStyle(
+		List<Widget> more = [ if (data.length > 0) for (var i = 0; i < data.length; i++) 
+			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i)))
+             Text(data.values.elementAt(i), style: TextStyle(
                fontSize: 14, 
                color: accentColor(0.4, accent, 0.6, 1)
             )
@@ -30,8 +30,8 @@ class InfoCard extends StatelessWidget {
             )
          ),
 			Container(height: 4),
-			more.length != 0 ? more 
-         : Text('No description', 
+			...?more ,
+         if (more.length == 0) Text('No description', 
             style: TextStyle(
                fontSize: 14, 
                color: accentColor(0.4, accent, 0.6, 1)
