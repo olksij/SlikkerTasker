@@ -68,7 +68,7 @@ class InfoCard extends StatelessWidget {
 							children: cardInfo()
 						),
 					),
-					Align(
+					if (showButton) Align(
 						alignment: Alignment.bottomRight,
 						child: SlikkerCard(
 							borderRadius: BorderRadius.circular(8), 

@@ -11,15 +11,24 @@ class AddItem extends StatefulWidget {
 
 class _AddItemState extends State<AddItem> {
    int stepNumber;
+   PageController pageController;
 
    initState() {
       super.initState();
       stepNumber = 0;
+      pageController = PageController();
    }
 
    @override Widget build(BuildContext context) {
       return DraggableScrollableSheet(
-         builder: chooseProjectPage,
+         builder: (context, scrollController) => PageView(
+            children: [
+               chooseProjectPage(context, scrollController, pageController),
+               chooseProjectPage(context, scrollController, pageController),
+            ],
+            controller: pageController,
+            physics: NeverScrollableScrollPhysics(),
+         ),
          expand: false,
          initialChildSize: 0.4,
          maxChildSize: 0.7,
@@ -27,7 +36,7 @@ class _AddItemState extends State<AddItem> {
       );
    }
 
-   Widget chooseProjectPage(BuildContext context, ScrollController scrollController) { 
+   Widget chooseProjectPage(BuildContext context, ScrollController scrollController, PageController pageController) { 
       List<Widget> cards = [];
       data.toMap().forEach((key, value) {
          if (key[0] == 'P' || key[0] == 'P') cards.add(
@@ -36,19 +45,32 @@ class _AddItemState extends State<AddItem> {
                accent: value['accent'] ?? widget.accent,
                isFloating: false,
                showButton: false,
-               onCardTap: () {},
+               onCardTap: () => pageController.nextPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOutQuart
+               ),
             )
          );
       });
-      return StaggeredGridView.countBuilder(
-         physics: BouncingScrollPhysics(),
-         controller: scrollController,
-         crossAxisCount: 2,
-         itemCount: cards.length,
-         itemBuilder: (BuildContext context, int index) => cards[index],
-         staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-         mainAxisSpacing: 20.0,
-         crossAxisSpacing: 20.0,
+      return Column(
+         children: [
+            Text('Laaaa!',  style: TextStyle(
+               fontSize: 16,
+               color: accentColor(1, widget.accent, 0.3, 0.5)
+            )),
+            Container(height: 20,),
+            Expanded(
+               child: StaggeredGridView.countBuilder(
+               physics: BouncingScrollPhysics(),
+               controller: scrollController,
+               crossAxisCount: 2,
+               itemCount: cards.length,
+               itemBuilder: (BuildContext context, int index) => cards[index],
+               staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+               mainAxisSpacing: 20.0,
+               crossAxisSpacing: 20.0,
+            ))
+         ]
       );
    }
 }
