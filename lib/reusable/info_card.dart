@@ -6,11 +6,22 @@ class InfoCard extends StatelessWidget {
 	final Function onCardTap; 
 	final Function onButtonTap; 
 	final IconData buttonIcon; 
+   final double buttonIconSize;
 	final bool isButtonEnabled;
 	final bool showButton;
 	final double accent;
    final bool isFloating;
-	const InfoCard(this.data, { this.onCardTap, this.onButtonTap, this.buttonIcon, this.accent = 240, this.isButtonEnabled = true, this.showButton = true, this.isFloating });
+	const InfoCard({ 
+      @required this.data, 
+      this.accent, 
+      this.onCardTap, 
+      this.onButtonTap, 
+      this.buttonIcon = Icons.play_arrow_rounded, 
+      this.buttonIconSize = 32, 
+      this.isButtonEnabled = true, 
+      this.showButton = true, 
+      this.isFloating = true
+   });
 
 	List<Widget> cardInfo() {
 		List<Widget> more = [ if (data.length > 0) for (var i = 0; i < data.length; i++) 
@@ -42,7 +53,7 @@ class InfoCard extends StatelessWidget {
 
 	@override Widget build(BuildContext context) {
 		return SlikkerCard(
-         isFloating: isFloating ?? true,
+         isFloating: isFloating,
 			onTap: this.onCardTap ?? () {},
 			padding: EdgeInsets.all(13),
 			accent: accent ?? 240,
@@ -69,7 +80,7 @@ class InfoCard extends StatelessWidget {
 								width: 46,
 								child: Center(
 									child: Icon(
-										buttonIcon ?? Icons.play_arrow_rounded, 
+										buttonIcon, 
 										color: isButtonEnabled ? accentColor(1, accent, 0.6, 1) : accentColor(0.5, accent, 0.3, 0.5), 
 										size: buttonIcon != null ? 28 : 32,
 									),

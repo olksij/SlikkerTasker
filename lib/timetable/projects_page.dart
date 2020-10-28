@@ -30,7 +30,7 @@ class ProjectsPage extends StatelessWidget {
                Map a = data.toMap();
                a.forEach((key, value) {
                   if (key[0] == 'P') cards.add(
-                     InfoCard(Map<String,dynamic>.from(value), 
+                     InfoCard(data: Map<String,dynamic>.from(value), 
                         isFloating: false,
                         onCardTap: () => Navigator.push(context, 
                            MaterialPageRoute(

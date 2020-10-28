@@ -213,7 +213,8 @@ class _CardPreviewState extends State<_CardPreview> {
    }
    
    @override Widget build(BuildContext context) {
-      return InfoCard(_toCreate,
+      return InfoCard(
+         data: _toCreate,
          buttonIcon: Icons.save_rounded,
          accent: 240,
          isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,
