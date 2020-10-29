@@ -10,6 +10,171 @@ import 'package:tasker/data.dart';
 Map<String, dynamic> _toCreate;
 
 
+
+
+
+// Decides which togges will be used
+enum CreatePageType { task, project }
+
+class CreatePage extends StatefulWidget { 
+   final CreatePageType pageType;
+   final Map<String, dynamic> map;
+
+   const CreatePage(this.pageType, this.map);
+
+   @override _CreatePageState createState() => _CreatePageState(); 
+}
+
+class _CreatePageState extends State<CreatePage> {
+   List<CreateProps> _toggesList;
+   Function refreshPreviewFunction;
+
+   void refreshPreview() => refreshPreviewFunction();
+
+   @override void initState() { 
+      super.initState(); _toCreate = widget.map ?? {}; 
+      _toggesList = widget.pageType == CreatePageType.task ? _TaskTogges.list(refreshPreview) : _ProjectTogges.list(refreshPreview);
+   }
+
+	@override Widget build(BuildContext context) {
+      return SlikkerScaffold(
+         topButtonIcon: Icons.arrow_back,
+         topButtonTitle: 'Back',
+         topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/projects'),
+         customTitle: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
+         header: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: _CardPreview(['T','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
+         ),
+         content: StaggeredGridView.countBuilder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            itemCount: _toggesList.length,
+            itemBuilder: (BuildContext context, int index) => _toggesList[index],
+            staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+            mainAxisSpacing: 20.0,
+            crossAxisSpacing: 20.0,
+         ),
+         floatingButton: Container(),
+      );
+   }
+}
+
+
+
+
+
+class _CardPreview extends StatefulWidget { 
+   final String type; final Map<String, dynamic> data; final Function callback;
+   const _CardPreview(this.type, this.data, this.callback);
+   @override _CardPreviewState createState() => _CardPreviewState(); 
+}
+
+class _CardPreviewState extends State<_CardPreview> {
+
+   @override void initState() {
+      super.initState();
+      widget.callback(() => setState(() {}));
+   }
+   
+   @override Widget build(BuildContext context) {
+      return InfoCard(
+         data: _toCreate,
+         buttonIcon: Icons.save_rounded,
+         accent: 240,
+         isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,
+         onButtonTap: () {
+            uploadData(widget.type, widget.data);
+            Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/projects');
+         },
+      );
+   }
+}
+
+
+
+
+
+class CreateProps extends StatefulWidget {
+	final String title; 
+   final String description; 
+   final String value; 
+   final Function input;
+   final Function callback;
+   final Function display;
+   
+	CreateProps({ this.title, this.value, this.description, this.input, this.callback, this.display });
+	@override _CreatePropsState createState() => _CreatePropsState();
+}
+
+class _CreatePropsState extends State<CreateProps> {
+   bool data;
+
+   @override void initState() { 
+      super.initState(); 
+      data = _toCreate[widget.value] != null;
+   }
+
+   enterValue() => showModalBottomSheet(
+      context: context, 
+      isDismissible: true,
+      barrierColor: Color(0x553D3D66),
+      backgroundColor: Colors.transparent,
+      builder: (context) { 
+         return Container(
+            decoration: BoxDecoration(
+               color: Color(0xFFF6F6FC),
+               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+               boxShadow: [
+                  BoxShadow(
+                     color: Color(0x301e1e33),
+                     blurRadius: 35
+                  )
+               ]
+            ),
+            padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
+            child: widget.input((newData) {
+               _toCreate[widget.value] = newData;
+               setState(() => data = newData != null);
+               widget.callback();
+               Navigator.pop(context);
+            })
+         );
+      }
+   );
+
+	@override Widget build(BuildContext context) {
+		return SlikkerCard(
+			accent: 240,
+			child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               widget.display != null && _toCreate[widget.value] != null
+                  ? widget.display(_toCreate[widget.value]) 
+                  : Text(_toCreate[widget.value] ?? widget.title, 
+                     style: TextStyle(
+                     fontSize: 17, 
+                     color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66)
+                  )
+               ),
+               Container(height: 8),
+               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
+            ],
+         ),
+         borderRadius: BorderRadius.circular(12),
+			isFloating: data,
+			padding: EdgeInsets.all(17),
+			onTap: this.enterValue,
+		);
+	}
+}
+
+
+
+
+
 // Accept button in bottomModalSheet
 Widget _acceptButton(Function onTap) => SlikkerCard(
    onTap: onTap,
@@ -141,165 +306,4 @@ class _ProjectTogges {
          input: (a) {}
       ),
    ];
-}
-
-
-
-
-
-// Decides which togges will be used
-enum CreatePageType { task, project }
-
-class CreatePage extends StatefulWidget { 
-   final CreatePageType pageType;
-   final Map<String, dynamic> map;
-
-   const CreatePage(this.pageType, this.map);
-
-   @override _CreatePageState createState() => _CreatePageState(); 
-}
-
-class _CreatePageState extends State<CreatePage> {
-   List<CreateProps> _toggesList;
-   Function refreshPreviewFunction;
-
-   void refreshPreview() => refreshPreviewFunction();
-
-   @override void initState() { 
-      super.initState(); _toCreate = widget.map ?? {}; 
-      _toggesList = widget.pageType == CreatePageType.task ? _TaskTogges.list(refreshPreview) : _ProjectTogges.list(refreshPreview);
-   }
-
-	@override Widget build(BuildContext context) {
-      return SlikkerScaffold(
-         topButtonIcon: Icons.arrow_back,
-         topButtonTitle: 'Back',
-         topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/projects'),
-         customTitle: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
-         header: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: _CardPreview(['T','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
-         ),
-         content: StaggeredGridView.countBuilder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            itemCount: _toggesList.length,
-            itemBuilder: (BuildContext context, int index) => _toggesList[index],
-            staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-            mainAxisSpacing: 20.0,
-            crossAxisSpacing: 20.0,
-         ),
-         floatingButton: Container(),
-      );
-   }
-}
-
-
-
-
-
-class _CardPreview extends StatefulWidget { 
-   final String type; final Map<String, dynamic> data; final Function callback;
-   const _CardPreview(this.type, this.data, this.callback);
-   @override _CardPreviewState createState() => _CardPreviewState(); 
-}
-
-class _CardPreviewState extends State<_CardPreview> {
-
-   @override void initState() {
-      super.initState();
-      widget.callback(() => setState(() {}));
-   }
-   
-   @override Widget build(BuildContext context) {
-      return InfoCard(
-         data: _toCreate,
-         buttonIcon: Icons.save_rounded,
-         accent: 240,
-         isButtonEnabled: widget.data['title'] != null || widget.data['description'] != null,
-         onButtonTap: () {
-            uploadData(widget.type, widget.data);
-            Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/projects');
-         },
-      );
-   }
-}
-
-
-
-
-class CreateProps extends StatefulWidget {
-	final String title; 
-   final String description; 
-   final String value; 
-   final Function input;
-   final Function callback;
-   final Function display;
-   
-	CreateProps({ this.title, this.value, this.description, this.input, this.callback, this.display });
-	@override _CreatePropsState createState() => _CreatePropsState();
-}
-
-class _CreatePropsState extends State<CreateProps> {
-   bool data;
-
-   @override void initState() { 
-      super.initState(); 
-      data = _toCreate[widget.value] != null;
-   }
-
-   enterValue() => showModalBottomSheet(
-      context: context, 
-      isDismissible: true,
-      barrierColor: Color(0x553D3D66),
-      backgroundColor: Colors.transparent,
-      builder: (context) { 
-         return Container(
-            decoration: BoxDecoration(
-               color: Color(0xFFF6F6FC),
-               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-               boxShadow: [
-                  BoxShadow(
-                     color: Color(0x301e1e33),
-                     blurRadius: 35
-                  )
-               ]
-            ),
-            padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
-            child: widget.input((newData) {
-               _toCreate[widget.value] = newData;
-               setState(() => data = newData != null);
-               widget.callback();
-               Navigator.pop(context);
-            })
-         );
-      }
-   );
-
-	@override Widget build(BuildContext context) {
-		return SlikkerCard(
-			accent: 240,
-			child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-               widget.display != null && _toCreate[widget.value] != null
-                  ? widget.display(_toCreate[widget.value]) 
-                  : Text(_toCreate[widget.value] ?? widget.title, 
-                     style: TextStyle(
-                     fontSize: 17, 
-                     color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66)
-                  )
-               ),
-               Container(height: 8),
-               Text(data ? widget.title : widget.description, style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
-            ],
-         ),
-         borderRadius: BorderRadius.circular(12),
-			isFloating: data,
-			padding: EdgeInsets.all(17),
-			onTap: this.enterValue,
-		);
-	}
 }

@@ -24,15 +24,15 @@ class InfoCard extends StatelessWidget {
    });
 
 	List<Widget> cardInfo() {
-		List<Widget> more = [ if (data.length > 0) for (var i = 0; i < data.length; i++) 
-			if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i)))
-             Text(data.values.elementAt(i), style: TextStyle(
-               fontSize: 14, 
-               color: accentColor(0.4, accent, 0.6, 1)
-            )
-         ),
+		List<Widget> more = [ 
+         if (data.length > 0) 
+         for (var i = 0; i < data.length; i++) 
+         if (!['title', 'accent', 'time'].contains(data.keys.elementAt(i)))
+         Text(data.values.elementAt(i) is List ? data.values.elementAt(i).join(', ') : data.values.elementAt(i), style: TextStyle(
+            fontSize: 14, 
+            color: accentColor(0.4, accent, 0.6, 1)
+         )),
 		];
-
 		return [
 			Text(data['title'] ?? (data['description'] ?? 'Enter title'), 
             style: TextStyle(
