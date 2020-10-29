@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:tasker/reusable/info_card.dart';
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
@@ -27,7 +28,7 @@ class _AddItemState extends State<AddItem> {
             children: [
                chooseProjectPage(context, scrollController, pageController),
                if (newItem['project'] != null && data.get(newItem['project'])['categories'] != null) chooseCategoryPage(context, scrollController, pageController),
-               chooseProjectPage(context, scrollController, pageController),
+               chooseDurationPage(context, scrollController, pageController),
             ],
             controller: pageController,
             physics: NeverScrollableScrollPhysics(),
@@ -38,6 +39,7 @@ class _AddItemState extends State<AddItem> {
          minChildSize: 0.2,
       );
    }
+
 
    Widget chooseProjectPage(BuildContext context, ScrollController scrollController, PageController pageController) { 
       List<Widget> cards = [
@@ -79,6 +81,7 @@ class _AddItemState extends State<AddItem> {
          crossAxisSpacing: 20.0,
       );
    }
+
 
    Widget chooseCategoryPage(BuildContext context, ScrollController scrollController, PageController pageController) { 
       List<Widget> cards = [
@@ -127,4 +130,31 @@ class _AddItemState extends State<AddItem> {
          crossAxisSpacing: 20.0,
       );
    }
+
+
+   Widget chooseDurationPage(BuildContext context, ScrollController scrollController, PageController pageController) => Column(
+      //controller: scrollController,
+      children: [
+         Column(
+            children: [
+               Text('Choose duration',  style: TextStyle(
+                  fontSize: 17,
+                  color: accentColor(1, widget.accent, 0.3, 0.5)
+               )),
+               Container(height: 5,),
+            ],
+         ),
+         Container(height: 20),
+         SizedBox(
+            //width: 250,
+            //height: 150,
+            child: CupertinoTimerPicker(
+               onTimerDurationChanged: (value) {},
+               mode: CupertinoTimerPickerMode.hm,
+               minuteInterval: 5,
+               initialTimerDuration: Duration(hours: 1),
+            )
+         )
+      ]
+   );
 }
