@@ -27,7 +27,7 @@ class ProjectsPage extends StatelessWidget {
             builder: (context, snapshot){
                if (snapshot.hasError) return Text('Something went wrong');
                List<Widget> cards = [];
-               Map a = data.toMap();
+               Map<String, dynamic> a = Map<String, dynamic>.from(data.toMap());
                a.forEach((key, value) {
                   if (key[0] == 'P') cards.add(
                      InfoCard(data: Map<String,dynamic>.from(value), 
@@ -38,7 +38,7 @@ class ProjectsPage extends StatelessWidget {
                            )
                         ),
                         showButton: false,
-                        accent: value['accent'],
+                        accent: value['accent'] ?? 240,
                      ),
                   );
                });

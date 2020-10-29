@@ -17,18 +17,19 @@ Map<String, dynamic> getDefaults() => {
 Future<bool> signIn({ bool silently = true }) async {
    await Firebase.initializeApp();
    refreshStatus('Initializing..');
+   
    return (silently ? GoogleSignIn().signInSilently() : GoogleSignIn().signIn())
    .then((account) async {
       refreshStatus('Authoricating..');
+
       GoogleSignInAuthentication auth = await account.authentication;
-      print(auth.serverAuthCode);
+      
       return FirebaseAuth.instance.signInWithCredential(
          GoogleAuthProvider.credential(
             accessToken: auth.accessToken,
             idToken: auth.idToken
          )
-      )
-      .then((credential) { 
+      ).then((credential) { 
          user = credential.user; 
          app.put('isSignedIn', true);
          firestoreConnect(); 
@@ -41,12 +42,17 @@ firestoreConnect() async {
    refreshStatus('Connecting..');
    firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
+   // Merge local and cloud settings
    Map<String, dynamic> tempSettings = Map<String, dynamic>.from(data.get('.settings') ?? {});
    getDefaults().forEach((key, value) => tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
-   data.clear();
 
+   // Prepeare local DB for merging
+   await data.clear();
+   refreshStatus('Syncing..');
+
+   // Connect listeners
    firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => event.docChanges
-   .where((docChange) => (data.get(docChange.doc.id) ?? { 'time': 0 })['time'] < docChange.doc.data()['time'] 
+   .where((docChange) => ((data.get(docChange.doc.id) ?? {})['time'] ?? 0) < docChange.doc.data()['time'] 
       || docChange.type == DocumentChangeType.removed) 
    .forEach((change) {
       if (change.type == DocumentChangeType.removed) data.delete(change.doc.id);
@@ -55,6 +61,7 @@ firestoreConnect() async {
 
    data.watch().listen((event) { if (event.value != null) firestoreDB.doc(event.key).set(event.value); });
 
+   // Put new settings in DB
    data.put('.settings', tempSettings);
    firestoreDB.doc('.settings').set(tempSettings);
 
@@ -64,7 +71,7 @@ firestoreConnect() async {
 Function connectivityStatusRefresher = (a) {}; String connectivityStatus = '';
 void refreshStatus(String status) { connectivityStatusRefresher(status); connectivityStatus = status; }
 
-void uploadData(String type, Map map) {
+void uploadData(String type, Map<String, dynamic> map) {
    map['time'] = DateTime.now().millisecondsSinceEpoch;
    data.put(type + map['time'].toString(), map);
 }

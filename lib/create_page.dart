@@ -7,7 +7,7 @@ import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
 
 /// The list of props 
-Map _toCreate;
+Map<String, dynamic> _toCreate;
 
 
 // Accept button in bottomModalSheet
@@ -152,7 +152,7 @@ enum CreatePageType { task, project }
 
 class CreatePage extends StatefulWidget { 
    final CreatePageType pageType;
-   final Map map;
+   final Map<String, dynamic> map;
 
    const CreatePage(this.pageType, this.map);
 
@@ -178,7 +178,7 @@ class _CreatePageState extends State<CreatePage> {
          customTitle: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
          header: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
-            child: _CardPreview(['Т','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
+            child: _CardPreview(['T','P'][widget.pageType.index], _toCreate, (Function toRefresh) => refreshPreviewFunction = toRefresh)
          ),
          content: StaggeredGridView.countBuilder(
             shrinkWrap: true,
@@ -200,7 +200,7 @@ class _CreatePageState extends State<CreatePage> {
 
 
 class _CardPreview extends StatefulWidget { 
-   final String type; final Map data; final Function callback;
+   final String type; final Map<String, dynamic> data; final Function callback;
    const _CardPreview(this.type, this.data, this.callback);
    @override _CardPreviewState createState() => _CardPreviewState(); 
 }

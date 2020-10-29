@@ -4,7 +4,7 @@ import 'package:tasker/data.dart';
 class AgendaBuilder extends StatefulWidget {
    final Function newItem;
    final double accent;
-   final Map day;
+   final Map<String, dynamic> day;
 
   const AgendaBuilder({ this.newItem, this.accent, this.day });
 

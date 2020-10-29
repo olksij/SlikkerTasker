@@ -4,7 +4,7 @@ import 'package:tasker/timetable/timetable_builder.dart';
 import 'package:tasker/timetable/day_editor_additem.dart';
 
 class DayEditor extends StatefulWidget {
-   final Map oldDay;
+   final Map<String, dynamic> oldDay;
    final double accent;
 
    const DayEditor({ 
@@ -17,7 +17,7 @@ class DayEditor extends StatefulWidget {
 
 class _DayEditorState extends State<DayEditor> {
 
-   Map newDay;
+   Map<String, dynamic> newDay;
 
    @override void initState() {
       super.initState();

@@ -3,7 +3,7 @@ import 'package:tasker/timetable/day_editor.dart';
 import 'package:tasker/data.dart';
 
 class TimetableEditor extends StatelessWidget {
-   final Map timetable;
+   final Map<String, dynamic> timetable;
    final double accent;
 
    const TimetableEditor({ 
@@ -57,14 +57,14 @@ class TimetableEditor extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
-               for (Map day in timetable['days']) SlikkerCard(
+               for (Map<String, dynamic> day in timetable['days']) SlikkerCard(
                   accent: 240,
                   isFloating: false,
                   onTap: () {},
                   padding: EdgeInsets.symmetric(vertical: 17, horizontal: 15),
                   child: Row(
                      children: [
-                        for (Map project in day['projects']) Padding(
+                        for (Map<String, dynamic> project in day['projects']) Padding(
                            padding: EdgeInsets.symmetric(horizontal: 2),
                            child: Flexible(
                               flex: project['duration'],

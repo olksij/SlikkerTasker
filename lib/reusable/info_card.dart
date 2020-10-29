@@ -2,7 +2,7 @@ import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
 
 class InfoCard extends StatelessWidget {
-	final Map data; 
+	final Map<String, dynamic> data; 
 	final Function onCardTap; 
 	final Function onButtonTap; 
 	final IconData buttonIcon; 
@@ -56,7 +56,7 @@ class InfoCard extends StatelessWidget {
          isFloating: isFloating,
 			onTap: this.onCardTap ?? () {},
 			padding: EdgeInsets.all(13),
-			accent: accent ?? 240,
+			accent: accent,
 			borderRadius: BorderRadius.circular(12),
 			child: Stack( 
 				alignment: Alignment.bottomRight,
@@ -82,7 +82,7 @@ class InfoCard extends StatelessWidget {
 									child: Icon(
 										buttonIcon, 
 										color: isButtonEnabled ? accentColor(1, accent, 0.6, 1) : accentColor(0.5, accent, 0.3, 0.5), 
-										size: buttonIcon != null ? 28 : 32,
+										size: buttonIconSize,
 									),
 								),
 							)

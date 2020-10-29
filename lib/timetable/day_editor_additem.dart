@@ -38,7 +38,7 @@ class _AddItemState extends State<AddItem> {
 
    Widget chooseProjectPage(BuildContext context, ScrollController scrollController, PageController pageController) { 
       List<Widget> cards = [];
-      data.toMap().forEach((key, value) {
+      Map<String, dynamic>.from(data.toMap()).forEach((key, value) {
          if (key[0] == 'P' || key[0] == 'P') cards.add(
             InfoCard(
                data: value,
