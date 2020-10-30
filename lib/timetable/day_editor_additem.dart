@@ -70,15 +70,46 @@ class _AddItemState extends State<AddItem> {
             )
          );
       });
-      return StaggeredGridView.countBuilder(
-         physics: BouncingScrollPhysics(),
-         controller: scrollController,
-         crossAxisCount: 2,
-         itemCount: cards.length,
-         itemBuilder: (BuildContext context, int index) => cards[index],
-         staggeredTileBuilder: (int index) => StaggeredTile.fit(index == 0 ? 2 : 1),
-         mainAxisSpacing: 20.0,
-         crossAxisSpacing: 20.0,
+      return Stack(
+         children: [
+            StaggeredGridView.countBuilder(
+               padding: EdgeInsets.all(25),
+               physics: BouncingScrollPhysics(),
+               controller: scrollController,
+               crossAxisCount: 2,
+               itemCount: cards.length,
+               itemBuilder: (BuildContext context, int index) => cards[index],
+               staggeredTileBuilder: (int index) => StaggeredTile.fit(index == 0 ? 2 : 1),
+               mainAxisSpacing: 20.0,
+               crossAxisSpacing: 20.0,
+            ),
+            Align(
+               alignment: Alignment.topCenter,
+               child: Container(
+                  decoration: BoxDecoration(
+                     gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment(0,0.25),
+                        colors: [ Color(0xFFFAFAFF), Color(0x00FAFAFF) ]
+                     )
+                  ),
+                  height: 50,
+               ),
+            ),
+            Align(
+               alignment: Alignment.bottomCenter,
+               child: Container(
+                  decoration: BoxDecoration(
+                     gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment(0,0.25),
+                        colors: [ Color(0x00FAFAFF), Color(0xFFFAFAFF) ]
+                     )
+                  ),
+                  height: 80,
+               ),
+            ),
+         ]
       );
    }
 
@@ -119,42 +150,118 @@ class _AddItemState extends State<AddItem> {
             )
          );
       });
-      return StaggeredGridView.countBuilder(
-         physics: BouncingScrollPhysics(),
-         controller: scrollController,
-         crossAxisCount: 2,
-         itemCount: cards.length,
-         itemBuilder: (BuildContext context, int index) => cards[index],
-         staggeredTileBuilder: (int index) => StaggeredTile.fit(index == 0 ? 2 : 1),
-         mainAxisSpacing: 20.0,
-         crossAxisSpacing: 20.0,
+      return Stack(
+         children: [
+            StaggeredGridView.countBuilder(
+               padding: EdgeInsets.all(25),
+               physics: BouncingScrollPhysics(),
+               controller: scrollController,
+               crossAxisCount: 2,
+               itemCount: cards.length,
+               itemBuilder: (BuildContext context, int index) => cards[index],
+               staggeredTileBuilder: (int index) => StaggeredTile.fit(index == 0 ? 2 : 1),
+               mainAxisSpacing: 20.0,
+               crossAxisSpacing: 20.0,
+            ),
+            Align(
+               alignment: Alignment.topCenter,
+               child: Container(
+                  decoration: BoxDecoration(
+                     gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment(0,0.25),
+                        colors: [ Color(0xFFFAFAFF), Color(0x00FAFAFF) ]
+                     )
+                  ),
+                  height: 50,
+               ),
+            ),
+            Align(
+               alignment: Alignment.bottomCenter,
+               child: Container(
+                  decoration: BoxDecoration(
+                     gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment(0,0.25),
+                        colors: [ Color(0x00FAFAFF), Color(0xFFFAFAFF) ]
+                     )
+                  ),
+                  height: 80,
+               ),
+            ),
+         ]
       );
    }
 
 
-   Widget chooseDurationPage(BuildContext context, ScrollController scrollController, PageController pageController) => Column(
-      //controller: scrollController,
+   Widget chooseDurationPage(BuildContext context, ScrollController scrollController, PageController pageController) => Stack(
       children: [
          Column(
             children: [
-               Text('Choose duration',  style: TextStyle(
-                  fontSize: 17,
-                  color: accentColor(1, widget.accent, 0.3, 0.5)
-               )),
-               Container(height: 5,),
-            ],
+               Column(
+                  children: [
+                     Container(height: 25,),
+                     Text('Choose duration',  style: TextStyle(
+                        fontSize: 17,
+                        color: accentColor(1, widget.accent, 0.3, 0.5)
+                     )),
+                     Container(height: 10),
+                  ],
+               ),
+               Container(
+                  height: 200,
+                  child: Stack(
+                  //width: 250,
+                  //height: 150,
+                     children: [
+                        CupertinoTimerPicker(
+                           onTimerDurationChanged: (value) {},
+                           mode: CupertinoTimerPickerMode.hm,
+                           minuteInterval: 5,
+                           initialTimerDuration: Duration(hours: 1),
+                        ),
+                        Align(
+                           alignment: Alignment.topCenter,
+                           child: Container(
+                              decoration: BoxDecoration(
+                                 gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment(0,-0.5),
+                                    colors: [ Color(0x00FAFAFF), Color(0xFFFAFAFF) ]
+                                 )
+                              ),
+                              height: 60,
+                           ),
+                        ),
+                        Align(
+                           alignment: Alignment.bottomCenter,
+                           child: Container(
+                              decoration: BoxDecoration(
+                                 gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment(0,0.5),
+                                    colors: [ Color(0x00FAFAFF), Color(0xFFFAFAFF) ]
+                                 )
+                              ),
+                              height: 60,
+                           ),
+                        ),
+                     ]
+                  ),
+               ),
+            ]
          ),
-         Container(height: 20),
-         SizedBox(
-            //width: 250,
-            //height: 150,
-            child: CupertinoTimerPicker(
-               onTimerDurationChanged: (value) {},
-               mode: CupertinoTimerPickerMode.hm,
-               minuteInterval: 5,
-               initialTimerDuration: Duration(hours: 1),
-            )
-         )
+         Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+               child: SlikkerCard(
+                  accent: widget.accent,
+                  child: Text('Continue'),
+                  padding: EdgeInsets.all(15),
+               ),
+               margin: EdgeInsets.only(bottom: 25),
+            ),
+         ),
       ]
    );
 }

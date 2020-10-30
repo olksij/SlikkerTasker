@@ -82,6 +82,7 @@ class _DayEditorState extends State<DayEditor> {
                isScrollControlled: true,
                builder: (context) { 
                   return Container(
+                     clipBehavior: Clip.hardEdge,
                      decoration: BoxDecoration(
                         color: Color(0xFFFAFAFF),
                         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -92,7 +93,6 @@ class _DayEditorState extends State<DayEditor> {
                            )
                         ]
                      ),
-                     padding: EdgeInsets.all(25),
                      child: AddItem(accent: widget.accent,)
                   );
                }
