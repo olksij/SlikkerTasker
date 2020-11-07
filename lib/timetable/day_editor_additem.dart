@@ -6,7 +6,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class AddItem extends StatefulWidget { 
    final double accent;
-   const AddItem({ this.accent });
+   final Function save;
+   final Function cancel;
+   const AddItem({ this.accent, this.save, this.cancel });
    @override _AddItemState createState() => _AddItemState(); 
 }
 
@@ -215,7 +217,7 @@ class _AddItemState extends State<AddItem> {
                   //height: 150,
                      children: [
                         CupertinoTimerPicker(
-                           onTimerDurationChanged: (value) {},
+                           onTimerDurationChanged: (value) => newItem['duration'] = value.inHours + value.inMinutes/60,
                            mode: CupertinoTimerPickerMode.hm,
                            minuteInterval: 5,
                            initialTimerDuration: Duration(hours: 1),
@@ -252,14 +254,28 @@ class _AddItemState extends State<AddItem> {
             ]
          ),
          Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomRight,
             child: Container(
                child: SlikkerCard(
+                  onTap: () => widget.save(newItem),
                   accent: widget.accent,
                   child: Text('Continue'),
                   padding: EdgeInsets.all(15),
                ),
-               margin: EdgeInsets.only(bottom: 25),
+               margin: EdgeInsets.only(bottom: 25, right: 25),
+            ),
+         ),
+         Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+               child: SlikkerCard(
+                  onTap: () => widget.cancel(),
+                  accent: widget.accent,
+                  isFloating: false,
+                  child: Text('Cancel'),
+                  padding: EdgeInsets.all(15),
+               ),
+               margin: EdgeInsets.only(bottom: 25, left: 25),
             ),
          ),
       ]

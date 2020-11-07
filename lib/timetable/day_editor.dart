@@ -93,7 +93,14 @@ class _DayEditorState extends State<DayEditor> {
                            )
                         ]
                      ),
-                     child: AddItem(accent: widget.accent,)
+                     child: AddItem(
+                        accent: widget.accent, 
+                        save: (value) {
+                           setState(() => newDay['projects'].add(value));
+                           Navigator.pop(context);
+                        },
+                        cancel: () => Navigator.pop(context),
+                     )
                   );
                }
             ),
