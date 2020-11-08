@@ -217,7 +217,7 @@ class _AddItemState extends State<AddItem> {
                   //height: 150,
                      children: [
                         CupertinoTimerPicker(
-                           onTimerDurationChanged: (value) => newItem['duration'] = value.inHours + value.inMinutes/60,
+                           onTimerDurationChanged: (value) => newItem['duration'] = value,
                            mode: CupertinoTimerPickerMode.hm,
                            minuteInterval: 5,
                            initialTimerDuration: Duration(hours: 1),

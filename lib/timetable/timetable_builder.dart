@@ -17,8 +17,7 @@ class _AgendaBuilderState extends State<AgendaBuilder> {
    List<Widget> _buildAgenda() {
       List<Widget> toReturn = [];
       int i = 0;
-      double time = widget.day['wakeup'].hour + widget.day['wakeup'].minute/60;
-      print(widget.day['projects']);
+      Duration time = Duration(hours: widget.day['wakeup'].hour, minutes: widget.day['wakeup'].minute);
       while (i <= widget.day['projects'].length) {
          toReturn.add( Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,7 +29,7 @@ class _AgendaBuilderState extends State<AgendaBuilder> {
                      alignment: AlignmentDirectional.topCenter,
                      children: [
                         Text(
-                           TimeOfDay(hour: time.floor(), minute: (time%1*60).round()).format(context),
+                           TimeOfDay(hour: time.inHours, minute: time.inMinutes%60).format(context),
                            style: TextStyle(
                               color: accentColor(0.7, widget.accent, 0.2, 0.4)
                            ),
@@ -38,7 +37,7 @@ class _AgendaBuilderState extends State<AgendaBuilder> {
                         Align(
                            alignment: Alignment.bottomCenter,
                            child: (i == widget.day['projects'].length) ? Text(
-                              TimeOfDay(hour: time.floor()+1, minute: (time%1*60).round()).format(context),
+                              TimeOfDay(hour: time.inHours+1, minute: time.inMinutes%60).format(context),
                               style: TextStyle(
                                  color: accentColor(0.4, widget.accent, 0.2, 0.4)
                               ),
@@ -109,7 +108,7 @@ class _AgendaBuilderState extends State<AgendaBuilder> {
             ]
          ));
          toReturn.add(Container(height: 10,));
-         if (i != widget.day['projects'].length) time += widget.day['projects'][i]['duration'] ?? 1;
+         if (i != widget.day['projects'].length) time += widget.day['projects'][i]['duration'] ?? Duration(hours: 1);
          i++;
       }
       return toReturn;
