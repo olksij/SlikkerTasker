@@ -1,21 +1,24 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_core/firebase_core.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:tasker/reusable/slikker.dart';
 
-bool signedIn; User user; CollectionReference firestoreDB;
-Box app; Box data; 
+bool? signedIn;
+//User? user;
+//CollectionReference? firestoreDB;
+late Box app;
+late Box data;
 
 Map<String, dynamic> getDefaults() => {
-   'time': DateTime.now().millisecondsSinceEpoch,
-   'light': true,
-   'accent': 240,
-};
+      'time': DateTime.now().millisecondsSinceEpoch,
+      'light': true,
+      'accent': 240,
+    };
 
-Future<bool> signIn({ bool silently = true }) async {
-   await Firebase.initializeApp();
+Future<bool> signIn({bool silently = true}) async {
+  /*await Firebase.initializeApp();
    refreshStatus('Initializing..');
    
    return (silently ? GoogleSignIn().signInSilently() : GoogleSignIn().signIn())
@@ -35,11 +38,12 @@ Future<bool> signIn({ bool silently = true }) async {
          firestoreConnect(); 
          return true; 
       });
-   }).catchError((a) => false);
+   }).catchError((a) => false);*/
+  return true;
 }
 
 firestoreConnect() async {
-   refreshStatus('Connecting..');
+  /*refreshStatus('Connecting..');
    firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
    // Merge local and cloud settings
@@ -65,15 +69,20 @@ firestoreConnect() async {
    data.put('.settings', tempSettings);
    firestoreDB.doc('.settings').set(tempSettings);
 
-   refreshStatus('');
+   refreshStatus('');*/
 }
 
-Function connectivityStatusRefresher = (a) {}; String connectivityStatus = '';
-void refreshStatus(String status) { connectivityStatusRefresher(status); connectivityStatus = status; }
-
-void uploadData(String type, Map<String, dynamic> map) {
-   map['time'] = DateTime.now().millisecondsSinceEpoch;
-   data.put(type + map['time'].toString(), map);
+Function connectivityStatusRefresher = (a) {};
+String connectivityStatus = '';
+void refreshStatus(String status) {
+  connectivityStatusRefresher(status);
+  connectivityStatus = status;
 }
 
-Color accentColor(double alpha, double hue, double saturation, double value) => HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();
+void uploadData(String type, Map<String?, dynamic> map) {
+  map['time'] = DateTime.now().millisecondsSinceEpoch;
+  data.put(type + map['time'].toString(), map);
+}
+
+Color accentColor(double alpha, double hue, double saturation, double value) =>
+    HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();

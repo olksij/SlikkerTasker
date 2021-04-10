@@ -8,7 +8,7 @@ class AppIcons {
   AppIcons._();
 
   static const _kFontFam = 'AppIcons';
-  static const _kFontPkg = null;
+  static const dynamic _kFontPkg = null;
 
   static const IconData timeline = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

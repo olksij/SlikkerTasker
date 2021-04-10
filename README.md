@@ -1,4 +1,4 @@
 # ***Slikker Tasker***
-## The way to achieve your goals
+## Find time for your tasks
 
 #### README coming soon
