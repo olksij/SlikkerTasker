@@ -351,7 +351,7 @@ packages:
       path: "../slikker_kit"
       relative: true
     source: path
-    version: "1.0.4"
+    version: "1.0.5"
   source_span:
     dependency: transitive
     description:

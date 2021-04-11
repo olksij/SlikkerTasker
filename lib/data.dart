@@ -10,6 +10,7 @@ late Box data;
 
 late User user;
 late CollectionReference firestoreDB;
+late GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
 
 Map<String, dynamic> getDefaults() => {
       'time': DateTime.now().millisecondsSinceEpoch,
@@ -20,7 +21,7 @@ Map<String, dynamic> getDefaults() => {
 Future<bool> signIn({bool silently = true}) async {
   await Firebase.initializeApp();
   refreshStatus('Syncing..');
-  return (silently ? GoogleSignIn().signInSilently() : GoogleSignIn().signIn()).then((account) async {
+  return (silently ? googleSignIn.signInSilently() : googleSignIn.signIn()).then((account) async {
     GoogleSignInAuthentication? auth = await account?.authentication;
     return FirebaseAuth.instance
         .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth?.accessToken, idToken: auth?.idToken))
