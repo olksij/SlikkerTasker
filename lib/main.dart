@@ -17,10 +17,9 @@ void main() async {
 
   app = await Hive.openBox('.app');
   data = await Hive.openBox('data');
-  signedIn = app.get('isSignedIn');
-  if (signedIn ?? false) signIn();
+  if (app.get('isSignedIn') ?? false) signIn();
 
-  runApp(Tasker(isSignedIn: signedIn ?? false));
+  runApp(Tasker(isSignedIn: app.get('isSignedIn') ?? false));
 }
 
 class Tasker extends StatelessWidget {
@@ -41,7 +40,7 @@ class Tasker extends StatelessWidget {
     return MaterialApp(
       color: Color(0xFFF6F6FC),
       theme: ThemeData(fontFamily: 'Manrope'),
-      title: 'Tasker :)',
+      title: 'Tasker',
       initialRoute: isSignedIn! ? '/home' : '/init',
       routes: {
         '/init': (context) => FirstRun(),
