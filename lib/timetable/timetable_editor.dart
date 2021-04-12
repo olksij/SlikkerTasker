@@ -1,6 +1,6 @@
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/timetable/day_editor.dart';
-import 'package:tasker/data.dart';
+import 'package:tasker/main.dart';
 
 class TimetableEditor extends StatelessWidget {
   final Map<String, dynamic> timetable;

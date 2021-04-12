@@ -3,12 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
-import 'package:tasker/reusable/slikker.dart';
+import 'package:googleapis/calendar/v3.dart';
+import 'package:googleapis_auth/auth_io.dart';
 
 late Box app;
 late Box data;
 
 late User user;
+late CalendarApi calendarApi;
 late CollectionReference firestoreDB;
 late GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
 
@@ -21,21 +23,25 @@ Map<String, dynamic> getDefaults() => {
 Future<bool> signIn({bool silently = true}) async {
   await Firebase.initializeApp();
   refreshStatus('Syncing..');
-  return (silently ? googleSignIn.signInSilently() : googleSignIn.signIn()).then((account) async {
-    GoogleSignInAuthentication? auth = await account?.authentication;
-    return FirebaseAuth.instance
-        .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth?.accessToken, idToken: auth?.idToken))
-        .then((credential) {
-      user = credential.user!;
-      app.put('isSignedIn', true);
-      firestoreConnect();
-      return true;
-    });
-  }).catchError((a) => false);
+
+  GoogleSignInAccount? account = silently ? await googleSignIn.signInSilently() : await googleSignIn.signIn();
+  if (account == null) return false;
+
+  GoogleSignInAuthentication auth = await account.authentication;
+
+  calendarApi = CalendarApi(clientViaApiKey(auth.accessToken!));
+  print(calendarApi.runtimeType);
+
+  FirebaseAuth.instance
+      .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth.accessToken, idToken: auth.idToken))
+      .then((credential) => firestoreConnect(credential));
+
+  return true;
 }
 
-void firestoreConnect() async {
-  firestoreDB = FirebaseFirestore.instance.collection(user.uid);
+void firestoreConnect(UserCredential credential) async {
+  app.put('signedIn', credential.user!);
+  firestoreDB = FirebaseFirestore.instance.collection(credential.user!.uid);
 
   // Merge local and cloud settings
   Map<String, dynamic> tempSettings = Map<String, dynamic>.from(data.get('.settings') ?? {});
@@ -80,6 +86,3 @@ void uploadData(String type, Map<String?, dynamic> map) {
   map['time'] = DateTime.now().millisecondsSinceEpoch;
   data.put(type + map['time'].toString(), map);
 }
-
-Color accentColor(double alpha, double hue, double saturation, double value) =>
-    HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();

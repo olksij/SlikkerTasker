@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:tasker/reusable/info_card.dart';
 import 'package:tasker/reusable/slikker.dart';
 import 'package:tasker/data.dart';
+import 'package:tasker/main.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class AddItem extends StatefulWidget {

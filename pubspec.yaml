@@ -1,9 +1,9 @@
 name: tasker
-description: Tasker, tracker, diary, and a habit maker.
+description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 0.1.0-alpha.160
+version: 0.1.0-alpha.161
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -12,9 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
   
+  google_sign_in: ^5.0.1
+  googleapis: ^2.0.0
+  googleapis_auth: ^1.1.0
+
   firebase_core: ^1.0.3
   firebase_auth: ^1.0.3
-  google_sign_in: ^5.0.1
   cloud_firestore: ^1.0.4
   firebase_analytics: ^8.0.0-dev.2
 

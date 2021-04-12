@@ -1,5 +1,5 @@
 import 'package:tasker/reusable/slikker.dart';
-import 'package:tasker/data.dart';
+import 'package:tasker/main.dart';
 import 'package:tasker/timetable/timetable_builder.dart';
 import 'package:tasker/timetable/day_editor_additem.dart';
 
