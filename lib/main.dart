@@ -7,8 +7,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:tasker/data.dart';
 import 'package:tasker/home_page.dart';
 import 'package:tasker/login_page.dart';
-import 'package:tasker/timetable/projects_page.dart';
-import 'package:tasker/timetable/timetable_page.dart';
+import 'package:tasker/collections_page.dart';
 import 'package:tasker/tracker_page.dart';
 
 void main() async {
@@ -46,8 +45,7 @@ class Tasker extends StatelessWidget {
         '/init': (context) => FirstRun(),
         '/home': (context) => HomePage(),
         '/account': (context) => AccountPage(),
-        '/projects': (context) => ProjectsPage(),
-        '/timetable': (context) => TimetablePage(),
+        '/collections': (context) => CollectionsPage(),
         '/tracker': (context) => TrackerPage(),
       },
     );

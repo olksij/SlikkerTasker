@@ -40,8 +40,8 @@ Future<bool> signIn({bool silently = true}) async {
 }
 
 void firestoreConnect(UserCredential credential) async {
-  app.put('signedIn', credential.user!);
-  firestoreDB = FirebaseFirestore.instance.collection(credential.user!.uid);
+  user = credential.user!;
+  firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
   // Merge local and cloud settings
   Map<String, dynamic> tempSettings = Map<String, dynamic>.from(data.get('.settings') ?? {});

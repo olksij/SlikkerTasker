@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:tasker/data.dart';
-import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/slikker.dart';
 
 class FirstRun extends StatefulWidget {
   @override

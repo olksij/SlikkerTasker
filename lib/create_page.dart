@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:tasker/reusable/info_card.dart';
+import 'package:tasker/info_card.dart';
 
-import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/slikker.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/main.dart';
 
@@ -11,7 +11,7 @@ import 'package:tasker/main.dart';
 Map<String?, dynamic>? _toCreate;
 
 // Decides which togges will be used
-enum CreatePageType { task, project }
+enum CreatePageType { task, collection }
 
 class CreatePage extends StatefulWidget {
   final CreatePageType pageType;
@@ -33,8 +33,9 @@ class _CreatePageState extends State<CreatePage> {
   void initState() {
     super.initState();
     _toCreate = widget.map;
-    _toggesList =
-        widget.pageType == CreatePageType.task ? _TaskTogges.list(refreshPreview) : _ProjectTogges.list(refreshPreview);
+    _toggesList = widget.pageType == CreatePageType.task
+        ? _TaskTogges.list(refreshPreview)
+        : _CollectionTogges.list(refreshPreview);
   }
 
   @override
@@ -42,7 +43,7 @@ class _CreatePageState extends State<CreatePage> {
     return SlikkerScaffold(
       topButtonIcon: Icons.arrow_back,
       topButtonTitle: 'Back',
-      topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/projects'),
+      topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/collections'),
       customTitle: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
       header: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
@@ -88,7 +89,7 @@ class _CardPreviewState extends State<_CardPreview> {
       isButtonEnabled: widget.data!['title'] != null || widget.data!['description'] != null,
       onButtonTap: () {
         uploadData(widget.type, widget.data!);
-        Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/projects');
+        Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/collections');
       },
     );
   }
@@ -219,15 +220,15 @@ class _TaskTogges {
       ];
 }
 
-// Togges used in Create Page for Project creation
-class _ProjectTogges {
+// Togges used in Create Page for Collection creation
+class _CollectionTogges {
   static TextEditingController _titleValueController = TextEditingController();
 
   static List<CreateProps> list(Function callback) => [
         CreateProps(
             callback: callback,
             title: 'Title',
-            description: 'The title of your project. Required',
+            description: 'The title of your collection. Required',
             value: 'title',
             input: (Function pop) => _singleLineTextField(_titleValueController, pop)),
         CreateProps(
@@ -259,7 +260,7 @@ class _ProjectTogges {
         CreateProps(
             callback: callback,
             title: 'Goal',
-            description: 'When project should be marked as finished',
+            description: 'When collection should be marked as finished',
             value: 'goal',
             input: (a) {}),
       ];

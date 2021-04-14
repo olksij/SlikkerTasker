@@ -1,8 +1,8 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:tasker/app_icons.dart';
-import 'package:tasker/reusable/slikker.dart';
-import 'package:tasker/reusable/info_card.dart';
+import 'package:tasker/slikker.dart';
+import 'package:tasker/info_card.dart';
 import 'package:tasker/task_page.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/create_page.dart';
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(7),
                     child: SlikkerCard(
-                      onTap: () => Navigator.pushNamed(context, '/projects'),
+                      onTap: () => Navigator.pushNamed(context, '/collections'),
                       isFloating: false,
                       borderRadius: BorderRadius.circular(6),
                       child: Container(

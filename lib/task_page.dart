@@ -1,5 +1,5 @@
-import 'package:tasker/reusable/info_card.dart';
-import 'package:tasker/reusable/slikker.dart';
+import 'package:tasker/info_card.dart';
+import 'package:tasker/slikker.dart';
 import 'package:tasker/create_page.dart';
 
 class TaskPage extends StatelessWidget {
