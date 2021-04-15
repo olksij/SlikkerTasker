@@ -12,6 +12,7 @@ late Box data;
 late User user;
 late CalendarApi calendarApi;
 late CollectionReference firestoreDB;
+late String authToken;
 late GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
 
 Map<String, dynamic> getDefaults() => {
@@ -29,8 +30,7 @@ Future<bool> signIn({bool silently = true}) async {
 
   GoogleSignInAuthentication auth = await account.authentication;
 
-  calendarApi = CalendarApi(clientViaApiKey(auth.accessToken!));
-  print(calendarApi.runtimeType);
+  authToken = auth.accessToken!;
 
   FirebaseAuth.instance
       .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth.accessToken, idToken: auth.idToken))
@@ -86,3 +86,6 @@ void uploadData(String type, Map<String?, dynamic> map) {
   map['time'] = DateTime.now().millisecondsSinceEpoch;
   data.put(type + map['time'].toString(), map);
 }
+
+Future<List<CalendarListEntry>?> getCalendars() async =>
+    (await CalendarApi(clientViaApiKey(authToken)).calendarList.list()).items;

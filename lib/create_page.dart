@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:tasker/info_card.dart';
 
+import 'package:tasker/info_card.dart';
 import 'package:tasker/slikker.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/main.dart';
@@ -35,7 +35,7 @@ class _CreatePageState extends State<CreatePage> {
     _toCreate = widget.map;
     _toggesList = widget.pageType == CreatePageType.task
         ? _TaskTogges.list(refreshPreview)
-        : _CollectionTogges.list(refreshPreview);
+        : _CollectionTogges().list(refreshPreview);
   }
 
   @override
@@ -224,44 +224,78 @@ class _TaskTogges {
 class _CollectionTogges {
   static TextEditingController _titleValueController = TextEditingController();
 
-  static List<CreateProps> list(Function callback) => [
-        CreateProps(
-            callback: callback,
-            title: 'Title',
-            description: 'The title of your collection. Required',
-            value: 'title',
-            input: (Function pop) => _singleLineTextField(_titleValueController, pop)),
-        CreateProps(
-            callback: callback,
-            title: 'Relaxable?',
-            description: 'Does it suit for break time?',
-            value: 'relaxable',
-            input: (a) {}),
-        CreateProps(
-            callback: callback,
-            title: 'Color',
-            description: "Accent color for task. Used in timeline and as app's accent for about view and tasks.",
-            value: 'accent',
-            display: (value) => Container(
-                  height: 10,
-                  //width: 36,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [BoxShadow(blurRadius: 10, color: accentColor(0.3, value, 0.6, 1))],
-                      color: accentColor(1, value, 0.6, 1)),
-                ),
-            input: (a) {}),
-        CreateProps(
-            callback: callback,
-            title: 'Type',
-            description: 'You do that in free time or it should be in your timetable?',
-            value: 'type',
-            input: (a) {}),
-        CreateProps(
-            callback: callback,
-            title: 'Goal',
-            description: 'When collection should be marked as finished',
-            value: 'goal',
-            input: (a) {}),
-      ];
+  List<CreateProps> list(Function callback) {
+    return [
+      CreateProps(
+          callback: callback,
+          title: 'Title',
+          description: 'The title of your collection. Required',
+          value: 'title',
+          input: (Function pop) => _singleLineTextField(_titleValueController, pop)),
+      CreateProps(
+        callback: callback,
+        title: 'Event',
+        description: 'Choose event, during which tasks of the collection will be suggested.',
+        value: 'relaxable',
+        input: (Function pop) {
+          return SizedBox(
+            height: 52,
+            child: FutureBuilder(
+              future: getCalendars(),
+              builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
+                if (snapshot.hasData)
+                  return StaggeredGridView.countBuilder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (BuildContext context, int index) => SlikkerCard(
+                      accent: 240,
+                      child: Text(snapshot.data![index].summary ?? 'Title'),
+                    ),
+                    staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                    mainAxisSpacing: 20.0,
+                    crossAxisSpacing: 20.0,
+                  );
+                else
+                  return Text('Please wait');
+              },
+            ),
+          );
+        },
+      ),
+      CreateProps(
+          callback: callback,
+          title: 'Relaxable?',
+          description: 'Does it suit for break time?',
+          value: 'relaxable',
+          input: (a) {}),
+      CreateProps(
+          callback: callback,
+          title: 'Color',
+          description: "Accent color for collection and it's tasks.",
+          value: 'accent',
+          display: (value) => Container(
+                height: 10,
+                //width: 36,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [BoxShadow(blurRadius: 10, color: accentColor(0.3, value, 0.6, 1))],
+                    color: accentColor(1, value, 0.6, 1)),
+              ),
+          input: (a) {}),
+      CreateProps(
+          callback: callback,
+          title: 'Type',
+          description: 'You do that in free time or it should be in your timetable?',
+          value: 'type',
+          input: (a) {}),
+      CreateProps(
+          callback: callback,
+          title: 'Goal',
+          description: 'When collection should be marked as finished',
+          value: 'goal',
+          input: (a) {}),
+    ];
+  }
 }
