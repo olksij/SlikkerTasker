@@ -238,29 +238,41 @@ class _CollectionTogges {
         description: 'Choose event, during which tasks of the collection will be suggested.',
         value: 'relaxable',
         input: (Function pop) {
-          return SizedBox(
-            height: 52,
-            child: FutureBuilder(
-              future: getCalendars(),
-              builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
-                if (snapshot.hasData)
-                  return StaggeredGridView.countBuilder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (BuildContext context, int index) => SlikkerCard(
-                      accent: 240,
-                      child: Text(snapshot.data![index].summary ?? 'Title'),
+          return FutureBuilder(
+            future: getCalendars(),
+            builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
+              if (snapshot.hasData)
+                return StaggeredGridView.countBuilder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (BuildContext context, int index) => SlikkerCard(
+                    accent: HSVColor.fromColor(Color(int.parse(
+                      snapshot.data![index].backgroundColor.replaceFirst('#', ''),
+                      radix: 16,
+                    ))).hue,
+                    isFloating: false,
+                    padding: EdgeInsets.all(15),
+                    child: Text(
+                      snapshot.data![index].summary ?? 'Title',
+                      style: TextStyle(
+                        color: Color(
+                          int.parse(
+                            snapshot.data![index].backgroundColor.replaceFirst('#', ''),
+                            radix: 16,
+                          ),
+                        ).withAlpha(255),
+                      ),
                     ),
-                    staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                    mainAxisSpacing: 20.0,
-                    crossAxisSpacing: 20.0,
-                  );
-                else
-                  return Text('Please wait');
-              },
-            ),
+                  ),
+                  staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 20.0,
+                );
+              else
+                return Text('Please wait');
+            },
           );
         },
       ),
