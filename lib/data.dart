@@ -4,15 +4,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:googleapis/calendar/v3.dart';
-import 'package:googleapis_auth/auth_io.dart';
+import 'package:tasker/api_http_client.dart';
 
 late Box app;
 late Box data;
 
 late User user;
-late CalendarApi calendarApi;
 late CollectionReference firestoreDB;
-late String authToken;
+late GoogleHttpClient httpClient;
 late GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
 
 Map<String, dynamic> getDefaults() => {
@@ -30,11 +29,11 @@ Future<bool> signIn({bool silently = true}) async {
 
   GoogleSignInAuthentication auth = await account.authentication;
 
-  authToken = auth.accessToken!;
+  UserCredential credential = await FirebaseAuth.instance
+      .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth.accessToken, idToken: auth.idToken));
 
-  FirebaseAuth.instance
-      .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth.accessToken, idToken: auth.idToken))
-      .then((credential) => firestoreConnect(credential));
+  httpClient = GoogleHttpClient(await account.authHeaders);
+  firestoreConnect(credential);
 
   return true;
 }
@@ -87,5 +86,4 @@ void uploadData(String type, Map<String?, dynamic> map) {
   data.put(type + map['time'].toString(), map);
 }
 
-Future<List<CalendarListEntry>?> getCalendars() async =>
-    (await CalendarApi(clientViaApiKey(authToken)).calendarList.list()).items;
+Future<List<CalendarListEntry>?> getCalendars() async => (await CalendarApi(httpClient).calendarList.list()).items;
