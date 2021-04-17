@@ -1,5 +1,4 @@
 import 'package:tasker/slikker.dart';
-import 'package:tasker/main.dart';
 
 class InfoCard extends StatelessWidget {
   final Map<String?, dynamic>? data;

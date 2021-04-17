@@ -3,7 +3,7 @@ description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 0.1.0-alpha.165
+version: 0.1.0-alpha.166
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -19,11 +19,11 @@ dependencies:
   firebase_core: ^1.0.3
   firebase_auth: ^1.0.3
   cloud_firestore: ^1.0.4
-  firebase_analytics: ^8.0.0-dev.2
 
   flutter_staggered_grid_view: ^0.4.0-nullsafety.3
   path_provider: ^2.0.1
   hive: ^2.0.2
+  url_launcher: ^6.0.3
 
   slikker_kit: #^1.0.4
     path: "../slikker_kit/"  

@@ -61,6 +61,3 @@ class AccountPage extends StatelessWidget {
     ));
   }
 }
-
-Color accentColor(double alpha, double hue, double saturation, double value) =>
-    HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();
