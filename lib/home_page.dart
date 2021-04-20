@@ -10,100 +10,113 @@ import 'package:tasker/create_page.dart';
 class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlikkerScaffold(
-        header: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Stack(children: [
-              SlikkerTextField(
-                accent: 240,
-                prefixIcon: Icons.search,
-                hintText: 'Search everything',
-                prefixIconPadding: EdgeInsets.all(18),
-                padding: EdgeInsets.fromLTRB(18, 18, 42, 18),
-              ),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(7),
-                    child: SlikkerCard(
-                      onTap: () => Navigator.pushNamed(context, '/collections'),
-                      isFloating: false,
-                      borderRadius: BorderRadius.circular(6),
-                      child: Container(
-                          width: 46,
-                          height: 46,
-                          child: Center(
-                            child: Icon(AppIcons.timeline,
-                                color: Color(0xFF3D3D66)),
-                          )),
+      header: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: Stack(
+          children: [
+            SlikkerTextField(
+              accent: 240,
+              prefixIcon: Icons.search,
+              hintText: 'Search everything',
+              prefixIconPadding: EdgeInsets.all(18),
+              padding: EdgeInsets.fromLTRB(18, 18, 42, 18),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.all(7),
+                child: SlikkerCard(
+                  onTap: () => Navigator.pushNamed(context, '/collections'),
+                  isFloating: false,
+                  borderRadius: BorderRadius.circular(6),
+                  child: Container(
+                    width: 46,
+                    height: 46,
+                    child: Center(
+                      child: Icon(AppIcons.timeline, color: Color(0xFF3D3D66)),
                     ),
-                  ))
-            ])),
-        title: 'Tasker',
-        topButton: TopButton(
-          icon: Icons.account_circle_rounded,
-          title: 'Account',
-          action: () => Navigator.pushNamed(context, '/account'),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        floatingButton: SlikkerCard(
-          accent: 240,
-          borderRadius: BorderRadius.circular(54),
-          padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CreatePage(CreatePageType.task, {}),
-              )),
-          child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      ),
+      title: 'Tasker',
+      topButton: TopButton(
+        icon: Icons.account_circle_rounded,
+        title: 'Account',
+        action: () => Navigator.pushNamed(context, '/account'),
+      ),
+      floatingButton: SlikkerCard(
+        accent: 240,
+        borderRadius: BorderRadius.circular(54),
+        padding: EdgeInsets.fromLTRB(14, 15, 16, 15),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreatePage(CreatePageType.task, {}),
+            )),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
             Icon(
               Icons.add,
               color: Color(0xFF6666FF),
             ),
             Container(width: 7, height: 24),
-            Text('Create',
-                style: TextStyle(
-                    color: Color(0xFF6666FF),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16))
-          ]),
+            Text(
+              'Create',
+              style: TextStyle(
+                color: Color(0xFF6666FF),
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ],
         ),
-        content: Column(children: [
+      ),
+      content: Column(
+        children: [
           _ConnectivityStatus(),
           StreamBuilder(
-              stream: data.watch(),
-              initialData: null,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) return Text('Something went wrong');
-                List<Widget> cards = [];
-                Map<String, dynamic> a =
-                    Map<String, dynamic>.from(data.toMap());
-                a.forEach((key, value) {
-                  if (key[0] == 'D' || key[0] == 'T')
-                    cards.add(
-                      InfoCard(
-                        data: Map<String, dynamic>.from(value),
-                        accent: 240,
-                        onCardTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TaskPage(Map<String, dynamic>.from(value)),
-                            )),
+            stream: data.watch(),
+            initialData: null,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) return Text('Something went wrong');
+              List<Widget> cards = [];
+              Map<String, dynamic> a = Map<String, dynamic>.from(data.toMap());
+              a.forEach((key, value) {
+                if (key[0] == 'D' || key[0] == 'T')
+                  cards.add(
+                    InfoCard(
+                      data: Map<String, dynamic>.from(value),
+                      accent: 240,
+                      onCardTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TaskPage(Map<String, dynamic>.from(value)),
+                        ),
                       ),
-                    );
-                });
-                return StaggeredGridView.countBuilder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  itemCount: cards.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      cards[index],
-                  staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 20.0,
-                );
-              })
-        ]));
+                    ),
+                  );
+              });
+              return StaggeredGridView.countBuilder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                itemCount: cards.length,
+                itemBuilder: (BuildContext context, int index) => cards[index],
+                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                mainAxisSpacing: 20.0,
+                crossAxisSpacing: 20.0,
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -127,26 +140,29 @@ class __ConnectivityStatusState extends State<_ConnectivityStatus> {
   @override
   Widget build(BuildContext context) {
     return connectivity != ''
-        ? Column(children: [
-            Flex(
-              direction: Axis.horizontal,
-              children: [
-                Expanded(
-                  child: SlikkerCard(
+        ? Column(
+            children: [
+              Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                    child: SlikkerCard(
                       isFloating: false,
                       padding: EdgeInsets.all(15),
                       child: Center(
                         child: Text(
                           connectivity,
                         ),
-                      )),
-                )
-              ],
-            ),
-            Container(
-              height: 30,
-            )
-          ])
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 30,
+              )
+            ],
+          )
         : Container();
   }
 }

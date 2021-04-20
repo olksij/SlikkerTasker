@@ -26,16 +26,34 @@ class InfoCard extends StatelessWidget {
       if (data!.length > 0)
         for (var i = 0; i < data!.length; i++)
           if (!['title', 'accent', 'time'].contains(data!.keys.elementAt(i)))
-            Text(data!.values.elementAt(i) is List ? data!.values.elementAt(i).join(', ') : data!.values.elementAt(i),
-                style: TextStyle(fontSize: 14, color: accentColor(0.4, accent!, 0.6, 1))),
+            Text(
+              data!.values.elementAt(i) is List
+                  ? data!.values.elementAt(i).join(', ')
+                  : data!.values.elementAt(i),
+              style: TextStyle(
+                fontSize: 14,
+                color: accentColor(0.4, accent!, 0.6, 1),
+              ),
+            ),
     ];
     return [
-      Text(data!['title'] ?? (data!['description'] ?? 'Enter title'),
-          style: TextStyle(fontSize: 18, color: accentColor(1, accent!, 0.6, 1))),
+      Text(
+        data!['title'] ?? (data!['description'] ?? 'Enter title'),
+        style: TextStyle(
+          fontSize: 18,
+          color: accentColor(1, accent!, 0.6, 1),
+        ),
+      ),
       Container(height: 4),
       ...more,
       if (more.length == 0)
-        Text('No description', style: TextStyle(fontSize: 14, color: accentColor(0.4, accent!, 0.6, 1)))
+        Text(
+          'No description',
+          style: TextStyle(
+            fontSize: 14,
+            color: accentColor(0.4, accent!, 0.6, 1),
+          ),
+        )
     ];
   }
 
@@ -47,15 +65,20 @@ class InfoCard extends StatelessWidget {
       padding: EdgeInsets.all(13),
       accent: accent!,
       borderRadius: BorderRadius.circular(12),
-      child: Stack(alignment: Alignment.bottomRight, children: [
-        Padding(
-          padding: EdgeInsets.all(4),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: cardInfo()),
-        ),
-        if (showButton)
-          Align(
-            alignment: Alignment.bottomRight,
-            child: SlikkerCard(
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: cardInfo(),
+            ),
+          ),
+          if (showButton)
+            Align(
+              alignment: Alignment.bottomRight,
+              child: SlikkerCard(
                 borderRadius: BorderRadius.circular(8),
                 accent: accent ?? 240,
                 isFloating: false,
@@ -66,13 +89,17 @@ class InfoCard extends StatelessWidget {
                   child: Center(
                     child: Icon(
                       buttonIcon,
-                      color: isButtonEnabled ? accentColor(1, accent!, 0.6, 1) : accentColor(0.5, accent!, 0.3, 0.5),
+                      color: isButtonEnabled
+                          ? accentColor(1, accent!, 0.6, 1)
+                          : accentColor(0.5, accent!, 0.3, 0.5),
                       size: buttonIconSize,
                     ),
                   ),
-                )),
-          )
-      ]),
+                ),
+              ),
+            )
+        ],
+      ),
     );
   }
 }

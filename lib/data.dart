@@ -12,7 +12,8 @@ late Box data;
 late User user;
 late CollectionReference firestoreDB;
 late GoogleHttpClient httpClient;
-late GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
+late GoogleSignIn googleSignIn =
+    GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
 
 Map<String, dynamic> getDefaults() => {
       'time': DateTime.now().millisecondsSinceEpoch,
@@ -24,13 +25,16 @@ Future<bool> signIn({bool silently = true}) async {
   await Firebase.initializeApp();
   refreshStatus('Syncing..');
 
-  GoogleSignInAccount? account = silently ? await googleSignIn.signInSilently() : await googleSignIn.signIn();
+  GoogleSignInAccount? account = silently
+      ? await googleSignIn.signInSilently()
+      : await googleSignIn.signIn();
   if (account == null) return false;
 
   GoogleSignInAuthentication auth = await account.authentication;
 
-  UserCredential credential = await FirebaseAuth.instance
-      .signInWithCredential(GoogleAuthProvider.credential(accessToken: auth.accessToken, idToken: auth.idToken));
+  UserCredential credential = await FirebaseAuth.instance.signInWithCredential(
+      GoogleAuthProvider.credential(
+          accessToken: auth.accessToken, idToken: auth.idToken));
 
   httpClient = GoogleHttpClient(await account.authHeaders);
   firestoreConnect(credential);
@@ -43,14 +47,18 @@ void firestoreConnect(UserCredential credential) async {
   firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
   // Merge local and cloud settings
-  Map<String, dynamic> tempSettings = Map<String, dynamic>.from(data.get('.settings') ?? {});
-  getDefaults().forEach((key, value) => tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
+  Map<String, dynamic> tempSettings =
+      Map<String, dynamic>.from(data.get('.settings') ?? {});
+  getDefaults().forEach((key, value) =>
+      tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
   await data.clear();
 
   // Connect firebase listener
-  firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => event.docChanges
+  firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => event
+          .docChanges
           .where((docChange) =>
-              (data.get(docChange.doc.id)?['time'] ?? 0) < docChange.doc.data()?['time'] ||
+              (data.get(docChange.doc.id)?['time'] ?? 0) <
+                  docChange.doc.data()?['time'] ||
               docChange.type == DocumentChangeType.removed)
           .forEach((change) {
         if (change.type == DocumentChangeType.removed)
@@ -86,4 +94,5 @@ void uploadData(String type, Map<String?, dynamic> map) {
   data.put(type + map['time'].toString(), map);
 }
 
-Future<List<CalendarListEntry>?> getCalendars() async => (await CalendarApi(httpClient).calendarList.list()).items;
+Future<List<CalendarListEntry>?> getCalendars() async =>
+    (await CalendarApi(httpClient).calendarList.list()).items;

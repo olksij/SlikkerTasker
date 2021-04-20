@@ -163,15 +163,21 @@ class _CreatePropsState extends State<CreateProps> {
         children: [
           widget.display != null && _toCreate![widget.value] != null
               ? widget.display!(_toCreate![widget.value])
-              : Text(_toCreate![widget.value] ?? widget.title!,
+              : Text(
+                  _toCreate![widget.value] ?? widget.title!,
                   style: TextStyle(
-                      fontSize: 17,
-                      color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66))),
+                    fontSize: 17,
+                    color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66),
+                  ),
+                ),
           Container(height: 8),
-          Text(data ? widget.title! : widget.description!,
-              style: TextStyle(
-                  fontSize: 15,
-                  color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
+          Text(
+            data ? widget.title! : widget.description!,
+            style: TextStyle(
+              fontSize: 15,
+              color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66),
+            ),
+          ),
         ],
       ),
       borderRadius: BorderRadius.circular(12),
@@ -184,25 +190,34 @@ class _CreatePropsState extends State<CreateProps> {
 
 // Accept button in bottomModalSheet
 Widget _acceptButton(Function onTap) => SlikkerCard(
-    onTap: onTap,
-    child: SizedBox(
+      onTap: onTap,
+      child: SizedBox(
         height: 52,
         width: 52,
-        child: Center(child: Text('👍', style: TextStyle(fontSize: 18)))));
+        child: Center(
+          child: Text('👍', style: TextStyle(fontSize: 18)),
+        ),
+      ),
+    );
 
-Widget _singleLineTextField(TextEditingController controller, Function pop) =>
-    SizedBox(
-        height: 52,
-        child: Row(children: [
-          Expanded(
-              child: SlikkerTextField(
+Widget _singleLineTextField(TextEditingController controller, Function pop) {
+  return SizedBox(
+    height: 52,
+    child: Row(
+      children: [
+        Expanded(
+          child: SlikkerTextField(
             accent: 240,
             controller: controller,
             hintText: 'Type something',
-          )),
-          Container(width: 20),
-          _acceptButton(() => pop(controller.value.text))
-        ]));
+          ),
+        ),
+        Container(width: 20),
+        _acceptButton(() => pop(controller.value.text))
+      ],
+    ),
+  );
+}
 
 // Togges used in Create Page for Task creation
 class _TaskTogges {
@@ -212,29 +227,32 @@ class _TaskTogges {
 
   static List<CreateProps> list(Function callback) => [
         CreateProps(
-            callback: callback,
-            title: 'Title',
-            description: 'The title of your task.',
-            value: 'title',
-            input: (Function pop) =>
-                _singleLineTextField(_titleValueController, pop)),
+          callback: callback,
+          title: 'Title',
+          description: 'The title of your task.',
+          value: 'title',
+          input: (Function pop) =>
+              _singleLineTextField(_titleValueController, pop),
+        ),
         CreateProps(
-            callback: callback,
-            title: 'Description',
-            description: 'The description of your task.',
-            value: 'description',
-            input: (Function pop) => Column(children: [
-                  SlikkerTextField(
-                    accent: 240,
-                    controller: _descriptionValueController,
-                    hintText: 'Type something here :)',
-                    maxLines: 6,
-                    minLines: 3,
-                  ),
-                  Container(height: 20),
-                  _acceptButton(
-                      () => pop(_descriptionValueController.value.text))
-                ])),
+          callback: callback,
+          title: 'Description',
+          description: 'The description of your task.',
+          value: 'description',
+          input: (Function pop) => Column(
+            children: [
+              SlikkerTextField(
+                accent: 240,
+                controller: _descriptionValueController,
+                hintText: 'Type something here :)',
+                maxLines: 6,
+                minLines: 3,
+              ),
+              Container(height: 20),
+              _acceptButton(() => pop(_descriptionValueController.value.text)),
+            ],
+          ),
+        ),
         CreateProps(
           title: 'Time out',
           description: 'Time till which task should be done.',
@@ -245,9 +263,10 @@ class _TaskTogges {
           ),
         ),
         CreateProps(
-            title: 'Category',
-            description: 'To which category is this task relative?',
-            value: 'category'),
+          title: 'Category',
+          description: 'To which category is this task relative?',
+          value: 'category',
+        ),
       ];
 }
 
@@ -258,12 +277,13 @@ class _CollectionTogges {
   List<CreateProps> list(Function callback) {
     return [
       CreateProps(
-          callback: callback,
-          title: 'Title',
-          description: 'The title of your collection. Required',
-          value: 'title',
-          input: (Function pop) =>
-              _singleLineTextField(_titleValueController, pop)),
+        callback: callback,
+        title: 'Title',
+        description: 'The title of your collection. Required',
+        value: 'title',
+        input: (Function pop) =>
+            _singleLineTextField(_titleValueController, pop),
+      ),
       CreateProps(
         callback: callback,
         title: 'Event',
@@ -312,42 +332,48 @@ class _CollectionTogges {
         },
       ),
       CreateProps(
-          callback: callback,
-          title: 'Relaxable?',
-          description: 'Does it suit for break time?',
-          value: 'relaxable',
-          input: (a) {}),
+        callback: callback,
+        title: 'Relaxable?',
+        description: 'Does it suit for break time?',
+        value: 'relaxable',
+        input: (a) {},
+      ),
       CreateProps(
-          callback: callback,
-          title: 'Color',
-          description: "Accent color for collection and it's tasks.",
-          value: 'accent',
-          display: (value) => Container(
-                height: 10,
-                //width: 36,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 10,
-                          color: accentColor(0.3, value, 0.6, 1))
-                    ],
-                    color: accentColor(1, value, 0.6, 1)),
+        callback: callback,
+        title: 'Color',
+        description: "Accent color for collection and it's tasks.",
+        value: 'accent',
+        display: (value) => Container(
+          height: 10,
+          //width: 36,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                color: accentColor(0.3, value, 0.6, 1),
               ),
-          input: (a) {}),
+            ],
+            color: accentColor(1, value, 0.6, 1),
+          ),
+        ),
+        input: (a) {},
+      ),
       CreateProps(
-          callback: callback,
-          title: 'Type',
-          description:
-              'You do that in free time or it should be in your timetable?',
-          value: 'type',
-          input: (a) {}),
+        callback: callback,
+        title: 'Type',
+        description:
+            'You do that in free time or it should be in your timetable?',
+        value: 'type',
+        input: (a) {},
+      ),
       CreateProps(
-          callback: callback,
-          title: 'Goal',
-          description: 'When collection should be marked as finished',
-          value: 'goal',
-          input: (a) {}),
+        callback: callback,
+        title: 'Goal',
+        description: 'When collection should be marked as finished',
+        value: 'goal',
+        input: (a) {},
+      ),
     ];
   }
 }
