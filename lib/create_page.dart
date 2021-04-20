@@ -40,14 +40,18 @@ class _CreatePageState extends State<CreatePage> {
   @override
   Widget build(BuildContext context) {
     return SlikkerScaffold(
-      topButtonIcon: Icons.arrow_back,
-      topButtonTitle: 'Back',
-      topButtonAction: () => Navigator.pushNamed(context, widget.pageType.index == 0 ? '/home' : '/collections'),
-      customTitle: Text('Create', style: TextStyle(fontSize: 36.0), textAlign: TextAlign.center),
+      topButton: TopButton(
+        icon: Icons.arrow_back,
+        title: 'Back',
+        action: () => Navigator.pushNamed(
+            context, widget.pageType.index == 0 ? '/home' : '/collections'),
+      ),
+      title: 'Create',
       header: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
-          child: _CardPreview(['T', 'P'][widget.pageType.index], _toCreate,
-              (Function toRefresh) => refreshPreviewFunction = toRefresh)),
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: _CardPreview(['T', 'P'][widget.pageType.index], _toCreate,
+            (Function toRefresh) => refreshPreviewFunction = toRefresh),
+      ),
       content: StaggeredGridView.countBuilder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
@@ -85,10 +89,12 @@ class _CardPreviewState extends State<_CardPreview> {
       data: _toCreate,
       buttonIcon: Icons.save_rounded,
       accent: 240,
-      isButtonEnabled: widget.data!['title'] != null || widget.data!['description'] != null,
+      isButtonEnabled:
+          widget.data!['title'] != null || widget.data!['description'] != null,
       onButtonTap: () {
         uploadData(widget.type, widget.data!);
-        Navigator.pushNamed(context, widget.type == 'T' ? '/home' : '/collections');
+        Navigator.pushNamed(
+            context, widget.type == 'T' ? '/home' : '/collections');
       },
     );
   }
@@ -102,7 +108,14 @@ class CreateProps extends StatefulWidget {
   final Function? callback;
   final Function? display;
 
-  CreateProps({this.title, this.value, this.description, this.input, this.callback, this.display});
+  CreateProps({
+    this.title,
+    this.value,
+    this.description,
+    this.input,
+    this.callback,
+    this.display,
+  });
   @override
   _CreatePropsState createState() => _CreatePropsState();
 }
@@ -117,24 +130,28 @@ class _CreatePropsState extends State<CreateProps> {
   }
 
   enterValue() => showModalBottomSheet(
-      context: context,
-      isDismissible: true,
-      barrierColor: Color(0x553D3D66),
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
+        context: context,
+        isDismissible: true,
+        barrierColor: Color(0x553D3D66),
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Container(
             decoration: BoxDecoration(
-                color: Color(0xFFF6F6FC),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                boxShadow: [BoxShadow(color: Color(0x301e1e33), blurRadius: 35)]),
-            padding: EdgeInsets.fromLTRB(25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
+              color: Color(0xFFF6F6FC),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              boxShadow: [BoxShadow(color: Color(0x301e1e33), blurRadius: 35)],
+            ),
+            padding: EdgeInsets.fromLTRB(
+                25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
             child: widget.input!((newData) {
               _toCreate![widget.value] = newData;
               setState(() => data = newData != null);
               widget.callback!();
               Navigator.pop(context);
-            }));
-      });
+            }),
+          );
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -147,10 +164,14 @@ class _CreatePropsState extends State<CreateProps> {
           widget.display != null && _toCreate![widget.value] != null
               ? widget.display!(_toCreate![widget.value])
               : Text(_toCreate![widget.value] ?? widget.title!,
-                  style: TextStyle(fontSize: 17, color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66))),
+                  style: TextStyle(
+                      fontSize: 17,
+                      color: data ? Color(0xFF6666FF) : Color(0xFF3D3D66))),
           Container(height: 8),
           Text(data ? widget.title! : widget.description!,
-              style: TextStyle(fontSize: 15, color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
+              style: TextStyle(
+                  fontSize: 15,
+                  color: data ? Color(0x4C6666FF) : Color(0x4C3D3D66))),
         ],
       ),
       borderRadius: BorderRadius.circular(12),
@@ -164,25 +185,30 @@ class _CreatePropsState extends State<CreateProps> {
 // Accept button in bottomModalSheet
 Widget _acceptButton(Function onTap) => SlikkerCard(
     onTap: onTap,
-    child: SizedBox(height: 52, width: 52, child: Center(child: Text('👍', style: TextStyle(fontSize: 18)))));
+    child: SizedBox(
+        height: 52,
+        width: 52,
+        child: Center(child: Text('👍', style: TextStyle(fontSize: 18)))));
 
-Widget _singleLineTextField(TextEditingController controller, Function pop) => SizedBox(
-    height: 52,
-    child: Row(children: [
-      Expanded(
-          child: SlikkerTextField(
-        accent: 240,
-        controller: controller,
-        hintText: 'Type something',
-      )),
-      Container(width: 20),
-      _acceptButton(() => pop(controller.value.text))
-    ]));
+Widget _singleLineTextField(TextEditingController controller, Function pop) =>
+    SizedBox(
+        height: 52,
+        child: Row(children: [
+          Expanded(
+              child: SlikkerTextField(
+            accent: 240,
+            controller: controller,
+            hintText: 'Type something',
+          )),
+          Container(width: 20),
+          _acceptButton(() => pop(controller.value.text))
+        ]));
 
 // Togges used in Create Page for Task creation
 class _TaskTogges {
   static TextEditingController _titleValueController = TextEditingController();
-  static TextEditingController _descriptionValueController = TextEditingController();
+  static TextEditingController _descriptionValueController =
+      TextEditingController();
 
   static List<CreateProps> list(Function callback) => [
         CreateProps(
@@ -190,7 +216,8 @@ class _TaskTogges {
             title: 'Title',
             description: 'The title of your task.',
             value: 'title',
-            input: (Function pop) => _singleLineTextField(_titleValueController, pop)),
+            input: (Function pop) =>
+                _singleLineTextField(_titleValueController, pop)),
         CreateProps(
             callback: callback,
             title: 'Description',
@@ -205,17 +232,22 @@ class _TaskTogges {
                     minLines: 3,
                   ),
                   Container(height: 20),
-                  _acceptButton(() => pop(_descriptionValueController.value.text))
+                  _acceptButton(
+                      () => pop(_descriptionValueController.value.text))
                 ])),
         CreateProps(
           title: 'Time out',
           description: 'Time till which task should be done.',
           value: 'ends',
-          input: (BuildContext context, Function refresh) => CupertinoDatePicker(
+          input: (BuildContext context, Function refresh) =>
+              CupertinoDatePicker(
             onDateTimeChanged: (a) => print(a),
           ),
         ),
-        CreateProps(title: 'Category', description: 'To which category is this task relative?', value: 'category'),
+        CreateProps(
+            title: 'Category',
+            description: 'To which category is this task relative?',
+            value: 'category'),
       ];
 }
 
@@ -230,11 +262,13 @@ class _CollectionTogges {
           title: 'Title',
           description: 'The title of your collection. Required',
           value: 'title',
-          input: (Function pop) => _singleLineTextField(_titleValueController, pop)),
+          input: (Function pop) =>
+              _singleLineTextField(_titleValueController, pop)),
       CreateProps(
         callback: callback,
         title: 'Event',
-        description: 'Choose event, during which tasks of the collection will be suggested.',
+        description:
+            'Choose event, during which tasks of the collection will be suggested.',
         value: 'relaxable',
         input: (Function pop) {
           return FutureBuilder(
@@ -248,7 +282,8 @@ class _CollectionTogges {
                   itemCount: snapshot.data?.length,
                   itemBuilder: (BuildContext context, int index) => SlikkerCard(
                     accent: HSVColor.fromColor(Color(int.parse(
-                      snapshot.data![index].backgroundColor.replaceFirst('#', ''),
+                      snapshot.data![index].backgroundColor
+                          .replaceFirst('#', ''),
                       radix: 16,
                     ))).hue,
                     isFloating: false,
@@ -258,7 +293,8 @@ class _CollectionTogges {
                       style: TextStyle(
                         color: Color(
                           int.parse(
-                            snapshot.data![index].backgroundColor.replaceFirst('#', ''),
+                            snapshot.data![index].backgroundColor
+                                .replaceFirst('#', ''),
                             radix: 16,
                           ),
                         ).withAlpha(255),
@@ -291,14 +327,19 @@ class _CollectionTogges {
                 //width: 36,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    boxShadow: [BoxShadow(blurRadius: 10, color: accentColor(0.3, value, 0.6, 1))],
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 10,
+                          color: accentColor(0.3, value, 0.6, 1))
+                    ],
                     color: accentColor(1, value, 0.6, 1)),
               ),
           input: (a) {}),
       CreateProps(
           callback: callback,
           title: 'Type',
-          description: 'You do that in free time or it should be in your timetable?',
+          description:
+              'You do that in free time or it should be in your timetable?',
           value: 'type',
           input: (a) {}),
       CreateProps(

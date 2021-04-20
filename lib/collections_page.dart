@@ -7,14 +7,13 @@ class CollectionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SlikkerScaffold(
-      topButtonTitle: 'Back',
-      topButtonIcon: Icons.arrow_back,
-      topButtonAction: () => Navigator.pushNamed(context, '/home'),
-      customTitle: Text(
-        'Collections',
-        style: TextStyle(fontSize: 36.0),
-        textAlign: TextAlign.center,
+      topButton: TopButton(
+        title: 'Back',
+        icon: Icons.arrow_back,
+        action: () => Navigator.pushNamed(context, '/home'),
       ),
+      title: 'Collections',
+      header: Container(),
       floatingButton: SlikkerCard(
         accent: 240,
         borderRadius: BorderRadius.circular(54),
@@ -30,7 +29,11 @@ class CollectionsPage extends StatelessWidget {
             color: Color(0xFF6666FF),
           ),
           Container(width: 7, height: 24),
-          Text('New collection', style: TextStyle(color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16))
+          Text('New collection',
+              style: TextStyle(
+                  color: Color(0xFF6666FF),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16))
         ]),
       ),
       content: StreamBuilder(
@@ -50,7 +53,8 @@ class CollectionsPage extends StatelessWidget {
                     onCardTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CreatePage(CreatePageType.collection, value),
+                          builder: (context) =>
+                              CreatePage(CreatePageType.collection, value),
                         )),
                     showButton: false,
                     accent: value['accent'] ?? 240,

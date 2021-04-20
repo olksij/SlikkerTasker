@@ -9,11 +9,7 @@ class TaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SlikkerScaffold(
-      customTitle: Text(
-        'Task',
-        style: TextStyle(fontSize: 36.0),
-        textAlign: TextAlign.center,
-      ),
+      title: 'Task',
       header: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: InfoCard(
@@ -21,13 +17,16 @@ class TaskPage extends StatelessWidget {
             onCardTap: () {},
             accent: 240,
           )),
-      topButtonIcon: Icons.arrow_back,
-      topButtonTitle: 'Back',
-      topButtonAction: () => Navigator.pushNamed(context, '/home'),
+      topButton: TopButton(
+        icon: Icons.arrow_back,
+        title: 'Back',
+        action: () => Navigator.pushNamed(context, '/home'),
+      ),
       content: SlikkerCard(
         isFloating: false,
         padding: EdgeInsets.all(15),
-        child: Text(task['description'] ?? "Hh", style: TextStyle(fontSize: 15, color: Color(0xAA3D3D66))),
+        child: Text(task['description'] ?? "Hh",
+            style: TextStyle(fontSize: 15, color: Color(0xAA3D3D66))),
       ),
       floatingButton: SlikkerCard(
         accent: 240,

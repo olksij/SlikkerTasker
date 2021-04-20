@@ -4,15 +4,14 @@ class TrackerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SlikkerScaffold(
-        topButtonTitle: 'Back',
-        topButtonIcon: Icons.arrow_back,
-        topButtonAction: () => Navigator.pushNamed(context, '/home'),
-        customTitle: Text(
-          'proj name',
-          style: TextStyle(fontSize: 36.0),
-          textAlign: TextAlign.center,
+        topButton: TopButton(
+          title: 'Back',
+          icon: Icons.arrow_back,
+          action: () => Navigator.pushNamed(context, '/home'),
         ),
-        floatingButton: SlikkerCard(padding: EdgeInsets.all(17), child: Text('start')),
+        title: '[proj name]',
+        floatingButton:
+            SlikkerCard(padding: EdgeInsets.all(17), child: Text('start')),
         content: Container(),
         header: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),

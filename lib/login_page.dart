@@ -23,6 +23,7 @@ class _FirstRunState extends State<FirstRun> {
   Widget build(BuildContext context) {
     return SlikkerScaffold(
       title: 'Tasker',
+      topButton: TopButton.hidden(),
       header: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: SlikkerCard(
@@ -41,7 +42,8 @@ class _FirstRunState extends State<FirstRun> {
                   children: [
                     TextSpan(
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => launch('https://github.com/AlexBesida/SlikkerTasker/blob/master/PRIVACY.md'),
+                        ..onTap = () => launch(
+                            'https://github.com/AlexBesida/SlikkerTasker/blob/master/PRIVACY.md'),
                       text: 'Privacy Policy',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -61,7 +63,8 @@ class _FirstRunState extends State<FirstRun> {
                     ),
                     TextSpan(
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => launch('https://github.com/AlexBesida/SlikkerTasker/blob/master/TERMS.md'),
+                        ..onTap = () => launch(
+                            'https://github.com/AlexBesida/SlikkerTasker/blob/master/TERMS.md'),
                       text: 'Terms & Conditions',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -85,6 +88,7 @@ class _FirstRunState extends State<FirstRun> {
           isFloating: false,
         ),
       ),
+      content: Container(),
       floatingButton: SlikkerCard(
         padding: EdgeInsets.all(15),
         accent: 240,

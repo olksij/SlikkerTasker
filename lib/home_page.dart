@@ -32,19 +32,18 @@ class HomePage extends StatelessWidget {
                           width: 46,
                           height: 46,
                           child: Center(
-                            child: Icon(AppIcons.timeline, color: Color(0xFF3D3D66)),
+                            child: Icon(AppIcons.timeline,
+                                color: Color(0xFF3D3D66)),
                           )),
                     ),
                   ))
             ])),
-        customTitle: Text(
-          'Tasker',
-          style: TextStyle(fontSize: 36.0),
-          textAlign: TextAlign.center,
+        title: 'Tasker',
+        topButton: TopButton(
+          icon: Icons.account_circle_rounded,
+          title: 'Account',
+          action: () => Navigator.pushNamed(context, '/account'),
         ),
-        topButtonIcon: Icons.account_circle_rounded,
-        topButtonTitle: 'Account',
-        topButtonAction: () => Navigator.pushNamed(context, '/account'),
         floatingButton: SlikkerCard(
           accent: 240,
           borderRadius: BorderRadius.circular(54),
@@ -60,7 +59,11 @@ class HomePage extends StatelessWidget {
               color: Color(0xFF6666FF),
             ),
             Container(width: 7, height: 24),
-            Text('Create', style: TextStyle(color: Color(0xFF6666FF), fontWeight: FontWeight.w600, fontSize: 16))
+            Text('Create',
+                style: TextStyle(
+                    color: Color(0xFF6666FF),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16))
           ]),
         ),
         content: Column(children: [
@@ -71,7 +74,8 @@ class HomePage extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasError) return Text('Something went wrong');
                 List<Widget> cards = [];
-                Map<String, dynamic> a = Map<String, dynamic>.from(data.toMap());
+                Map<String, dynamic> a =
+                    Map<String, dynamic>.from(data.toMap());
                 a.forEach((key, value) {
                   if (key[0] == 'D' || key[0] == 'T')
                     cards.add(
@@ -81,7 +85,8 @@ class HomePage extends StatelessWidget {
                         onCardTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TaskPage(Map<String, dynamic>.from(value)),
+                              builder: (context) =>
+                                  TaskPage(Map<String, dynamic>.from(value)),
                             )),
                       ),
                     );
@@ -91,7 +96,8 @@ class HomePage extends StatelessWidget {
                   physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   itemCount: cards.length,
-                  itemBuilder: (BuildContext context, int index) => cards[index],
+                  itemBuilder: (BuildContext context, int index) =>
+                      cards[index],
                   staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
                   mainAxisSpacing: 20.0,
                   crossAxisSpacing: 20.0,

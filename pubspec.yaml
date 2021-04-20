@@ -3,7 +3,7 @@ description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 0.1.0-alpha.166
+version: 0.1.0-alpha.167
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -25,7 +25,7 @@ dependencies:
   hive: ^2.0.2
   url_launcher: ^6.0.3
 
-  slikker_kit: #^1.0.4
+  slikker_kit: #^1.0.7
     path: "../slikker_kit/"  
 
 dev_dependencies:
