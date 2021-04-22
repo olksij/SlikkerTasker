@@ -111,8 +111,7 @@ class _CreatePagePropsState extends State<CreatePageProps> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               boxShadow: [BoxShadow(color: Color(0x301e1e33), blurRadius: 35)],
             ),
-            padding: EdgeInsets.fromLTRB(
-                25, 25, 25, 25 + MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.fromLTRB(25, 25, 25, 25),
             child: widget.input(processData),
           );
         },
