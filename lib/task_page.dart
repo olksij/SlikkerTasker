@@ -1,6 +1,6 @@
 import 'package:tasker/info_card.dart';
 import 'package:tasker/slikker.dart';
-import 'package:tasker/create_page.dart';
+import 'package:tasker/create/page.dart';
 
 class TaskPage extends StatelessWidget {
   final Map<String, dynamic> task;

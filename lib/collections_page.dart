@@ -1,7 +1,7 @@
 import 'package:tasker/slikker.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/info_card.dart';
-import 'package:tasker/create_page.dart';
+import 'package:tasker/create/page.dart';
 
 class CollectionsPage extends StatelessWidget {
   @override
