@@ -69,20 +69,6 @@ CreateType collection = CreateType(
       title: 'Color',
       description: "Accent color for collection and it's tasks.",
       value: 'accent',
-      display: (value) => Container(
-        height: 10,
-        //width: 36,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              color: accentColor(0.3, value, 0.6, 1),
-            ),
-          ],
-          color: accentColor(1, value, 0.6, 1),
-        ),
-      ),
       input: (a) {},
     ),
     CreatePageProps(

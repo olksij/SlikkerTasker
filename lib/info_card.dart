@@ -10,16 +10,17 @@ class InfoCard extends StatelessWidget {
   final bool showButton;
   final double? accent;
   final bool isFloating;
-  const InfoCard(
-      {required this.data,
-      this.accent,
-      this.onCardTap,
-      this.onButtonTap,
-      this.buttonIcon = Icons.play_arrow_rounded,
-      this.buttonIconSize = 32,
-      this.isButtonEnabled = true,
-      this.showButton = true,
-      this.isFloating = true});
+  const InfoCard({
+    required this.data,
+    this.accent,
+    this.onCardTap,
+    this.onButtonTap,
+    this.buttonIcon = Icons.play_arrow_rounded,
+    this.buttonIconSize = 32,
+    this.isButtonEnabled = true,
+    this.showButton = true,
+    this.isFloating = true,
+  });
 
   List<Widget> cardInfo() {
     List<Widget> more = [

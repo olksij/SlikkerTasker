@@ -27,7 +27,7 @@ CreateType task = CreateType(
             minLines: 3,
           ),
           Container(height: 20),
-          acceptButton(() => pop('hey')),
+          CreatePageAcceptButton(() => pop('hey')),
         ],
       ),
     ),
