@@ -65,7 +65,10 @@ class _CreatePageState extends State<CreatePage> {
         physics: NeverScrollableScrollPhysics(),
         crossAxisCount: 2,
         itemCount: data.props.length,
-        itemBuilder: (BuildContext context, int index) => data.props[index],
+        itemBuilder: (BuildContext context, int index) => CreatePagePropsWidget(
+          config: data.props[index],
+          callback: () {},
+        ),
         staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
         mainAxisSpacing: 20.0,
         crossAxisSpacing: 20.0,

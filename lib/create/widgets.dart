@@ -55,9 +55,9 @@ class CreatePageTextField extends StatelessWidget {
   }
 }
 
-// --- PROPS WIDGET --- ///
+// --- PROPS CONFIG --- ///
 
-class CreatePageProps extends StatefulWidget {
+class CreatePageProps {
   final String title;
   final String description;
   final String value;
@@ -65,26 +65,36 @@ class CreatePageProps extends StatefulWidget {
 
   CreatePageProps({
     required this.title,
-    required this.value,
     required this.description,
+    required this.value,
     required this.input,
   });
-
-  @override
-  _CreatePagePropsState createState() => _CreatePagePropsState();
 }
 
-class _CreatePagePropsState extends State<CreatePageProps> {
+// --- PROPS WIDGET --- ///
+
+class CreatePagePropsWidget extends StatefulWidget {
+  final CreatePageProps config;
+  final Function callback;
+
+  CreatePagePropsWidget({required this.config, required this.callback});
+
+  @override
+  _CreatePagePropsWidgetState createState() => _CreatePagePropsWidgetState();
+}
+
+class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
   late bool isEmpty;
+  late Function callback;
 
   @override
   void initState() {
     super.initState();
-    isEmpty = _toCreate[widget.value] == null;
+    isEmpty = _toCreate[widget.config.value] == null;
   }
 
   processData(newData) {
-    _toCreate[widget.value] = newData;
+    _toCreate[widget.config.value] = newData;
     setState(() {});
     Navigator.pop(context);
   }
@@ -93,8 +103,8 @@ class _CreatePagePropsState extends State<CreatePageProps> {
   Widget build(BuildContext context) {
     return InfoCard(
       data: {
-        'title': isEmpty ? widget.title : "h",
-        'description': isEmpty ? widget.description : widget.title
+        'title': isEmpty ? widget.config.title : "h",
+        'description': isEmpty ? widget.config.description : widget.config.title
       },
       accent: 240,
       isFloating: !isEmpty,
@@ -112,7 +122,7 @@ class _CreatePagePropsState extends State<CreatePageProps> {
               boxShadow: [BoxShadow(color: Color(0x301e1e33), blurRadius: 35)],
             ),
             padding: EdgeInsets.fromLTRB(25, 25, 25, 25),
-            child: widget.input(processData),
+            child: widget.config.input(processData),
           );
         },
       ),
