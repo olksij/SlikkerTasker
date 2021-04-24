@@ -3,33 +3,42 @@ import 'package:tasker/data.dart';
 import 'package:flutter/material.dart';
 
 class CardPreview extends StatefulWidget {
-  final String type;
-  final Map<String?, dynamic>? data;
+  final Map<String, dynamic> initData;
   final Function callback;
-  const CardPreview(this.type, this.data, this.callback);
+  final String backPath;
+
+  const CardPreview({
+    required this.initData,
+    required this.callback,
+    required this.backPath,
+  });
+
   @override
   _CardPreviewState createState() => _CardPreviewState();
 }
 
 class _CardPreviewState extends State<CardPreview> {
+  late Map<String, dynamic> data;
+
   @override
   void initState() {
     super.initState();
-    widget.callback(() => setState(() {}));
+    data = widget.initData;
+    widget.callback((Map<String, dynamic> newData) {
+      this.setState(() => this.data = newData);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return InfoCard(
-      data: Map(),
+      data: data,
       buttonIcon: Icons.save_rounded,
       accent: 240,
-      isButtonEnabled:
-          widget.data!['title'] != null || widget.data!['description'] != null,
+      isButtonEnabled: data['title'] != null || data['description'] != null,
       onButtonTap: () {
-        uploadData(widget.type, widget.data!);
-        Navigator.pushNamed(
-            context, widget.type == 'T' ? '/home' : '/collections');
+        uploadData('T', data);
+        Navigator.pushNamed(context, widget.backPath);
       },
     );
   }

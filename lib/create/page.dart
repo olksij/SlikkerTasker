@@ -3,44 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:tasker/create/collection.dart';
-import 'package:tasker/create/task.dart';
 import 'package:tasker/create/header.dart';
+import 'package:tasker/create/task.dart';
+import 'package:tasker/create/types.dart';
 import 'package:tasker/create/widgets.dart';
 
 enum CreatePageType { task, collection }
 
-class CreateType {
-  final String backPath;
-  final List<CreatePageProps> props;
-
-  CreateType({
-    required this.backPath,
-    required this.props,
-  });
-}
-
 class CreatePage extends StatefulWidget {
   final CreatePageType pageType;
-  final Map<String, dynamic> map;
+  final CreateType props;
+  final Map<String, dynamic> data;
 
-  const CreatePage(this.pageType, this.map);
+  CreatePage(this.pageType, this.data)
+      : props = pageType == CreatePageType.task ? task : collection;
 
   @override
   _CreatePageState createState() => _CreatePageState();
 }
 
 class _CreatePageState extends State<CreatePage> {
-  late CreateType data;
-  late Function refreshPreviewFunction;
-
-  void refreshPreview() => refreshPreviewFunction();
+  late Function refresh;
 
   @override
   void initState() {
     super.initState();
-    //_toCreate = widget.map;
-    if (widget.pageType == CreatePageType.task) data = task;
-    if (widget.pageType == CreatePageType.collection) data = collection;
+    createTemp = widget.data;
   }
 
   @override
@@ -49,25 +37,25 @@ class _CreatePageState extends State<CreatePage> {
       topButton: TopButton(
         icon: Icons.arrow_back,
         title: 'Back',
-        action: () => Navigator.pushNamed(context, data.backPath),
+        action: () => Navigator.pushNamed(context, widget.props.backPath),
       ),
       title: 'Create',
       header: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: CardPreview(
-          'T',
-          Map(),
-          (Function toRefresh) => refreshPreviewFunction = toRefresh,
+          initData: widget.data,
+          backPath: widget.props.backPath,
+          callback: (Function function) => refresh = function,
         ),
       ),
       content: StaggeredGridView.countBuilder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         crossAxisCount: 2,
-        itemCount: data.props.length,
+        itemCount: widget.props.props.length,
         itemBuilder: (BuildContext context, int index) => CreatePagePropsWidget(
-          config: data.props[index],
-          callback: () {},
+          config: widget.props.props[index],
+          callback: refresh,
         ),
         staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
         mainAxisSpacing: 20.0,

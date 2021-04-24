@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tasker/info_card.dart';
 import 'package:tasker/slikker.dart';
+import 'package:tasker/create/types.dart';
 
-Map<String?, dynamic> _toCreate = {};
+Map<String?, dynamic> createTemp = {};
 
 // --- ACCEPT BUTTON --- ///
 
@@ -55,22 +56,6 @@ class CreatePageTextField extends StatelessWidget {
   }
 }
 
-// --- PROPS CONFIG --- ///
-
-class CreatePageProps {
-  final String title;
-  final String description;
-  final String value;
-  final Function input;
-
-  CreatePageProps({
-    required this.title,
-    required this.description,
-    required this.value,
-    required this.input,
-  });
-}
-
 // --- PROPS WIDGET --- ///
 
 class CreatePagePropsWidget extends StatefulWidget {
@@ -85,25 +70,28 @@ class CreatePagePropsWidget extends StatefulWidget {
 
 class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
   late bool isEmpty;
-  late Function callback;
 
   @override
   void initState() {
     super.initState();
-    isEmpty = _toCreate[widget.config.value] == null;
+    isEmpty = createTemp[widget.config.value] == null;
   }
 
   processData(newData) {
-    _toCreate[widget.config.value] = newData;
-    setState(() {});
+    setState(() {
+      createTemp[widget.config.value] = newData;
+      isEmpty = createTemp[widget.config.value] == null;
+    });
     Navigator.pop(context);
+    widget.callback(Map<String, dynamic>.from(createTemp));
   }
 
   @override
   Widget build(BuildContext context) {
     return InfoCard(
       data: {
-        'title': isEmpty ? widget.config.title : "h",
+        'title':
+            isEmpty ? widget.config.title : createTemp[widget.config.value],
         'description': isEmpty ? widget.config.description : widget.config.title
       },
       accent: 240,
@@ -119,7 +107,9 @@ class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
             decoration: BoxDecoration(
               color: Color(0xFFF6F6FC),
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              boxShadow: [BoxShadow(color: Color(0x301e1e33), blurRadius: 35)],
+              boxShadow: [
+                BoxShadow(color: Color(0x301e1e33), blurRadius: 35),
+              ],
             ),
             padding: EdgeInsets.fromLTRB(25, 25, 25, 25),
             child: widget.config.input(processData),

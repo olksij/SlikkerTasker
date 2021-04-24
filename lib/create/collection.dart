@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:tasker/data.dart';
-import 'package:tasker/create/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:slikker_kit/slikker_kit.dart';
+
+import 'package:tasker/data.dart';
 import 'package:tasker/slikker.dart';
-import 'package:tasker/create/page.dart';
+import 'package:tasker/create/types.dart';
+import 'package:tasker/create/widgets.dart';
 
 CreateType collection = CreateType(
   backPath: '/collections',

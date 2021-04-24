@@ -51,7 +51,7 @@ class CollectionsPage extends StatelessWidget {
             if (key[0] == 'P')
               cards.add(
                 Padding(
-                  padding: EdgeInsets.only(bottom: 30),
+                  padding: EdgeInsets.only(bottom: 20),
                   child: InfoCard(
                     data: Map<String, dynamic>.from(value),
                     isFloating: false,
