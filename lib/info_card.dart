@@ -5,22 +5,22 @@ class InfoCard extends StatelessWidget {
   final String? description;
   final double accent;
   final Widget? widget;
-  final bool? isFloating;
+  final bool isFloating;
   final Function? onTap;
 
   const InfoCard({
     required this.title,
     required this.description,
     required this.accent,
+    this.isFloating = false,
     this.widget,
-    this.isFloating,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return SlikkerCard(
-      isFloating: isFloating ?? false,
+      isFloating: isFloating,
       onTap: onTap ?? () {},
       padding: EdgeInsets.all(13),
       accent: accent,
@@ -33,10 +33,12 @@ class InfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? description ?? "",
+                  title ?? description ?? "No title.",
                   style: TextStyle(
                     fontSize: 18,
-                    color: accentColor(1, accent, 0.6, 1),
+                    color: isFloating
+                        ? accentColor(1, accent, .6, 1)
+                        : accentColor(.8, accent, .25, .3),
                   ),
                 ),
                 if (title != null && description != null) ...[
@@ -45,7 +47,9 @@ class InfoCard extends StatelessWidget {
                     title != null ? description ?? "" : "",
                     style: TextStyle(
                       fontSize: 14,
-                      color: accentColor(0.4, accent, 0.6, 1),
+                      color: isFloating
+                          ? accentColor(.4, accent, .6, 1)
+                          : accentColor(.4, accent, .25, .3),
                     ),
                   ),
                 ],
