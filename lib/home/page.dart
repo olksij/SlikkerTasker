@@ -85,18 +85,20 @@ class HomePage extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasError) return Text('Something went wrong');
               List<Widget> cards = [];
-              Map<String, dynamic> a = Map<String, dynamic>.from(data.toMap());
-              a.forEach((key, value) {
-                if (key[0] == 'D' || key[0] == 'T')
+              data.toMap().forEach((key, value) {
+                if (key[0] == 'T')
                   cards.add(
                     InfoCard(
-                      data: Map<String, dynamic>.from(value),
+                      title: value['title'],
+                      description: value['description'],
                       accent: 240,
-                      onCardTap: () => Navigator.push(
+                      isFloating: true,
+                      onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              TaskPage(Map<String, dynamic>.from(value)),
+                          builder: (context) => TaskPage(
+                            Map<String, dynamic>.from(value),
+                          ),
                         ),
                       ),
                     ),

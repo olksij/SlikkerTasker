@@ -83,21 +83,17 @@ class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
       isEmpty = createTemp[widget.config.value] == null;
     });
     Navigator.pop(context);
-    widget.callback(Map<String, dynamic>.from(createTemp));
+    widget.callback(Map<String, dynamic?>.from(createTemp));
   }
 
   @override
   Widget build(BuildContext context) {
     return InfoCard(
-      data: {
-        'title':
-            isEmpty ? widget.config.title : createTemp[widget.config.value],
-        'description': isEmpty ? widget.config.description : widget.config.title
-      },
+      title: isEmpty ? widget.config.title : createTemp[widget.config.value],
+      description: isEmpty ? widget.config.description : widget.config.title,
       accent: 240,
       isFloating: !isEmpty,
-      showButton: false,
-      onCardTap: () => showModalBottomSheet(
+      onTap: () => showModalBottomSheet(
         context: context,
         isDismissible: true,
         barrierColor: Color(0x553D3D66),

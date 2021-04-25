@@ -13,9 +13,10 @@ class TaskPage extends StatelessWidget {
       header: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: InfoCard(
-            data: task,
-            onCardTap: () {},
+            title: task['title'],
+            description: task['description'],
             accent: 240,
+            isFloating: true,
           )),
       topButton: TopButton(
         icon: Icons.arrow_back,

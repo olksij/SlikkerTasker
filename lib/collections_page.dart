@@ -53,16 +53,16 @@ class CollectionsPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(bottom: 20),
                   child: InfoCard(
-                    data: Map<String, dynamic>.from(value),
-                    isFloating: false,
-                    onCardTap: () => Navigator.push(
+                    title: value['title'],
+                    description: value['description'],
+                    onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            CreatePage(CreatePageType.collection, value),
+                        builder: (context) {
+                          return CreatePage(CreatePageType.collection, value);
+                        },
                       ),
                     ),
-                    showButton: false,
                     accent: value['accent'] ?? 240,
                   ),
                 ),
