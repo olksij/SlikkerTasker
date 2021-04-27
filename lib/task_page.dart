@@ -24,6 +24,7 @@ class TaskPage extends StatelessWidget {
         action: () => Navigator.pushNamed(context, '/home'),
       ),
       content: SlikkerCard(
+        accent: task['color'] ?? 240,
         isFloating: false,
         padding: EdgeInsets.all(15),
         child: Text(task['description'] ?? "Hh",

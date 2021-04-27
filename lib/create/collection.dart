@@ -31,6 +31,7 @@ CreateType collection = CreateType(
                 crossAxisCount: 2,
                 itemCount: snapshot.data?.length,
                 itemBuilder: (BuildContext context, int index) => SlikkerCard(
+                  onTap: () => callback(snapshot.data![index].id),
                   accent: HSVColor.fromColor(Color(int.parse(
                     snapshot.data![index].backgroundColor.replaceFirst('#', ''),
                     radix: 16,

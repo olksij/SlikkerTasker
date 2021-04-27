@@ -21,7 +21,7 @@ class CollectionsPage extends StatelessWidget {
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CreatePage(CreatePageType.task, {}),
+            builder: (context) => CreatePage(CreatePageType.collection, {}),
           ),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[

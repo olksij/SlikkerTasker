@@ -10,12 +10,16 @@ class TrackerPage extends StatelessWidget {
         action: () => Navigator.pushNamed(context, '/home'),
       ),
       title: '[proj name]',
-      floatingButton:
-          SlikkerCard(padding: EdgeInsets.all(17), child: Text('start')),
+      floatingButton: SlikkerCard(
+        padding: EdgeInsets.all(17),
+        child: Text('start'),
+        accent: 240,
+      ),
       content: Container(),
       header: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: SlikkerCard(
+          accent: 240,
           padding: EdgeInsets.all(17),
           child: Text('in future :c'),
         ),

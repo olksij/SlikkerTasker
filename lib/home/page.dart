@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(7),
                 child: SlikkerCard(
+                  accent: 240,
                   onTap: () => Navigator.pushNamed(context, '/collections'),
                   isFloating: false,
                   borderRadius: BorderRadius.circular(6),
@@ -141,30 +142,29 @@ class __ConnectivityStatusState extends State<_ConnectivityStatus> {
 
   @override
   Widget build(BuildContext context) {
-    return connectivity != ''
-        ? Column(
+    if (connectivity != '')
+      return Column(
+        children: [
+          Flex(
+            direction: Axis.horizontal,
             children: [
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Expanded(
-                    child: SlikkerCard(
-                      isFloating: false,
-                      padding: EdgeInsets.all(15),
-                      child: Center(
-                        child: Text(
-                          connectivity,
-                        ),
-                      ),
+              Expanded(
+                child: SlikkerCard(
+                  accent: 240,
+                  isFloating: false,
+                  padding: EdgeInsets.all(15),
+                  child: Center(
+                    child: Text(
+                      connectivity,
                     ),
-                  )
-                ],
-              ),
-              Container(
-                height: 30,
+                  ),
+                ),
               )
             ],
-          )
-        : Container();
+          ),
+          Container(height: 30)
+        ],
+      );
+    return Container();
   }
 }

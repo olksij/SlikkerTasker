@@ -17,6 +17,7 @@ class CreatePageAcceptButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlikkerCard(
       onTap: onTap,
+      accent: 240,
       child: SizedBox(
         height: 52,
         width: 52,
