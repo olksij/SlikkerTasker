@@ -1,9 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:slikker_kit/slikker_kit.dart';
 
 import 'package:tasker/data.dart';
-import 'package:slikker_kit/slikker_kit.dart';
 import 'package:tasker/create/types.dart';
 import 'package:tasker/create/widgets.dart';
 
@@ -24,38 +21,26 @@ CreateType collection = CreateType(
         return FutureBuilder(
           future: getCalendars(),
           builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
-            if (snapshot.hasData)
-              return StaggeredGridView.countBuilder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                itemCount: snapshot.data?.length,
-                itemBuilder: (BuildContext context, int index) => SlikkerCard(
-                  onTap: () => callback(snapshot.data![index].id),
-                  accent: HSVColor.fromColor(Color(int.parse(
-                    snapshot.data![index].backgroundColor.replaceFirst('#', ''),
-                    radix: 16,
-                  ))).hue,
-                  isFloating: false,
-                  padding: EdgeInsets.all(15),
-                  child: Text(
-                    snapshot.data![index].summary ?? 'Title',
-                    style: TextStyle(
-                      color: Color(
-                        int.parse(
-                          snapshot.data![index].backgroundColor
-                              .replaceFirst('#', ''),
+            if (snapshot.hasData) {
+              List data = snapshot.data!;
+              return GridSelection(
+                //scrollController: ,
+                data: [
+                  for (int i = 0; i < data.length; i++)
+                    GridSelectionData(
+                      title: data[i].summary ?? 'No title',
+                      description: data[i].description ?? 'No description',
+                      accent: HSVColor.fromColor(
+                        Color(int.parse(
+                          data[i].backgroundColor.replaceFirst('#', ''),
                           radix: 16,
-                        ),
-                      ).withAlpha(255),
-                    ),
-                  ),
-                ),
-                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                mainAxisSpacing: 20.0,
-                crossAxisSpacing: 20.0,
+                        )),
+                      ).hue,
+                      callback: () => callback(data[i].id),
+                    )
+                ],
               );
-            else
+            } else
               return Text('Please wait');
           },
         );

@@ -1,3 +1,5 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:slikker_kit/slikker_kit.dart';
@@ -53,6 +55,53 @@ class CreatePageTextField extends StatelessWidget {
           Container(width: 20),
           CreatePageAcceptButton(() => callback(controller.value.text))
         ],
+      ),
+    );
+  }
+}
+
+// --- GRID SELECTION WIDGET --- ///
+
+class GridSelectionData {
+  final String title;
+  final String description;
+  final double accent;
+  final Function callback;
+
+  GridSelectionData({
+    required this.title,
+    required this.description,
+    required this.accent,
+    required this.callback,
+  });
+}
+
+class GridSelection extends StatelessWidget {
+  final List<GridSelectionData> data;
+  final ScrollController? scrollController;
+
+  const GridSelection({
+    required this.data,
+    this.scrollController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StaggeredGridView.countBuilder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      itemCount: data.length,
+      controller: scrollController,
+      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+      mainAxisSpacing: 25.0,
+      crossAxisSpacing: 25.0,
+      itemBuilder: (BuildContext context, int index) => InfoCard(
+        onTap: data[index].callback,
+        accent: data[index].accent,
+        isFloating: true,
+        title: data[index].title,
+        description: data[index].description,
       ),
     );
   }
