@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:slikker_kit/slikker_kit.dart';
 
 import 'package:tasker/data.dart';
-import 'package:tasker/slikker.dart';
+
+Color accentColor(double alpha, double hue, double saturation, double value) =>
+    HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();
 
 class FirstRun extends StatefulWidget {
   @override

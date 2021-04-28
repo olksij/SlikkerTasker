@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:slikker_kit/slikker_kit.dart';
-import 'package:tasker/slikker.dart';
 import 'package:tasker/create/types.dart';
 import 'package:tasker/create/widgets.dart';
 

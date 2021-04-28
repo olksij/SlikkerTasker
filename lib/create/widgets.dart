@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:slikker_kit/slikker_kit.dart';
+
 import 'package:tasker/info_card.dart';
-import 'package:tasker/slikker.dart';
 import 'package:tasker/create/types.dart';
 
 Map<String?, dynamic> createTemp = {};

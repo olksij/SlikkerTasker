@@ -1,4 +1,8 @@
-import 'package:tasker/slikker.dart';
+import 'package:slikker_kit/slikker_kit.dart';
+import 'package:flutter/material.dart';
+
+Color accentColor(double alpha, double hue, double saturation, double value) =>
+    HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();
 
 class InfoCard extends StatelessWidget {
   final String? title;

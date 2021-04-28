@@ -1,4 +1,5 @@
-import 'package:tasker/slikker.dart';
+import 'package:slikker_kit/slikker_kit.dart';
+import 'package:flutter/material.dart';
 
 class TrackerPage extends StatelessWidget {
   @override

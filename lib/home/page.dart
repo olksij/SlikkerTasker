@@ -1,9 +1,10 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:slikker_kit/slikker_kit.dart';
+import 'package:flutter/material.dart';
 
 import 'package:tasker/app_icons.dart';
-import 'package:tasker/slikker.dart';
 import 'package:tasker/info_card.dart';
-import 'package:tasker/task_page.dart';
+import 'package:tasker/task/page.dart';
 import 'package:tasker/data.dart';
 import 'package:tasker/create/page.dart';
 
