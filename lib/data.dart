@@ -7,7 +7,7 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:tasker/api_http_client.dart';
 
 late Box app;
-late Box data;
+late Box<Map> data;
 
 late User user;
 late CollectionReference firestoreDB;
@@ -42,13 +42,14 @@ Future<bool> signIn({bool silently = true}) async {
   return true;
 }
 
+Map<String, dynamic> toMap(Map? inp) => Map<String, dynamic>.from(inp ?? {});
+
 void firestoreConnect(UserCredential credential) async {
   user = credential.user!;
   firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
   // Merge local and cloud settings
-  Map<String, dynamic> tempSettings =
-      Map<String, dynamic>.from(data.get('.settings') ?? {});
+  Map<String, dynamic> tempSettings = toMap(data.get('.settings'));
   getDefaults().forEach((key, value) =>
       tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
   await data.clear();
@@ -64,7 +65,7 @@ void firestoreConnect(UserCredential credential) async {
         if (change.type == DocumentChangeType.removed)
           data.delete(change.doc.id);
         else
-          data.put(change.doc.id, change.doc.data());
+          data.put(change.doc.id, change.doc.data() ?? {});
       }));
 
   // Connect local listener
@@ -77,7 +78,7 @@ void firestoreConnect(UserCredential credential) async {
 
   // Put new settings in DB
   data.put('.settings', tempSettings);
-  firestoreDB.doc('.settings').set(tempSettings);
+  firestoreDB.doc('.settings').set(Map<String, dynamic>.from(tempSettings));
 
   refreshStatus('');
 }
@@ -89,7 +90,7 @@ void refreshStatus(String status) {
   connectivityStatus = status;
 }
 
-void uploadData(String type, Map<String?, dynamic> map) {
+void uploadData(String type, Map<String, dynamic> map) {
   map['time'] = DateTime.now().millisecondsSinceEpoch;
   data.put(type + map['time'].toString(), map);
 }
