@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
       content: Column(
         children: [
           _ConnectivityStatus(),
-          StreamBuilder(
+          /*StreamBuilder(
             stream: data.watch(),
             initialData: null,
             builder: (context, snapshot) {
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                 crossAxisSpacing: 20.0,
               );
             },
-          )
+          )*/
         ],
       ),
     );
@@ -135,8 +135,6 @@ class __ConnectivityStatusState extends State<_ConnectivityStatus> {
   @override
   void initState() {
     super.initState();
-    connectivityStatusRefresher = refresh;
-    connectivity = connectivityStatus;
   }
 
   void refresh(String status) => setState(() => connectivity = status);

@@ -1,5 +1,6 @@
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import 'package:tasker/data.dart';
 import 'package:tasker/info_card.dart';
@@ -43,32 +44,33 @@ class CollectionsPage extends StatelessWidget {
         ]),
       ),
       content: StreamBuilder(
-        stream: data.watch(),
+        stream: collections.watch(),
         initialData: null,
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<BoxEvent?> snapshot) {
           if (snapshot.hasError) return Text('Something went wrong');
           List<Widget> cards = [];
-          Map<String, dynamic> a = Map<String, dynamic>.from(data.toMap());
+          Map<String, dynamic> a =
+              Map<String, dynamic>.from(collections.toMap());
           a.forEach((key, value) {
-            if (key[0] == 'P')
-              cards.add(
-                Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: InfoCard(
-                    title: value['title'],
-                    description: value['description'],
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CreatePage(CreatePageType.collection, value);
-                        },
-                      ),
+            //if (key[0] == 'C')
+            cards.add(
+              Padding(
+                padding: EdgeInsets.only(bottom: 20),
+                child: InfoCard(
+                  title: value['title'],
+                  description: value['description'],
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return CreatePage(CreatePageType.collection, value);
+                      },
                     ),
-                    accent: value['accent'] ?? 240,
                   ),
+                  accent: value['accent'] ?? 240,
                 ),
-              );
+              ),
+            );
           });
           return ListView.builder(
             shrinkWrap: true,

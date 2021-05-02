@@ -7,11 +7,13 @@ class CardPreview extends StatefulWidget {
   final Map<String, dynamic?> initData;
   final Function callback;
   final String backPath;
+  final String type;
 
   const CardPreview({
     required this.initData,
     required this.callback,
     required this.backPath,
+    required this.type,
   });
 
   @override
@@ -44,7 +46,11 @@ class _CardPreviewState extends State<CardPreview> {
           accent: data['color'] ?? 240,
           isFloating: false,
           onTap: () {
-            uploadData('T', data);
+            syncData(
+              widget.type + DateTime.now().millisecondsSinceEpoch.toString(),
+              data,
+              local: true,
+            );
             Navigator.pushNamed(context, widget.backPath);
           },
           child: Container(

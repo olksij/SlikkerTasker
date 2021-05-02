@@ -7,7 +7,7 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:tasker/api_http_client.dart';
 
 late Box app;
-late Box<Map> data;
+late Box<Map> tasks, collections;
 
 late User user;
 late CollectionReference firestoreDB;
@@ -19,11 +19,16 @@ Map<String, dynamic> getDefaults() => {
       'time': DateTime.now().millisecondsSinceEpoch,
       'light': true,
       'accent': 240,
+      'signin': null,
     };
 
 Future<bool> signIn({bool silently = true}) async {
   await Firebase.initializeApp();
-  refreshStatus('Syncing..');
+
+  if (!silently) {
+    tasks = await Hive.openBox('tasks');
+    collections = await Hive.openBox('collections');
+  }
 
   GoogleSignInAccount? account = silently
       ? await googleSignIn.signInSilently()
@@ -36,63 +41,75 @@ Future<bool> signIn({bool silently = true}) async {
       GoogleAuthProvider.credential(
           accessToken: auth.accessToken, idToken: auth.idToken));
 
+  if (credential.user == null) return false;
+
   httpClient = GoogleHttpClient(await account.authHeaders);
-  firestoreConnect(credential);
+  app.put('signin', true);
+  firestoreConnect(credential.user!);
 
   return true;
 }
 
-Map<String, dynamic> toMap(Map? inp) => Map<String, dynamic>.from(inp ?? {});
+Map<String, dynamic> toMap(Box inp) => Map<String, dynamic>.from(inp.toMap());
 
-void firestoreConnect(UserCredential credential) async {
-  user = credential.user!;
+void firestoreConnect(User user) async {
   firestoreDB = FirebaseFirestore.instance.collection(user.uid);
 
   // Merge local and cloud settings
-  Map<String, dynamic> tempSettings = toMap(data.get('.settings'));
+  Map<String, dynamic> tempSettings = toMap(app);
   getDefaults().forEach((key, value) =>
       tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
-  await data.clear();
+  await app.delete('settings');
 
-  // Connect firebase listener
-  firestoreDB.snapshots(includeMetadataChanges: true).listen((event) => event
-          .docChanges
-          .where((docChange) =>
-              (data.get(docChange.doc.id)?['time'] ?? 0) <
-                  docChange.doc.data()?['time'] ||
-              docChange.type == DocumentChangeType.removed)
-          .forEach((change) {
-        if (change.type == DocumentChangeType.removed)
-          data.delete(change.doc.id);
-        else
-          data.put(change.doc.id, change.doc.data() ?? {});
-      }));
-
-  // Connect local listener
-  data.watch().listen((event) {
-    if (event.value != null)
-      firestoreDB.doc(event.key).set(event.value);
-    else
-      firestoreDB.doc(event.key).delete();
+  firestoreDB.snapshots(includeMetadataChanges: true).listen((event) {
+    event.docChanges.forEach(
+      (change) => syncData(
+        change.doc.id,
+        change.type == DocumentChangeType.removed ? null : change.doc.data(),
+        local: false,
+        settings: change.doc.id == 'settings',
+      ),
+    );
   });
 
   // Put new settings in DB
-  data.put('.settings', tempSettings);
-  firestoreDB.doc('.settings').set(Map<String, dynamic>.from(tempSettings));
-
-  refreshStatus('');
+  app.putAll(tempSettings);
+  firestoreDB.doc('settings').set(Map<String, dynamic>.from(tempSettings));
 }
 
-Function connectivityStatusRefresher = (a) {};
-String connectivityStatus = '';
-void refreshStatus(String status) {
-  connectivityStatusRefresher(status);
-  connectivityStatus = status;
-}
+enum SyncData { settings, tasks, collections }
 
-void uploadData(String type, Map<String, dynamic> map) {
-  map['time'] = DateTime.now().millisecondsSinceEpoch;
-  data.put(type + map['time'].toString(), map);
+void syncData(String key, dynamic value,
+    {bool settings = false, bool local = true}) {
+  bool remove = value == null;
+  late Box data;
+  late int time;
+
+  if (settings) {
+    data = app;
+    time = app.get('time');
+  } else {
+    if (key[0] == 'T') data = tasks;
+    if (key[0] == 'C') data = collections;
+    time = app.get(key)?['time'] ?? 0;
+  }
+
+  // If the local data is newwer, update data in the cloud.
+  if (!local && time > value['time'] && !remove) local = true;
+
+  // Give data a time id
+  if (local) value['time'] = DateTime.now().millisecondsSinceEpoch;
+
+  // Sync locally
+  remove ? data.delete(key) : data.put(key, value);
+
+  // Upload changes
+  if (local) if (remove)
+    firestoreDB.doc(key).delete();
+  else
+    firestoreDB
+        .doc(settings ? 'settings' : key)
+        .set(settings ? toMap(data) : value);
 }
 
 Future<List<CalendarListEntry>?> getCalendars() async =>

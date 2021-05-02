@@ -44,6 +44,7 @@ class _CreatePageState extends State<CreatePage> {
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: CardPreview(
           initData: widget.data,
+          type: widget.props.type,
           backPath: widget.props.backPath,
           callback: (Function function) => refresh = function,
         ),

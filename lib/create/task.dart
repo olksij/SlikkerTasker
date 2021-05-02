@@ -3,6 +3,7 @@ import 'package:tasker/create/types.dart';
 import 'package:tasker/create/widgets.dart';
 
 CreateType task = CreateType(
+  type: 'T',
   backPath: '/home',
   props: [
     CreatePageProps(
@@ -21,15 +22,15 @@ CreateType task = CreateType(
       description: 'Add task to collection group.',
       value: 'collection',
       input: (Function callback) {
-        Map<dynamic, Map> tasks = data.toMap();
+        Map<dynamic, Map> tasksMap = tasks.toMap();
         return GridSelection(
           //scrollController: ,
           data: [
-            for (String key in data.keys)
+            for (String key in tasks.keys)
               GridSelectionData(
-                title: tasks[key]?['title'] ?? 'No title',
-                description: tasks[key]?['description'] ?? 'No description',
-                accent: tasks[key]?['color'] ?? 240,
+                title: tasksMap[key]?['title'] ?? 'No title',
+                description: tasksMap[key]?['description'] ?? 'No description',
+                accent: tasksMap[key]?['color'] ?? 240,
                 callback: () => callback(key),
               )
           ],

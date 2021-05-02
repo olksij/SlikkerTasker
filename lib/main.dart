@@ -14,17 +14,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) Hive.init((await getApplicationDocumentsDirectory()).path);
 
-  app = await Hive.openBox('.app');
-  data = await Hive.openBox('data');
-  if (app.get('isSignedIn') ?? false) signIn();
+  app = await Hive.openBox('app');
 
-  runApp(Tasker(isSignedIn: app.get('isSignedIn') ?? false));
+  if (app.get('signin') ?? false) {
+    signIn();
+    tasks = await Hive.openBox('tasks');
+    collections = await Hive.openBox('collections');
+  }
+
+  runApp(Tasker(isSignedIn: app.get('signin') ?? false));
 }
 
 class Tasker extends StatelessWidget {
-  final bool? isSignedIn;
+  final bool isSignedIn;
 
-  Tasker({this.isSignedIn});
+  Tasker({
+    required this.isSignedIn,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class Tasker extends StatelessWidget {
       color: Color(0xFFF6F6FC),
       theme: ThemeData(fontFamily: 'Manrope'),
       title: 'Tasker',
-      initialRoute: isSignedIn! ? '/home' : '/init',
+      initialRoute: isSignedIn ? '/home' : '/init',
       routes: {
         '/init': (context) => FirstRun(),
         '/home': (context) => HomePage(),
@@ -62,6 +68,3 @@ class AccountPage extends StatelessWidget {
     );
   }
 }
-
-Color accentColor(double alpha, double hue, double saturation, double value) =>
-    HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();

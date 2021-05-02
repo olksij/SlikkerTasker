@@ -1,9 +1,11 @@
 class CreateType {
   final String backPath;
+  final String type;
   final List<CreatePageProps> props;
 
   CreateType({
     required this.backPath,
+    required this.type,
     required this.props,
   });
 }

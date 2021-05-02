@@ -5,6 +5,7 @@ import 'package:tasker/create/types.dart';
 import 'package:tasker/create/widgets.dart';
 
 CreateType collection = CreateType(
+  type: 'C',
   backPath: '/collections',
   props: [
     CreatePageProps(
