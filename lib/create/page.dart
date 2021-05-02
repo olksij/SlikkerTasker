@@ -39,7 +39,7 @@ class _CreatePageState extends State<CreatePage> {
         title: 'Back',
         action: () => Navigator.pushNamed(context, widget.props.backPath),
       ),
-      title: 'Create',
+      title: widget.data == {} ? 'Create' : 'Edit',
       header: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: CardPreview(
