@@ -26,7 +26,6 @@ class _FirstRunState extends State<FirstRun> {
   Widget build(BuildContext context) {
     return SlikkerScaffold(
       title: 'Tasker',
-      topButton: TopButton.hidden(),
       header: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: SlikkerCard(

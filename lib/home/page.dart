@@ -1,48 +1,42 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tasker/app_icons.dart';
-import 'package:tasker/info_card.dart';
-import 'package:tasker/task/page.dart';
-import 'package:tasker/data.dart';
 import 'package:tasker/create/page.dart';
+import 'package:tasker/home/content.dart';
 
 class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
-    return SlikkerScaffold(
-      header: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Stack(
-          children: [
-            SlikkerTextField(
-              accent: 240,
-              prefixIcon: Icons.search,
-              hintText: 'Search everything',
-              prefixIconPadding: EdgeInsets.all(18),
-              padding: EdgeInsets.fromLTRB(18, 18, 42, 18),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: EdgeInsets.all(7),
-                child: SlikkerCard(
-                  accent: 240,
-                  onTap: () => Navigator.pushNamed(context, '/collections'),
-                  isFloating: false,
-                  borderRadius: BorderRadius.circular(6),
-                  child: Container(
-                    width: 46,
-                    height: 46,
-                    child: Center(
-                      child: Icon(AppIcons.timeline, color: Color(0xFF3D3D66)),
-                    ),
+    return SlikkerScaffold.sliver(
+      header: Stack(
+        children: [
+          SlikkerTextField(
+            accent: 240,
+            prefixIcon: Icons.search,
+            hintText: 'Search everything',
+            prefixIconPadding: EdgeInsets.all(18),
+            padding: EdgeInsets.fromLTRB(18, 18, 42, 18),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: EdgeInsets.all(7),
+              child: SlikkerCard(
+                accent: 240,
+                onTap: () => Navigator.pushNamed(context, '/collections'),
+                isFloating: false,
+                borderRadius: BorderRadius.circular(6),
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  child: Center(
+                    child: Icon(AppIcons.timeline, color: Color(0xFF3D3D66)),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       title: 'Tasker',
       topButton: TopButton(
@@ -78,11 +72,12 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      content: Column(
-        children: [
-          _ConnectivityStatus(),
-          /*StreamBuilder(
-            stream: data.watch(),
+      content: //Column(
+          //children: [
+          //_ConnectivityStatus(),
+          HomeSchedule(),
+      /*StreamBuilder(
+            stream: tasks.watch(),
             initialData: null,
             builder: (context, snapshot) {
               if (snapshot.hasError) return Text('Something went wrong');
@@ -118,8 +113,8 @@ class HomePage extends StatelessWidget {
               );
             },
           )*/
-        ],
-      ),
+      //],
+      //),
     );
   }
 }
