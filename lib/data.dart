@@ -59,7 +59,6 @@ void firestoreConnect(User user) async {
   Map<String, dynamic> tempSettings = toMap(app);
   getDefaults().forEach((key, value) =>
       tempSettings[key] = key == 'time' ? value : tempSettings[key] ?? value);
-  await app.delete('settings');
 
   firestoreDB.snapshots(includeMetadataChanges: true).listen((event) {
     event.docChanges.forEach(
@@ -68,26 +67,26 @@ void firestoreConnect(User user) async {
         change.type == DocumentChangeType.removed ? null : change.doc.data(),
         local: false,
         settings: change.doc.id == 'settings',
+        map: true,
       ),
     );
   });
 
   // Put new settings in DB
-  app.putAll(tempSettings);
-  firestoreDB.doc('settings').set(Map<String, dynamic>.from(tempSettings));
+  syncData('settings', tempSettings, settings: true, map: true);
 }
 
 enum SyncData { settings, tasks, collections }
 
 void syncData(String key, dynamic value,
-    {bool settings = false, bool local = true}) {
+    {bool settings = false, bool local = true, bool map = false}) {
   bool remove = value == null;
   late Box data;
   late int time;
 
   if (settings) {
     data = app;
-    time = app.get('time');
+    time = app.get('time') ?? 0;
   } else {
     if (key[0] == 'T') data = tasks;
     if (key[0] == 'C') data = collections;
@@ -95,13 +94,17 @@ void syncData(String key, dynamic value,
   }
 
   // If the local data is newwer, update data in the cloud.
-  if (!local && time > value['time'] && !remove) local = true;
+  if (!local && time > (value?['time'] ?? 0) && !remove) local = true;
 
   // Give data a time id
   if (local) value['time'] = DateTime.now().millisecondsSinceEpoch;
 
   // Sync locally
-  remove ? data.delete(key) : data.put(key, value);
+  remove
+      ? data.delete(key)
+      : map && settings
+          ? data.putAll(value)
+          : data.put(key, value);
 
   // Upload changes
   if (local) if (remove)
