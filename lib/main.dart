@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:tasker/data.dart';
 import 'package:tasker/home/page.dart';
-import 'package:tasker/login_page.dart';
+import 'package:tasker/login/page.dart';
 import 'package:tasker/collections_page.dart';
 import 'package:tasker/tracker_page.dart';
 

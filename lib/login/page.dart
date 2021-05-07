@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:slikker_kit/slikker_kit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:tasker/data.dart';
 
@@ -89,19 +90,34 @@ class _FirstRunState extends State<FirstRun> {
         isFloating: false,
       ),
       floatingButton: SlikkerCard(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.fromLTRB(15, 15, 17, 15),
         accent: 240,
         borderRadius: BorderRadius.circular(54),
         child: loggingIn
             ? SizedBox(
+                height: 16,
+                width: 16,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3D3D66)),
                 ),
-                height: 16,
-                width: 16,
               )
-            : Text('Continue with Google'),
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 22,
+                    width: 22,
+                    child: SvgPicture.asset(
+                      "assets/google_logo.svg",
+                      semanticsLabel: 'Google Logo',
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(left: 12)),
+                  Text('Sign in with Google', style: TextStyle(fontSize: 15)),
+                ],
+              ),
         onTap: () {
           setState(() => loggingIn = true);
           signIn(silently: false).then((value) {
