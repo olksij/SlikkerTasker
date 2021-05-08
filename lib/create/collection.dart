@@ -14,13 +14,13 @@ CreateType collection = CreateType(
         value: 'title',
         input: (Function callback) => CreatePageTextField(callback)),
     CreatePageProps(
-      title: 'Event',
+      title: 'Calendar',
       description:
-          'Choose event, during which tasks of the collection will be suggested.',
-      value: 'event',
+          'Choose calendar, during which tasks of the collection will be suggested.',
+      value: 'calendar',
       input: (Function callback) {
         return FutureBuilder(
-          future: getCalendars(),
+          future: calendars(),
           builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
             if (snapshot.hasData) {
               List data = snapshot.data!;

@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
+
 import 'package:googleapis/calendar/v3.dart';
 import 'package:tasker/api_http_client.dart';
 
@@ -11,9 +14,9 @@ late Box<Map> tasks, collections;
 
 late User user;
 late CollectionReference firestoreDB;
-late GoogleHttpClient httpClient;
 late GoogleSignIn googleSignIn =
     GoogleSignIn(scopes: ['https://www.googleapis.com/auth/calendar.readonly']);
+CalendarClient calendarClient = CalendarClient();
 
 Map<String, dynamic> getDefaults() => {
       'time': DateTime.now().millisecondsSinceEpoch,
@@ -43,7 +46,7 @@ Future<bool> signIn({bool silently = true}) async {
 
   if (credential.user == null) return false;
 
-  httpClient = GoogleHttpClient(await account.authHeaders);
+  calendarClient.set(GoogleHttpClient(await account.authHeaders));
   app.put('signin', true);
   firestoreConnect(credential.user!);
 
@@ -115,5 +118,25 @@ void syncData(String key, dynamic value,
         .set(settings ? toMap(data) : value);
 }
 
-Future<List<CalendarListEntry>?> getCalendars() async =>
-    (await CalendarApi(httpClient).calendarList.list()).items;
+class CalendarClient {
+  final Completer<CalendarApi> _completer = new Completer();
+
+  Future<CalendarApi> get() => _completer.future;
+
+  void set(GoogleHttpClient client) => _completer.complete(CalendarApi(client));
+}
+
+Future<List<CalendarListEntry>?> calendars() async {
+  CalendarApi api = await calendarClient.get();
+  return api.calendarList.list().then((list) => list.items);
+}
+
+Future<Map<String, List<Event>?>> events(Iterable<String> collections) async {
+  Map<String, List<Event>?> events = {};
+  CalendarApi api = await calendarClient.get();
+  for (String collection in collections) {
+    Events list = await api.events.list(collection);
+    events[collection] = list.items;
+  }
+  return events;
+}
