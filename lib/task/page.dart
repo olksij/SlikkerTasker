@@ -1,4 +1,4 @@
-import 'package:tasker/info_card.dart';
+import 'package:tasker/resources/info_card.dart';
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:tasker/create/page.dart';

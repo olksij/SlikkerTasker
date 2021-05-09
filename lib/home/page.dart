@@ -1,7 +1,7 @@
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
 
-import 'package:tasker/app_icons.dart';
+import 'package:tasker/resources/app_icons.dart';
 import 'package:tasker/create/page.dart';
 import 'package:tasker/home/content.dart';
 

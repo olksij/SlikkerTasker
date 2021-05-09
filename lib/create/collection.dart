@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'package:tasker/data.dart';
+import 'package:tasker/data/data.dart';
 import 'package:tasker/create/types.dart';
 import 'package:tasker/create/widgets.dart';
 

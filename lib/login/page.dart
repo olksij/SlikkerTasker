@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:tasker/data.dart';
+import 'package:tasker/data/data.dart';
 
 Color accentColor(double alpha, double hue, double saturation, double value) =>
     HSVColor.fromAHSV(alpha, hue, saturation, value).toColor();
