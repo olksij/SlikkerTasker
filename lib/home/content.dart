@@ -1,8 +1,8 @@
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/calendar/v3.dart';
 
 import 'package:tasker/info_card.dart';
-import 'package:tasker/task/page.dart';
 import 'package:tasker/data.dart';
 
 DateTime current = DateTime.now();
@@ -12,27 +12,86 @@ Stream<DateTime> timer =
   return current;
 }).asBroadcastStream();
 
+class CalendarEvent {
+  final String calendar;
+  final Event event;
+
+  CalendarEvent(this.calendar, this.event);
+}
+
+Future<Map<String, List<Event>?>> _getEvents() async {
+  Map<String, String> _collections = {};
+
+  collections
+      .toMap()
+      .forEach((key, value) => _collections[value['calendar']] = key);
+
+  return events(_collections.keys).then((value) =>
+      value.map((key, value) => MapEntry(_collections[key]!, value)));
+}
+
 class HomeSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: timer,
-      builder: (context, AsyncSnapshot<DateTime> snapshot) {
-        return SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            print(index);
-            return Padding(
-              padding: EdgeInsets.only(bottom: 25),
-              child: _Collection(),
+    return FutureBuilder(
+      future: _getEvents(),
+      builder: (context, AsyncSnapshot<Map<String, List<Event>?>> events) =>
+          StreamBuilder(
+        stream: timer,
+        builder: (context, AsyncSnapshot<DateTime> time) {
+          if (!events.hasData)
+            return SliverList(
+              delegate: SliverChildListDelegate([
+                SlikkerCard(
+                  accent: 240,
+                  child: Text('Loading..'),
+                ),
+              ]),
             );
-          }),
-        );
-      },
+
+          List<CalendarEvent> _collections = [];
+
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                while (_collections.length - 1 != index) {
+                  CalendarEvent? nextEvent;
+
+                  events.data?.forEach((key, value) {
+                    if (value?.length != 0) {
+                      DateTime? next = nextEvent?.event.start?.dateTime;
+                      DateTime? current = value?.first.start?.dateTime;
+
+                      if (current != null && !(next?.isAfter(current) ?? false))
+                        nextEvent = CalendarEvent(key, value!.first);
+
+                      value?.removeAt(0);
+                    }
+                  });
+
+                  if (nextEvent != null)
+                    _collections.add(nextEvent!);
+                  else
+                    return null;
+                }
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 25),
+                  child: _Collection(_collections[index].calendar),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
 class _Collection extends StatelessWidget {
+  final String id;
+
+  _Collection(this.id);
+
   @override
   Widget build(BuildContext context) {
     return SlikkerCard(
@@ -54,7 +113,7 @@ class _Collection extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    'Homework',
+                    collections.get(id)?['title'] ?? 'No Title',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -74,23 +133,20 @@ class _Collection extends StatelessWidget {
           ),
           SizedBox(
             height: 120,
-            child: ListView(
+            child: ListView.builder(
               clipBehavior: Clip.none,
               padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
               scrollDirection: Axis.horizontal,
               physics: BouncingScrollPhysics(),
-              children: [
-                for (int j = 0; j < 10; j++)
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: InfoCard(
-                      isFloating: true,
-                      accent: 240,
-                      title: 'djkmd' + ((j + 47) * j).toString(),
-                      description: 'edsdeed',
-                    ),
-                  )
-              ],
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: InfoCard(
+                  isFloating: true,
+                  accent: 240,
+                  title: 'djkmd' + ((index + 47) * index).toString(),
+                  description: 'edsdeed',
+                ),
+              ),
             ),
           ),
         ],
