@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 // Initialize local varibales
-late Box app;
+late Box app, cache;
 late Box<Map> tasks, collections;
 
 late CollectionReference firestore;

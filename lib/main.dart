@@ -24,6 +24,7 @@ void main() async {
     signIn();
     tasks = await Hive.openBox<Map>('tasks');
     collections = await Hive.openBox<Map>('collections');
+    cache = await Hive.openBox('cache');
   }
 
   runApp(Tasker(signin));

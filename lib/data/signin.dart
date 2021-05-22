@@ -22,6 +22,7 @@ Future<bool> signIn({bool silently = true}) async {
   if (!silently) {
     Hive.openBox<Map>('tasks').then((box) => tasks = box);
     Hive.openBox<Map>('collections').then((box) => collections = box);
+    Hive.openBox('cache').then((box) => cache = box);
   }
 
   GoogleSignInAccount? account = silently
