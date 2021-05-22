@@ -3,7 +3,7 @@ description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 0.1.0-alpha.188
+version: 0.1.0-alpha.189
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -31,6 +31,8 @@ dependencies:
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.0
+  hive_generator: ^1.1.0
+  build_runner: ^2.0.3
 
 flutter_icons:
   ios: true

@@ -15,6 +15,7 @@ class CalendarEvent {
   CalendarEvent(this.calendar, this.event);
 }
 
+// Used to return cached data instantly
 class Cache<E> {
   final E cache;
   final Future<E> newData;
@@ -24,13 +25,16 @@ class Cache<E> {
 // Loads events from cache
 Cache<List<CalendarEvent>> eventsQuickly(Iterable<String> calendars) {
   return Cache<List<CalendarEvent>>(
-    cache: List<CalendarEvent>.from(cache.get('events')),
-    newData: events(calendars),
+    cache: List<CalendarEvent>.from(cache.get('events') ?? []),
+    newData: events(
+      calendars, /*(result) => cache.put('events', result)*/
+    ),
   );
 }
 
 // Retrieve events
-Future<List<CalendarEvent>> events(Iterable<String> calendars) async {
+Future<List<CalendarEvent>> events(Iterable<String> calendars,
+    [Function? cache]) async {
   Map<String, List<Event>> rawEvents = Map<String, List<Event>>();
   CalendarApi api = await calendarClient.get();
   int n = 0;
@@ -65,5 +69,6 @@ Future<List<CalendarEvent>> events(Iterable<String> calendars) async {
     if (nextEvent != null) events.add(nextEvent);
   }
 
+  if (cache != null) cache(events);
   return events;
 }

@@ -5,78 +5,58 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:tasker/data/data.dart';
 import 'package:tasker/home/cards.dart';
 
+// Create stream on time change
 DateTime current = DateTime.now();
-Stream<DateTime> timer =
+Stream<DateTime> timeStream =
     Stream.periodic(Duration(seconds: 60 - current.second), (i) {
   current = DateTime.now();
   return current;
 }).asBroadcastStream();
 
-class CalendarEvent {
-  final String calendar;
-  final Event event;
-
-  CalendarEvent(this.calendar, this.event);
+class HomeSchedule extends StatefulWidget {
+  @override
+  _HomeScheduleState createState() => _HomeScheduleState();
 }
 
-Future<Map<String, List<Event>?>> _getEvents() async {
-  Map<String, String> _collections = {};
+class _HomeScheduleState extends State<HomeSchedule> {
+  late final Cache<List<CalendarEvent>> events;
 
-  collections
-      .toMap()
-      .forEach((key, value) => _collections[value['calendar']] = key);
+  @override
+  void initState() {
+    super.initState();
+    events =
+        eventsQuickly(collections.values.map<String>((e) => e['calendar']));
+  }
 
-  return events(_collections.keys).then((value) =>
-      value.map((key, value) => MapEntry(_collections[key]!, value)));
-}
-
-class HomeSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getEvents(),
-      builder: (context, AsyncSnapshot<Map<String, List<Event>?>> events) =>
+    return FutureBuilder<List<CalendarEvent>>(
+      future: events.newData,
+      initialData: events.cache,
+      builder: (context, AsyncSnapshot<List<CalendarEvent>> events) =>
           StreamBuilder(
-        stream: timer,
+        stream: timeStream,
         builder: (context, AsyncSnapshot<DateTime> time) {
           if (!events.hasData)
             return SliverList(
               delegate: SliverChildListDelegate([
                 SlikkerCard(
                   accent: 240,
-                  child: Text('Loading..'),
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: Center(child: Text('Loading..')),
+                  ),
                 ),
               ]),
             );
 
-          List<CalendarEvent> _collections = [];
-
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                while (_collections.length - 1 != index) {
-                  CalendarEvent? nextEvent;
-
-                  events.data?.forEach((key, value) {
-                    if (value?.length != 0) {
-                      DateTime? next = nextEvent?.event.start?.dateTime;
-                      DateTime? current = value?.first.start?.dateTime;
-
-                      if (current != null && !(next?.isAfter(current) ?? false))
-                        nextEvent = CalendarEvent(key, value!.first);
-
-                      value?.removeAt(0);
-                    }
-                  });
-
-                  if (nextEvent != null)
-                    _collections.add(nextEvent!);
-                  else
-                    return null;
-                }
+                if ((events.data?.length ?? 0) - 1 < index) return null;
                 return Padding(
                   padding: EdgeInsets.only(bottom: 25),
-                  child: CollectionCard(_collections[index].calendar),
+                  child: CollectionCard(events.data![index].calendar),
                 );
               },
             ),
