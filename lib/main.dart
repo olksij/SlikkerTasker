@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 // Hive
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tasker/data/adapter.dart';
 
 // Pages
 import 'package:tasker/data/data.dart';
@@ -16,6 +17,8 @@ import 'package:tasker/home/collections.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) Hive.init((await getApplicationDocumentsDirectory()).path);
+
+  register();
 
   app = await Hive.openBox('app');
   bool signin = app.get('signin') ?? false;

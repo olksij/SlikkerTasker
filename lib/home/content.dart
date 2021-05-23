@@ -1,6 +1,5 @@
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/calendar/v3.dart';
 
 import 'package:tasker/data/data.dart';
 import 'package:tasker/home/cards.dart';
@@ -19,7 +18,7 @@ class HomeSchedule extends StatefulWidget {
 }
 
 class _HomeScheduleState extends State<HomeSchedule> {
-  late final Cache<List<CalendarEvent>> events;
+  late final Cache<List<LocalEvent>> events;
 
   @override
   void initState() {
@@ -30,10 +29,10 @@ class _HomeScheduleState extends State<HomeSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<CalendarEvent>>(
+    return FutureBuilder<List<LocalEvent>>(
       future: events.newData,
       initialData: events.cache,
-      builder: (context, AsyncSnapshot<List<CalendarEvent>> events) =>
+      builder: (context, AsyncSnapshot<List<LocalEvent>> events) =>
           StreamBuilder(
         stream: timeStream,
         builder: (context, AsyncSnapshot<DateTime> time) {
@@ -56,7 +55,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                 if ((events.data?.length ?? 0) - 1 < index) return null;
                 return Padding(
                   padding: EdgeInsets.only(bottom: 25),
-                  child: CollectionCard(events.data![index].calendar),
+                  child: CollectionCard(events.data![index]),
                 );
               },
             ),

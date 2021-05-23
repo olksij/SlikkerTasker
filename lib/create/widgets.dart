@@ -134,7 +134,7 @@ class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
       isEmpty = createTemp[widget.config.value] == null;
     });
     Navigator.pop(context);
-    widget.callback(Map<String, dynamic?>.from(createTemp));
+    widget.callback(Map<String, dynamic>.from(createTemp));
   }
 
   @override

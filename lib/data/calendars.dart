@@ -3,16 +3,13 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:tasker/data/client.dart';
 import 'package:tasker/data/sync.dart';
 
+// Event adapter
+import 'package:tasker/data/adapter.dart';
+
 // Retrieve calendars
 Future<List<CalendarListEntry>?> calendars() async {
   CalendarApi api = await calendarClient.get();
   return api.calendarList.list().then((list) => list.items);
-}
-
-class CalendarEvent {
-  final String calendar;
-  final Event event;
-  CalendarEvent(this.calendar, this.event);
 }
 
 // Used to return cached data instantly
@@ -23,18 +20,15 @@ class Cache<E> {
 }
 
 // Loads events from cache
-Cache<List<CalendarEvent>> eventsQuickly(Iterable<String> calendars) {
-  return Cache<List<CalendarEvent>>(
-    cache: List<CalendarEvent>.from(cache.get('events') ?? []),
-    newData: events(
-      calendars, /*(result) => cache.put('events', result)*/
-    ),
+Cache<List<LocalEvent>> eventsQuickly(Iterable<String> calendars) {
+  return Cache<List<LocalEvent>>(
+    cache: List<LocalEvent>.from(cache.get('events') ?? []),
+    newData: events(calendars),
   );
 }
 
 // Retrieve events
-Future<List<CalendarEvent>> events(Iterable<String> calendars,
-    [Function? cache]) async {
+Future<List<LocalEvent>> events(Iterable<String> calendars) async {
   Map<String, List<Event>> rawEvents = Map<String, List<Event>>();
   CalendarApi api = await calendarClient.get();
   int n = 0;
@@ -47,28 +41,28 @@ Future<List<CalendarEvent>> events(Iterable<String> calendars,
     n += rawEvents[calendar]?.length ?? 0;
   }
 
-  List<CalendarEvent> events = [];
+  List<LocalEvent> events = [];
 
   // Sort events
   for (int i = 0; i < n; i++) {
-    CalendarEvent? nextEvent;
+    LocalEvent? nextEvent;
 
     for (String calendarName in calendars) {
-      List<Event> calendar = rawEvents[calendarName] ?? [];
-      if (calendar.length > 0) {
-        DateTime? current =
-            calendar.first.start?.dateTime ?? calendar[0].start?.date;
+      if (rawEvents[calendarName] != null &&
+          rawEvents[calendarName]!.length > 0) {
+        Event first = rawEvents[calendarName]!.first;
+        DateTime? current = first.start?.dateTime ?? first.start?.date;
 
         // Get the newwest event
-        if (nextEvent?.event.start?.dateTime?.isAfter(current!) ?? true) {
-          nextEvent = CalendarEvent(calendarName, calendar.first);
-          calendar.removeAt(0);
+        if (nextEvent?.start?.dateTime?.isAfter(current!) ?? true) {
+          nextEvent = ToLocalEvent(calendarName, first).data;
+          rawEvents[calendarName]!.removeAt(0);
         }
       }
     }
     if (nextEvent != null) events.add(nextEvent);
   }
 
-  if (cache != null) cache(events);
+  cache.put('events', events);
   return events;
 }

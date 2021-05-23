@@ -3,13 +3,23 @@ import 'package:googleapis/calendar/v3.dart';
 
 part 'adapter.g.dart';
 
+void register() {
+  Hive.registerAdapter(LocalEventAdapter());
+  Hive.registerAdapter(HiveEventAttachmentAdapter());
+  Hive.registerAdapter(HiveEventAttendeeAdapter());
+  Hive.registerAdapter(HiveEventCreatorAdapter());
+  Hive.registerAdapter(HiveEventOrganizerAdapter());
+  Hive.registerAdapter(HiveEventDateTimeAdapter());
+  Hive.registerAdapter(HiveEventReminderAdapter());
+  Hive.registerAdapter(HiveEventRemindersAdapter());
+}
+
 class ToLocalEvent {
   final Event event;
   final String calendar;
-
   final LocalEvent data;
 
-  ToLocalEvent(this.event, this.calendar)
+  ToLocalEvent(this.calendar, this.event)
       : data = LocalEvent(
           calendar: calendar,
           anyoneCanAddSelf: event.anyoneCanAddSelf,

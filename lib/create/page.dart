@@ -13,7 +13,7 @@ enum CreatePageType { task, collection }
 class CreatePage extends StatefulWidget {
   final CreatePageType pageType;
   final CreateType props;
-  final Map<String, dynamic?> data;
+  final Map<String, dynamic> data;
 
   CreatePage(this.pageType, this.data)
       : props = pageType == CreatePageType.task ? task : collection;

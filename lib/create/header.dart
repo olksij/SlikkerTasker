@@ -4,7 +4,7 @@ import 'package:tasker/resources/info_card.dart';
 import 'package:tasker/data/data.dart';
 
 class CardPreview extends StatefulWidget {
-  final Map<String, dynamic?> initData;
+  final Map<String, dynamic> initData;
   final Function callback;
   final String backPath;
   final String type;
@@ -21,13 +21,13 @@ class CardPreview extends StatefulWidget {
 }
 
 class _CardPreviewState extends State<CardPreview> {
-  late Map<String, dynamic?> data;
+  late Map<String, dynamic> data;
 
   @override
   void initState() {
     super.initState();
     data = widget.initData;
-    widget.callback((Map<String, dynamic?> newData) {
+    widget.callback((Map<String, dynamic> newData) {
       this.setState(() => this.data = newData);
     });
   }

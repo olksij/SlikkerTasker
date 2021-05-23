@@ -5,9 +5,9 @@ import 'package:tasker/resources/info_card.dart';
 import 'package:tasker/data/data.dart';
 
 class CollectionCard extends StatelessWidget {
-  final String id;
+  final LocalEvent event;
 
-  CollectionCard(this.id);
+  CollectionCard(this.event);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class CollectionCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    collections.get(id)?['title'] ?? 'No Title',
+                    collections.get(event.calendar)?['title'] ?? 'No Title',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
