@@ -36,7 +36,7 @@ Future<List<LocalEvent>> events(Iterable<String> calendars) async {
   // Get events from server
   for (String calendar in calendars) {
     Events list = await api.events
-        .list(calendar, orderBy: "startTime", singleEvents: true);
+        .list(calendar, singleEvents: true, timeMin: DateTime.now().toUtc());
     rawEvents[calendar] = list.items ?? [];
     n += rawEvents[calendar]?.length ?? 0;
   }

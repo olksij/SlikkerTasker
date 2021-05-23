@@ -30,14 +30,17 @@ class CollectionCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    collections.get(event.calendar)?['title'] ?? 'No Title',
+                    event.summary ?? event.description ?? 'No Title',
                     style: TextStyle(fontSize: 18),
+                    softWrap: false,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    '13:00',
+                    event.start?.dateTime != null
+                        ? "${event.start!.dateTime!.hour}:${event.start!.dateTime!.minute}"
+                        : "${event.start!.date!.weekday}",
                     style: TextStyle(
                       fontSize: 16,
                       color: HSVColor.fromAHSV(0.5, 240, 0.1, 0.7).toColor(),
