@@ -1,13 +1,38 @@
+import 'dart:async';
+
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:tasker/create/collection.dart';
 
 import 'package:tasker/resources/info_card.dart';
 import 'package:tasker/data/data.dart';
 
-class CollectionCard extends StatelessWidget {
-  final LocalEvent event;
+// Return sorted tasks
+class TasksCompleter {
+  final Completer<Map<String, List<Map<String, dynamic>>>> _completer =
+      new Completer();
 
-  CollectionCard(this.event);
+  TasksCompleter() {
+    Map<String, List<Map<String, dynamic>>> result = {};
+    collections.keys.forEach((key) => result[key] = []);
+    tasks.toMap().forEach((key, value) {
+      result[value['collection']]!.add(key);
+    });
+    resolve(result);
+  }
+
+  Future<Map<String, List<Map<String, dynamic>>>> wait() => _completer.future;
+
+  void resolve(Map<String, List<Map<String, dynamic>>> result) =>
+      _completer.complete(result);
+}
+
+class CollectionCard extends StatelessWidget {
+  final String collection;
+  final LocalEvent event;
+  final TasksCompleter resolver;
+
+  CollectionCard(this.collection, this.event, this.resolver);
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +83,31 @@ class CollectionCard extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
               scrollDirection: Axis.horizontal,
               physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: InfoCard(
-                  isFloating: true,
-                  accent: 240,
-                  title: 'djkmd' + ((index + 47) * index).toString(),
-                  description: 'edsdeed',
-                ),
-              ),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+                    future: resolver.wait(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return SlikkerCard(
+                          accent: 240,
+                          isFloating: false,
+                          child: Center(
+                            child: Text('Please wait.'),
+                          ),
+                        );
+                      return InfoCard(
+                        isFloating: true,
+                        accent: 240,
+                        title:
+                            collections.get(collection)?['title'] ?? "No title",
+                        description: 'edsdeed',
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ],

@@ -12,6 +12,7 @@ Stream<DateTime> timeStream =
   return current;
 }).asBroadcastStream();
 
+// Content of the home page
 class HomeSchedule extends StatefulWidget {
   @override
   _HomeScheduleState createState() => _HomeScheduleState();
@@ -19,12 +20,17 @@ class HomeSchedule extends StatefulWidget {
 
 class _HomeScheduleState extends State<HomeSchedule> {
   late final Cache<List<LocalEvent>> events;
+  late final TasksCompleter sortTasks;
+  final Map<String, String> collectionCalendar = Map();
 
   @override
   void initState() {
     super.initState();
     events =
         eventsQuickly(collections.values.map<String>((e) => e['calendar']));
+    sortTasks = TasksCompleter();
+    for (String element in collections.keys)
+      collectionCalendar[collections.get(element)!['calendar']] = element;
   }
 
   @override
@@ -55,7 +61,10 @@ class _HomeScheduleState extends State<HomeSchedule> {
                 if ((events.data?.length ?? 0) - 1 < index) return null;
                 return Padding(
                   padding: EdgeInsets.only(bottom: 25),
-                  child: CollectionCard(events.data![index]),
+                  child: CollectionCard(
+                      collectionCalendar[events.data![index].calendar] ?? "",
+                      events.data![index],
+                      sortTasks),
                 );
               },
             ),
