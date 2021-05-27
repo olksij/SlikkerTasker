@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:tasker/create/collection.dart';
 
 import 'package:tasker/resources/info_card.dart';
 import 'package:tasker/data/data.dart';
+import 'package:tasker/create/page.dart';
 
 // Return sorted tasks
 class TasksCompleter {
@@ -76,40 +76,59 @@ class CollectionCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            height: 120,
-            child: ListView.builder(
-              clipBehavior: Clip.none,
-              padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
+          FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+            future: resolver.wait(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData ||
+                  snapshot.data?[collection]?.length == 0) {
                 return Padding(
-                  padding: EdgeInsets.only(left: 15),
-                  child: FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
-                    future: resolver.wait(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData)
-                        return SlikkerCard(
-                          accent: 240,
-                          isFloating: false,
-                          child: Center(
-                            child: Text('Please wait.'),
-                          ),
-                        );
-                      return InfoCard(
-                        isFloating: true,
-                        accent: 240,
-                        title:
-                            collections.get(collection)?['title'] ?? "No title",
-                        description: 'edsdeed',
-                      );
-                    },
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+                  child: SlikkerCard(
+                    accent: 240,
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CreatePage(CreatePageType.task, {}),
+                        )),
+                    isFloating: true,
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        !snapshot.hasData
+                            ? 'Please wait.'
+                            : "There is empty right now. Add some tasks to this collection :)",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 );
-              },
-            ),
-          ),
+              }
+              return SizedBox(
+                height: 120,
+                child: ListView.builder(
+                  clipBehavior: Clip.none,
+                  padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: InfoCard(
+                        isFloating: true,
+                        accent: 240,
+                        title: snapshot.data?[collection]?[index]['title'] ??
+                            "No title",
+                        description: snapshot.data?[collection]?[index]
+                                ['description'] ??
+                            "No description",
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          )
         ],
       ),
     );
