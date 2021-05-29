@@ -16,7 +16,7 @@ class TasksCompleter {
     Map<String, List<Map<String, dynamic>>> result = {};
     collections.keys.forEach((key) => result[key] = []);
     tasks.toMap().forEach((key, value) {
-      result[value['collection']]!.add(key);
+      result[value['collection']]?.add(key);
     });
     resolve(result);
   }

@@ -3,7 +3,7 @@ description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 0.1.0-alpha.193
+version: 0.1.0-alpha.194
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -26,7 +26,7 @@ dependencies:
   url_launcher: ^6.0.3
   flutter_svg: ^0.22.0
 
-  slikker_kit: #^1.0.7
+  slikker_kit: #^1.0.10
     path: "../slikker_kit/"  
 
 dev_dependencies:

@@ -40,14 +40,11 @@ class _CreatePageState extends State<CreatePage> {
         action: () => Navigator.pushNamed(context, widget.props.backPath),
       ),
       title: widget.data == {} ? 'Create' : 'Edit',
-      header: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: CardPreview(
-          initData: widget.data,
-          type: widget.props.type,
-          backPath: widget.props.backPath,
-          callback: (Function function) => refresh = function,
-        ),
+      header: CardPreview(
+        initData: widget.data,
+        type: widget.props.type,
+        backPath: widget.props.backPath,
+        callback: (Function function) => refresh = function,
       ),
       content: StaggeredGridView.countBuilder(
         shrinkWrap: true,

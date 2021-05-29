@@ -34,11 +34,24 @@ class CreatePageAcceptButton extends StatelessWidget {
 
 // --- TEXT FIELD --- ///
 
-class CreatePageTextField extends StatelessWidget {
+class CreatePageTextField extends StatefulWidget {
   final Function callback;
+
   CreatePageTextField(this.callback);
 
-  final TextEditingController controller = TextEditingController();
+  @override
+  _CreatePageTextFieldState createState() => _CreatePageTextFieldState();
+}
+
+class _CreatePageTextFieldState extends State<CreatePageTextField> {
+  late final TextEditingController controller;
+
+  @override
+  void initState() {
+    controller = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -53,7 +66,7 @@ class CreatePageTextField extends StatelessWidget {
             ),
           ),
           Container(width: 20),
-          CreatePageAcceptButton(() => callback(controller.value.text))
+          CreatePageAcceptButton(() => widget.callback(controller.value.text))
         ],
       ),
     );
@@ -145,6 +158,7 @@ class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
       accent: 240,
       isFloating: !isEmpty,
       onTap: () => showModalBottomSheet(
+        enableDrag: true,
         context: context,
         isDismissible: true,
         barrierColor: Color(0x553D3D66),
@@ -158,8 +172,26 @@ class _CreatePagePropsWidgetState extends State<CreatePagePropsWidget> {
                 BoxShadow(color: Color(0x301e1e33), blurRadius: 35),
               ],
             ),
-            padding: EdgeInsets.fromLTRB(25, 25, 25, 25),
-            child: widget.config.input(processData),
+            padding: EdgeInsets.fromLTRB(
+                25, 0, 25, MediaQuery.of(context).viewInsets.bottom + 25),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 30,
+                  child: Center(
+                      child: Container(
+                    height: 5,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: HSVColor.fromAHSV(.5, 240, 0.05, 0.9).toColor(),
+                      borderRadius: BorderRadius.circular(2.5),
+                    ),
+                  )),
+                ),
+                widget.config.input(processData),
+              ],
+            ),
           );
         },
       ),
