@@ -28,9 +28,13 @@ class TasksCompleter {
 class CollectionCard extends StatelessWidget {
   final String collection;
   final LocalEvent event;
+  final DateTime? datetime;
+  final DateTime? date;
   final TasksCompleter resolver;
 
-  CollectionCard(this.collection, this.event, this.resolver);
+  CollectionCard(this.collection, this.event, this.resolver)
+      : this.datetime = event.start?.dateTime?.toLocal(),
+        this.date = event.start?.date;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +65,8 @@ class CollectionCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    event.start?.dateTime != null
-                        ? "${event.start!.dateTime!.hour}:${event.start!.dateTime!.minute}"
+                    datetime != null
+                        ? "${datetime!.hour < 10 ? "0" : ""}${datetime!.hour}:${datetime!.minute < 10 ? "0" : ""}${datetime!.minute}"
                         : "${event.start!.date!.weekday}",
                     style: TextStyle(
                       fontSize: 16,
