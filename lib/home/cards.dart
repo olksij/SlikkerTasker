@@ -9,11 +9,10 @@ import 'package:tasker/create/page.dart';
 
 // Return sorted tasks
 class TasksCompleter {
-  final Completer<Map<String, List<Map<String, dynamic>>>> _completer =
-      new Completer();
+  final Completer<Map<String, List<String>>> _completer = new Completer();
 
   TasksCompleter() {
-    Map<String, List<Map<String, dynamic>>> result = {};
+    Map<String, List<String>> result = {};
     collections.keys.forEach((key) => result[key] = []);
     tasks.toMap().forEach((key, value) {
       result[value['collection']]?.add(key);
@@ -21,10 +20,9 @@ class TasksCompleter {
     resolve(result);
   }
 
-  Future<Map<String, List<Map<String, dynamic>>>> wait() => _completer.future;
+  Future<Map<String, List<String>>> wait() => _completer.future;
 
-  void resolve(Map<String, List<Map<String, dynamic>>> result) =>
-      _completer.complete(result);
+  void resolve(Map<String, List<String>> result) => _completer.complete(result);
 }
 
 class CollectionCard extends StatelessWidget {
@@ -76,7 +74,7 @@ class CollectionCard extends StatelessWidget {
               ],
             ),
           ),
-          FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+          FutureBuilder<Map<String, List<String>>>(
             future: resolver.wait(),
             builder: (context, snapshot) {
               if (!snapshot.hasData ||
@@ -111,16 +109,18 @@ class CollectionCard extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
+                  itemCount: snapshot.data?[collection]?.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: InfoCard(
                         isFloating: true,
                         accent: 240,
-                        title: snapshot.data?[collection]?[index]['title'] ??
+                        title: tasks.get(
+                                snapshot.data?[collection]?[index])?['title'] ??
                             "No title",
-                        description: snapshot.data?[collection]?[index]
-                                ['description'] ??
+                        description: tasks.get(snapshot.data?[collection]
+                                ?[index])?['description'] ??
                             "No description",
                       ),
                     );

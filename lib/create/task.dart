@@ -22,15 +22,15 @@ CreateType task = CreateType(
       description: 'Add task to collection group.',
       value: 'collection',
       input: (Function callback) {
-        Map<dynamic, Map> tasksMap = tasks.toMap();
         return GridSelection(
           //scrollController: ,
           data: [
-            for (String key in tasks.keys)
+            for (String key in collections.keys)
               GridSelectionData(
-                title: tasksMap[key]?['title'] ?? 'No title',
-                description: tasksMap[key]?['description'] ?? 'No description',
-                accent: tasksMap[key]?['color'] ?? 240,
+                title: collections.get(key)?['title'] ?? 'No title',
+                description:
+                    collections.get(key)?['description'] ?? 'No description',
+                accent: collections.get(key)?['color'] ?? 240,
                 callback: () => callback(key),
               )
           ],
