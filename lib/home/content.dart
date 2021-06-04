@@ -20,17 +20,24 @@ class HomeSchedule extends StatefulWidget {
 
 class _HomeScheduleState extends State<HomeSchedule> {
   late final Cache<List<LocalEvent>> events;
-  late final TasksCompleter sortTasks;
-  final Map<String, String> collectionCalendar = Map();
+  Map<String, String> collectionCalendar = Map();
+  Map<String, List<String>?> collectionTask = Map();
 
   @override
   void initState() {
     super.initState();
-    events =
-        eventsQuickly(collections.values.map<String>((e) => e['calendar']));
-    sortTasks = TasksCompleter();
+
+    print(DateTime.now().millisecond);
     for (String element in collections.keys)
       collectionCalendar[collections.get(element)!['calendar']] = element;
+
+    events = eventsQuickly(collectionCalendar.keys);
+
+    for (String key in tasks.keys) {
+      String? clct = tasks.get(key)!['collection'];
+      if (clct != null) collectionTask[clct] = [...?collectionTask[clct], key];
+    }
+    print(DateTime.now().millisecond);
   }
 
   @override
@@ -62,9 +69,10 @@ class _HomeScheduleState extends State<HomeSchedule> {
                 return Padding(
                   padding: EdgeInsets.only(bottom: 25),
                   child: CollectionCard(
-                      collectionCalendar[events.data![index].calendar] ?? "",
-                      events.data![index],
-                      sortTasks),
+                    collectionCalendar[events.data![index].calendar] ?? "",
+                    events.data![index],
+                    collectionTask,
+                  ),
                 );
               },
             ),

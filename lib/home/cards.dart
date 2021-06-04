@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:slikker_kit/slikker_kit.dart';
 import 'package:flutter/material.dart';
 
@@ -7,32 +5,14 @@ import 'package:tasker/resources/info_card.dart';
 import 'package:tasker/data/data.dart';
 import 'package:tasker/create/page.dart';
 
-// Return sorted tasks
-class TasksCompleter {
-  final Completer<Map<String, List<String>>> _completer = new Completer();
-
-  TasksCompleter() {
-    Map<String, List<String>> result = {};
-    collections.keys.forEach((key) => result[key] = []);
-    tasks.toMap().forEach((key, value) {
-      result[value['collection']]?.add(key);
-    });
-    resolve(result);
-  }
-
-  Future<Map<String, List<String>>> wait() => _completer.future;
-
-  void resolve(Map<String, List<String>> result) => _completer.complete(result);
-}
-
 class CollectionCard extends StatelessWidget {
   final String collection;
   final LocalEvent event;
   final DateTime? datetime;
   final DateTime? date;
-  final TasksCompleter resolver;
+  final Map<String, List<String>?> collectionTask;
 
-  CollectionCard(this.collection, this.event, this.resolver)
+  CollectionCard(this.collection, this.event, this.collectionTask)
       : this.datetime = event.start?.dateTime?.toLocal(),
         this.date = event.start?.date;
 
@@ -78,61 +58,51 @@ class CollectionCard extends StatelessWidget {
               ],
             ),
           ),
-          FutureBuilder<Map<String, List<String>>>(
-            future: resolver.wait(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData ||
-                  snapshot.data?[collection]?.length == 0) {
-                return Padding(
-                  padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-                  child: SlikkerCard(
-                    accent: 240,
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CreatePage(CreatePageType.task, {}),
-                        )),
-                    isFloating: true,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        !snapshot.hasData
-                            ? 'Please wait.'
-                            : "There is empty right now. Add some tasks to this collection :)",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+          if (collectionTask[collection]?.length == 0)
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+              child: SlikkerCard(
+                accent: 240,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreatePage(CreatePageType.task, {}),
                   ),
-                );
-              }
-              return SizedBox(
-                height: 120,
-                child: ListView.builder(
-                  clipBehavior: Clip.none,
-                  padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
-                  scrollDirection: Axis.horizontal,
-                  physics: BouncingScrollPhysics(),
-                  itemCount: snapshot.data?[collection]?.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(left: 15),
-                      child: InfoCard(
-                        isFloating: true,
-                        accent: 240,
-                        title: tasks.get(
-                                snapshot.data?[collection]?[index])?['title'] ??
-                            "No title",
-                        description: tasks.get(snapshot.data?[collection]
-                                ?[index])?['description'] ??
-                            "No description",
-                      ),
-                    );
-                  },
                 ),
-              );
-            },
-          )
+                isFloating: true,
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Text(
+                    "There is empty right now. Add some tasks to this collection :)",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            )
+          else
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                clipBehavior: Clip.none,
+                padding: EdgeInsets.fromLTRB(0, 0, 15, 15),
+                scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
+                itemCount: collectionTask[collection]?.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: InfoCard(
+                      isFloating: true,
+                      accent: 240,
+                      title: tasks
+                          .get(collectionTask[collection]?[index])?['title'],
+                      description: tasks.get(
+                          collectionTask[collection]?[index])?['description'],
+                    ),
+                  );
+                },
+              ),
+            ),
         ],
       ),
     );

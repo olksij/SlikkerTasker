@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
             ),
             Container(width: 7, height: 24),
             Text(
-              'Create',
+              'Task',
               style: TextStyle(
                 color: Color(0xFF6666FF),
                 fontWeight: FontWeight.w600,
@@ -72,49 +72,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      content: //Column(
-          //children: [
-          //_ConnectivityStatus(),
-          HomeSchedule(),
-      /*StreamBuilder(
-            stream: tasks.watch(),
-            initialData: null,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return Text('Something went wrong');
-              List<Widget> cards = [];
-              data.toMap().forEach((key, value) {
-                if (key[0] == 'T')
-                  cards.add(
-                    InfoCard(
-                      title: value['title'],
-                      description: value['description'],
-                      accent: 240,
-                      isFloating: true,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TaskPage(
-                            Map<String, dynamic>.from(value),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-              });
-              return StaggeredGridView.countBuilder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                itemCount: cards.length,
-                itemBuilder: (BuildContext context, int index) => cards[index],
-                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-                mainAxisSpacing: 20.0,
-                crossAxisSpacing: 20.0,
-              );
-            },
-          )*/
-      //],
-      //),
+      content: HomeSchedule(),
     );
   }
 }
