@@ -35,8 +35,11 @@ Future<List<LocalEvent>> events(Iterable<String> calendars) async {
 
   // Get events from server
   for (String calendar in calendars) {
-    Events list = await api.events
-        .list(calendar, singleEvents: true, timeMin: DateTime.now().toUtc());
+    Events list = await api.events.list(calendar,
+        singleEvents: true,
+        orderBy: 'startTime',
+        timeMin: DateTime.now().toUtc(),
+        timeMax: DateTime.now().add(Duration(days: 30)).toUtc());
     rawEvents[calendar] = list.items ?? [];
     n += rawEvents[calendar]?.length ?? 0;
   }
