@@ -586,9 +586,9 @@ packages:
   slikker_kit:
     dependency: "direct main"
     description:
-      path: "../slikker_kit"
-      relative: true
-    source: path
+      name: slikker_kit
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.10"
   source_gen:
     dependency: transitive
