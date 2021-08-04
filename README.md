@@ -9,9 +9,20 @@
 
 <br>
 
-Full roadmap can be checked [**here**](https://github.com/AlexBesida/SlikkerTasker/projects/2)
+___
 
 <br>
+
+**Note:** The latest stable alpha version is `0.1.0-alpha.200`. After this version, I have started major rebuilding of the app to support desktop platforms and `slikker_kit 2.0.0`.
+
+To check the latest stable alpha version, navigate to [`v0.1.0-alpha.200` branch](https://github.com/AlexBesida/SlikkerTasker/tree/v0.1.0-alpha.200).
+
+<br>
+
+___
+
+<br>
+
 
 ## Build app
 

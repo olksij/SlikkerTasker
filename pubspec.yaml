@@ -3,7 +3,7 @@ description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 0.1.0-alpha.200
+version: 1.0.0-alpha
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -25,9 +25,9 @@ dependencies:
   hive: ^2.0.2
   url_launcher: ^6.0.3
   flutter_svg: ^0.22.0
-
-  slikker_kit: ^1.0.10
-    #path: "../slikker_kit/"  
+  #slikker_kit: ^1.1.0-alpha.22
+  slikker_kit: 
+    path: "../slikker_kit"  
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.0
@@ -42,7 +42,7 @@ flutter_icons:
   adaptive_icon_background: "#9999FF"
 
 flutter:
-  uses-material-design: true
+  #uses-material-design: true
   assets:
     - assets/google_logo.svg
   fonts:

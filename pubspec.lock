@@ -42,7 +42,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "2.6.1"
   build:
     dependency: transitive
     description:
@@ -586,10 +586,10 @@ packages:
   slikker_kit:
     dependency: "direct main"
     description:
-      name: slikker_kit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.10"
+      path: "../slikker_kit"
+      relative: true
+    source: path
+    version: "1.1.0-alpha.23"
   source_gen:
     dependency: transitive
     description:
