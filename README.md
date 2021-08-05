@@ -15,9 +15,9 @@ Full roadmap can be checked [**here**](https://github.com/AlexBesida/SlikkerTask
 
 ## Build app
 
-1. Clone repository.
+1. Clone repository from `v0.1.0-alpha.200` branch.
 ```shell
-$ git clone https://github.com/AlexBesida/SlikkerTasker.git
+$ git clone -b v0.1.0-alpha.200 https://github.com/AlexBesida/SlikkerTasker.git
 ```
 2. Navigate to cloned folder, and install packages.
 ```shell
