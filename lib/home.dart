@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
         child: Text('cool'),
       ),
       floatingButton: SlikkerButton(
-        child: Text("Button"),
+        child: Text("New"),
         padding: EdgeInsets.all(16),
         borderRadius: BorderRadius.circular(26),
         onTap: () {},

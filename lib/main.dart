@@ -17,7 +17,7 @@ class TaskerApp extends StatelessWidget {
         '/': (context) => HomePage(),
       },
       color: Color(0xFFF6F6FC),
-      //theme: ThemeData(fontFamily: 'Manrope'),
+      theme: SlikkerThemeData(fontFamily: 'Manrope'),
       title: 'Tasker',
     );
   }
