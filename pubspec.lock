@@ -589,7 +589,7 @@ packages:
       path: "../slikker_kit"
       relative: true
     source: path
-    version: "1.1.0-alpha.25"
+    version: "1.1.0-alpha.30"
   source_gen:
     dependency: transitive
     description:

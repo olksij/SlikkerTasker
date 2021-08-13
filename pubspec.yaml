@@ -3,7 +3,7 @@ description: Let your device plan your day.
 
 publish_to: 'none'
 
-version: 1.0.0-alpha.1
+version: 1.0.0-alpha.2
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -46,10 +46,6 @@ flutter:
   assets:
     - assets/google_logo.svg
   fonts:
-  - family:  AppIcons
-    fonts:
-      - asset: fonts/AppIcons.ttf    
-
   - family: Manrope
     fonts:
       - asset: fonts/Manrope-Bold.ttf
