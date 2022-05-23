@@ -1,15 +1,19 @@
 # **Slikker Tasker**
 ### Is a to-do app, which helps you to manage your tasks and plan your day using *your calendar*.
 
+> **NOTE:** The project was canceled
+
+The main idea of the project was to create an app, which would automatically plan your day, using your schedule, events in calendar, and gathering plans together by places and tags.
+
 <br>
 
 ![UI Preview](./res/Preview1.png)
 #### Powered by [`slikker_kit`](https://github.com/AlexBesida/slikker_kit)
-##### The preview of the future version `0.1.0-beta`.
+##### The preview of the ~~future~~ version `0.1.0-beta`.
 
 <br>
 
-Full roadmap can be checked [**here**](https://github.com/AlexBesida/SlikkerTasker/projects/2)
+Full roadmap ~~can~~ could be checked [**here**](https://github.com/AlexBesida/SlikkerTasker/projects/2)
 
 <br>
 
